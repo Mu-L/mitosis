@@ -149,4 +149,27 @@ export type MitosisComponent = {
   propsTypeRef?: string;
   defaultProps?: MitosisState;
   style?: string;
+
+  /**
+   * This data is filled inside cli to provide more data for plugins
+   */
+  pluginData?: {
+    target?: Target;
+    path?: string;
+    outputDir?: string;
+    outputFilePath?: string;
+  };
+
+  /**
+   * Used to store context of a component for a specific framework
+   * that we need access only during compilation (for internal use only) and gets removed after compilation.
+   */
+  compileContext?: {
+    [K in Target]?: {
+      state?: MitosisState;
+      hooks?: {
+        [hookName: string]: BaseHook;
+      };
+    };
+  };
 };

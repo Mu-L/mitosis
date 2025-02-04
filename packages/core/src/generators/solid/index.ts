@@ -21,8 +21,8 @@ import { TranspilerGenerator } from '@/types/transpiler';
 import { uniq } from 'fp-ts/lib/Array';
 import * as S from 'fp-ts/string';
 import hash from 'hash-sum';
+import traverse from 'neotraverse/legacy';
 import { format } from 'prettier/standalone';
-import traverse from 'traverse';
 import {
   runPostCodePlugins,
   runPostJsonPlugins,
@@ -64,6 +64,9 @@ function getContextString(component: MitosisComponent, options: ToSolidOptions) 
 const getRefsString = (json: MitosisComponent, options: ToSolidOptions) =>
   Array.from(getRefs(json))
     .map((ref) => {
+      // fix prettier issue when encounter `let props.ref`
+      // Prettier playground: https://prettier.io/playground/#N4Igxg9gdgLgprEAuEAzArlMMCW0AEAsgJ4DCEAtgA7QIwAUVAThFQM5ICGUxAlPsAA6UfPgA2cGPmas2AOhxQq6GACU4qANzDRTSeiYj6O0fgA8i5VPx7UAXmAz2CpSvWoAhAF9RAegB8JqK8wl7CcAAeNExSACYanOhiUiTk1LSwmiAANCCsuNBsyKCcTCwA7gAKpQhFKJxi5ZzERbkARkycYADWkgDKnBRwADKKcMioDWxw7Z09-VRdigDmyDBM6DMg0xQ4axtbkVRwTDhDsA0AKidQpThwdZNi07lsKxIAiugQ8BNTWwArNgRPrvOBfH7jJBPF4gACO33glRY7GQIE4bAAtFA4HB4rEciB1pwcGIVmkKJw0Q0xIS3lBlhIAIIwdY4NoqOCVE6jHF-Z5bAAWMAoYgA6oKcPA2IswHA+rUpTgAG5S4hosBsVogZWbACSUHisD6YFOVBgTMNfRgxAk-NhMmmYs6VDRzAeJ2V41yimmMWRnGWlPtW0WTD9aJtxzYppw5sJzEUMDFOFiMEFyAAHAAGXJ6BE4PQBoNU6H-XIwThtFNpjNIABMuXQ00uVce5ZAcAobTx+OG3GW6EDcAAYhAmJTWStqSoICAvF4gA
+      if (ref.includes('.')) return '';
       const typeParameter = (options.typescript && json['refs'][ref]?.typeParameter) || '';
       return `let ${ref}${typeParameter ? ': ' + typeParameter : ''};`;
     })
@@ -91,7 +94,7 @@ function addProviderComponents(json: MitosisComponent, options: ToSolidOptions) 
 
 const DEFAULT_OPTIONS: ToSolidOptions = {
   state: 'signals',
-  stylesType: 'styled-components',
+  stylesType: 'style-tag',
 };
 
 export const componentToSolid: TranspilerGenerator<Partial<ToSolidOptions>> =
@@ -162,7 +165,7 @@ export const componentToSolid: TranspilerGenerator<Partial<ToSolidOptions>> =
         hasShowComponent ? 'Show' : undefined,
         hasForComponent ? 'For' : undefined,
         json.hooks.onMount.length ? 'onMount' : undefined,
-        ...(json.hooks.onUpdate?.length ? ['on', 'createEffect'] : []),
+        ...(json.hooks.onUpdate?.length ? ['on', 'createEffect', 'createMemo'] : []),
         ...(state?.import.solidjs ?? []),
       ].filter(checkIsDefined),
     );
@@ -193,22 +196,44 @@ export const componentToSolid: TranspilerGenerator<Partial<ToSolidOptions>> =
 
       ${getRefsString(json, options)}
       ${getContextString(json, options)}
+      ${json.hooks.onInit?.code ?? ''}
 
       ${json.hooks.onMount.map((hook) => `onMount(() => { ${hook.code} })`).join('\n')}
       ${
         json.hooks.onUpdate
           ? json.hooks.onUpdate
               .map((hook, index) => {
-                if (hook.deps) {
-                  const hookName = `onUpdateFn_${index}`;
-                  return `
+                // TO-DO: support `onUpdate` without `deps`
+                if (!hook.deps) return '';
+
+                const hookName = `onUpdateFn_${index}`;
+
+                const depsArray = hook.deps
+                  .slice(1, hook.deps.length - 1)
+                  .split(',')
+                  .map((x) => x.trim());
+
+                const getReactiveDepName = (dep: string) => {
+                  const newLocal = dep.replace(/(\.|\?|\(|\)|\[|\])/g, '_');
+                  return `${hookName}_${newLocal}`;
+                };
+
+                const needsMemo = (dep: string) => true;
+
+                const reactiveDepsWorkaround = depsArray
+                  .filter(needsMemo)
+                  .map((dep) => `const ${getReactiveDepName(dep)} = createMemo(() => ${dep});`)
+                  .join('\n');
+
+                const depsArrayStr = depsArray
+                  .map((x) => (needsMemo(x) ? `${getReactiveDepName(x)}()` : x))
+                  .join(', ');
+
+                return `
+                    ${reactiveDepsWorkaround}
                     function ${hookName}() { ${hook.code} };
-                    createEffect(on(() => ${hook.deps}, ${hookName}));
+                    createEffect(on(() => [${depsArrayStr}], ${hookName}));
                   `;
-                } else {
-                  // TO-DO: support `onUpdate` without `deps`
-                  return '';
-                }
               })
               .join('\n')
           : ''
@@ -217,12 +242,11 @@ export const componentToSolid: TranspilerGenerator<Partial<ToSolidOptions>> =
       return (${addWrapper ? '<>' : ''}
         ${json.children
           .filter(filterEmptyTextNodes)
-          .map((item) => blockToSolid({ component, json: item, options }))
+          .map((item) => blockToSolid(item, component, options, addWrapper))
           .join('\n')}
         ${
           options.stylesType === 'style-tag' && css && css.trim().length > 4
-            ? // We add the jsx attribute so prettier formats this nicely
-              `<style jsx>{\`${css}\`}</style>`
+            ? `<style>{\`${css}\`}</style>`
             : ''
         }
         ${shouldInjectCustomStyles ? `<style>{\`${json.style}\`}</style>` : ''}

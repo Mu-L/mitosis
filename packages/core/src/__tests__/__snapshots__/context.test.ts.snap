@@ -22,13 +22,13 @@ exports[`Context > Parse context 1`] = `
     },
     "fooUpperCase": {
       "code": "get fooUpperCase() {
-  return this.foo.toUpperCase();
+  return state.foo.toUpperCase();
 }",
       "type": "getter",
     },
     "someMethod": {
       "code": "someMethod() {
-  return this.fooUpperCase.toLowercase();
+  return state.fooUpperCase.toLowercase();
 }",
       "type": "method",
     },
@@ -47,10 +47,10 @@ exports[`Context > Parse context 2`] = `
 export default createContext({
   foo: \\"bar\\",
   get fooUpperCase() {
-    return this.foo.toUpperCase();
+    return state.foo.toUpperCase();
   },
   someMethod() {
-    return this.fooUpperCase.toLowercase();
+    return state.fooUpperCase.toLowercase();
   },
   content: null,
   context: {},
@@ -76,6 +76,7 @@ exports[`Context > Use and set context in complex components 1`] = `
               "type": "spread",
             },
             "style": {
+              "bindingType": "expression",
               "code": "state.css",
               "type": "single",
             },
@@ -85,6 +86,7 @@ exports[`Context > Use and set context in complex components 1`] = `
               "@type": "@builder.io/mitosis/node",
               "bindings": {
                 "block": {
+                  "bindingType": "expression",
                   "code": "state.useBlock",
                   "type": "single",
                 },
@@ -99,6 +101,7 @@ exports[`Context > Use and set context in complex components 1`] = `
               "@type": "@builder.io/mitosis/node",
               "bindings": {
                 "when": {
+                  "bindingType": "expression",
                   "code": "state.componentRef",
                   "type": "single",
                 },
@@ -108,6 +111,7 @@ exports[`Context > Use and set context in complex components 1`] = `
                   "@type": "@builder.io/mitosis/node",
                   "bindings": {
                     "children": {
+                      "bindingType": "expression",
                       "code": "state.useBlock.children",
                       "type": "single",
                     },
@@ -133,6 +137,7 @@ exports[`Context > Use and set context in complex components 1`] = `
               "@type": "@builder.io/mitosis/node",
               "bindings": {
                 "when": {
+                  "bindingType": "expression",
                   "code": "!state.componentRef && state.useBlock.children && state.useBlock.children.length",
                   "type": "single",
                 },
@@ -142,6 +147,7 @@ exports[`Context > Use and set context in complex components 1`] = `
                   "@type": "@builder.io/mitosis/node",
                   "bindings": {
                     "each": {
+                      "bindingType": "expression",
                       "code": "state.useBlock.children",
                       "type": "single",
                     },
@@ -151,10 +157,12 @@ exports[`Context > Use and set context in complex components 1`] = `
                       "@type": "@builder.io/mitosis/node",
                       "bindings": {
                         "block": {
+                          "bindingType": "expression",
                           "code": "child",
                           "type": "single",
                         },
                         "index": {
+                          "bindingType": "expression",
                           "code": "index",
                           "type": "single",
                         },
@@ -478,6 +486,7 @@ exports[`Context > Use and set context in components 1`] = `
               "@type": "@builder.io/mitosis/node",
               "bindings": {
                 "_text": {
+                  "bindingType": "expression",
                   "code": "foo.value",
                   "type": "single",
                 },
@@ -592,7 +601,7 @@ function ComponentWithContext(props) {
           },
         }}
       >
-        {foo.value}
+        <>{foo.value}</>
       </Context1.Provider>
     </Context2.Provider>
   );
@@ -611,6 +620,11 @@ import {
   StyleSheet,
   Image,
   Text,
+  Pressable,
+  TextInput,
+  TouchableOpacity,
+  Button,
+  Linking,
 } from \\"react-native\\";
 import { useContext } from \\"react\\";
 import Context1 from \\"@dummy/1\\";
@@ -634,7 +648,9 @@ function ComponentWithContext(props) {
           },
         }}
       >
-        <Text>{foo.value}</Text>
+        <>
+          <Text>{foo.value}</Text>
+        </>
       </Context1.Provider>
     </Context2.Provider>
   );

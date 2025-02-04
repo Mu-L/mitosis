@@ -1,5 +1,6 @@
 import { dedent } from '@/helpers/dedent';
 import { getStateObjectStringFromComponent } from '@/helpers/get-state-object-string';
+import { getTypedFunction } from '@/helpers/get-typed-function';
 import { BaseHook, MitosisComponent } from '@/types/mitosis-component';
 import json5 from 'json5';
 import { pickBy } from 'lodash';
@@ -51,8 +52,9 @@ export function generateCompositionApiScript(
     functions: false,
     getters: false,
     format: 'variables',
-    valueMapper: (code, _, typeParameter) =>
-      isTs && typeParameter ? `ref<${typeParameter}>(${code})` : `ref(${code})`,
+    valueMapper: (code, _, typeParameter) => {
+      return isTs && typeParameter ? `ref<${typeParameter}>(${code})` : `ref(${code})`;
+    },
     keyPrefix: 'const',
   });
 
@@ -61,6 +63,17 @@ export function generateCompositionApiScript(
     getters: false,
     functions: true,
     format: 'variables',
+    valueMapper: (
+      code: string,
+      type: 'data' | 'function' | 'getter',
+      typeParameter: string | undefined,
+    ) => {
+      if (type != 'data') {
+        return getTypedFunction(code, isTs, typeParameter);
+      }
+
+      return code;
+    },
   });
 
   if (template.includes('_classStringToObject')) {
@@ -99,7 +112,8 @@ export function generateCompositionApiScript(
     ${Object.keys(component.refs)
       ?.map((key) => {
         if (isTs) {
-          return `const ${key} = ref<${component.refs[key].typeParameter}>()`;
+          const type = component.refs[key].typeParameter ?? 'any';
+          return `const ${key} = ref<${type}>(null)`;
         } else {
           return `const ${key} = ref(null)`;
         }

@@ -1,5 +1,50 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`Svelte > jsx > Javascript Test > Advanced 1`] = `
+"<script>
+  let name = \\"PatrickJS\\";
+  let names = [\\"Steve\\", \\"PatrickJS\\"];
+</script>
+
+<main>
+  {#each names as person, i}
+    <div>{i}: {person}</div>
+  {/each}
+
+  {#each names as person}
+    <span>{person}</span>
+  {/each}
+
+  {#each names as item}
+    <br />
+  {/each}
+
+  {#each Array.from({ length: 10 }) as _, ee}
+    <pre>{ee}</pre>
+  {/each}
+
+  {#each Array.from({ length: 10 }) as item}
+    <p>{index}</p>
+  {/each}
+
+  {#each names as person, index}
+    <span>{person}{index}</span>
+  {/each}
+
+  {#each Array.from({ length: 10 }) as person, count}
+    <span>{person}{count}</span>
+  {/each}
+
+  {#each names as person, i}
+    <span>{person}{i}</span>
+  {/each}
+
+  {#each Array.from({ length: 10 }) as person, index}
+    <span>{person}{index}</span>
+  {/each}
+</main>"
+`;
+
 exports[`Svelte > jsx > Javascript Test > AdvancedRef 1`] = `
 "<script>
   export let showInput;
@@ -74,7 +119,7 @@ exports[`Svelte > jsx > Javascript Test > Basic 1`] = `
       name = myEvent.target.value;
     }}
   />
-  Hello! I can run in React, Vue, Solid, or Liquid!
+  Hello! I can run in React, Vue, Solid, or Liquid! &gt;
 </div>
 
 <style>
@@ -179,22 +224,47 @@ exports[`Svelte > jsx > Javascript Test > Basic Outputs 1`] = `
 `;
 
 exports[`Svelte > jsx > Javascript Test > Basic Outputs Meta 1`] = `
-"<script>
-  import { onMount } from \\"svelte\\";
+"/**
+          useMetadata:
+          {\\"outputs\\":[\\"onMessage\\",\\"onEvent\\"],\\"baz\\":\\"metadata inside component\\"}
+          */
+          
+          <script >
+  import { onMount } from 'svelte'
+
+
+
+
+
+
+
+
 
   export let onMessage;
-  export let onEvent;
-  export let message;
+export let onEvent;
+export let message;
 
-  let name = \\"PatrickJS\\";
 
-  onMount(() => {
-    onMessage(name);
-    onEvent(message);
-  });
+
+
+
+
+
+
+  let name = 'PatrickJS';
+
+
+  onMount(() => { onMessage(name);
+onEvent(message); });
+
+
+
+
+
+
 </script>
 
-<div />"
+<div ></div>"
 `;
 
 exports[`Svelte > jsx > Javascript Test > BasicAttribute 1`] = `"<input autocapitalize=\\"on\\" autocomplete=\\"on\\" spellcheck={true} />"`;
@@ -265,7 +335,7 @@ exports[`Svelte > jsx > Javascript Test > BasicRef 1`] = `
 
   function onBlur() {
     // Maintain focus
-    inputRef.focus();
+    inputRef?.focus();
   }
 
   function lowerCaseName() {
@@ -316,8 +386,8 @@ exports[`Svelte > jsx > Javascript Test > BasicRefAssignment 1`] = `
 
 <div>
   <button
-    on:click={(evt) => {
-      handlerClick(evt);
+    on:click={async (evt) => {
+      await handlerClick(evt);
     }}>Click</button
   >
 </div>"
@@ -1023,23 +1093,23 @@ exports[`Svelte > jsx > Javascript Test > Img 1`] = `
   export let attributes;
   export let imgSrc;
   export let altText;
-
-  function mitosis_styling(node, vars) {
-    Object.entries(vars || {}).forEach(([p, v]) => {
-      if (p.startsWith(\\"--\\")) {
-        node.style.setProperty(p, v);
-      } else {
-        node.style[p] = v;
-      }
-    });
+  function stringifyStyles(stylesObj) {
+    let styles = \\"\\";
+    for (let key in stylesObj) {
+      const dashedKey = key.replace(/[A-Z]/g, function (match) {
+        return \\"-\\" + match.toLowerCase();
+      });
+      styles += dashedKey + \\":\\" + stylesObj[key] + \\";\\";
+    }
+    return styles;
   }
 </script>
 
 <img
-  use:mitosis_styling={{
+  style={stringifyStyles({
     objectFit: backgroundSize || \\"cover\\",
     objectPosition: backgroundPosition || \\"center\\",
-  }}
+  })}
   {...attributes}
   key={(Builder.isEditing && imgSrc) || \\"default-key\\"}
   alt={altText}
@@ -1092,6 +1162,19 @@ exports[`Svelte > jsx > Javascript Test > InputParent 1`] = `
 />"
 `;
 
+exports[`Svelte > jsx > Javascript Test > NestedStore 1`] = `
+"<script>
+  let _id = \\"abc\\";
+
+  let _messageId = _id + \\"-message\\";
+</script>
+
+<div id={_id}>
+  Test
+  <p id={_messageId}>Message</p>
+</div>"
+`;
+
 exports[`Svelte > jsx > Javascript Test > RawText 1`] = `
 "<script>
   export let attributes;
@@ -1108,23 +1191,26 @@ exports[`Svelte > jsx > Javascript Test > Section 1`] = `
   export let attributes;
   export let maxWidth;
 
-  function mitosis_styling(node, vars) {
-    Object.entries(vars || {}).forEach(([p, v]) => {
-      if (p.startsWith(\\"--\\")) {
-        node.style.setProperty(p, v);
-      } else {
-        node.style[p] = v;
-      }
-    });
+  function stringifyStyles(stylesObj) {
+    let styles = \\"\\";
+    for (let key in stylesObj) {
+      const dashedKey = key.replace(/[A-Z]/g, function (match) {
+        return \\"-\\" + match.toLowerCase();
+      });
+      styles += dashedKey + \\":\\" + stylesObj[key] + \\";\\";
+    }
+    return styles;
   }
 </script>
 
 <section
-  use:mitosis_styling={maxWidth && typeof maxWidth === \\"number\\"
-    ? {
-        maxWidth: maxWidth,
-      }
-    : undefined}
+  style={stringifyStyles(
+    maxWidth && typeof maxWidth === \\"number\\"
+      ? {
+          maxWidth: maxWidth,
+        }
+      : undefined
+  )}
   {...attributes}
 >
   <slot />
@@ -1135,14 +1221,15 @@ exports[`Svelte > jsx > Javascript Test > Section 2`] = `
 "<script>
   export let attributes;
 
-  function mitosis_styling(node, vars) {
-    Object.entries(vars || {}).forEach(([p, v]) => {
-      if (p.startsWith(\\"--\\")) {
-        node.style.setProperty(p, v);
-      } else {
-        node.style[p] = v;
-      }
-    });
+  function stringifyStyles(stylesObj) {
+    let styles = \\"\\";
+    for (let key in stylesObj) {
+      const dashedKey = key.replace(/[A-Z]/g, function (match) {
+        return \\"-\\" + match.toLowerCase();
+      });
+      styles += dashedKey + \\":\\" + stylesObj[key] + \\";\\";
+    }
+    return styles;
   }
 
   let max = 42;
@@ -1152,9 +1239,9 @@ exports[`Svelte > jsx > Javascript Test > Section 2`] = `
 {#if max}
   {#each items as item}
     <section
-      use:mitosis_styling={{
+      style={stringifyStyles({
         maxWidth: item + max,
-      }}
+      })}
       {...attributes}
     >
       <slot />
@@ -1243,9 +1330,9 @@ import  ContentSlotCode from './content-slot-jsx.raw';
 
 exports[`Svelte > jsx > Javascript Test > SlotNamed 1`] = `
 "<div>
-  <slot name=\\"top\\" /><slot name=\\"left\\">Default left</slot><slot
-    >Default Child</slot
-  >
+  <slot name=\\"my-awesome-slot\\" /><slot name=\\"top\\" /><slot name=\\"left\\"
+    >Default left</slot
+  ><slot>Default Child</slot>
 </div>"
 `;
 
@@ -1295,8 +1382,8 @@ exports[`Svelte > jsx > Javascript Test > Stamped.io 1`] = `
     <textarea placeholder=\\"How was your experience?\\" class=\\"textarea\\" />
     <button
       class=\\"button\\"
-      on:click={(event) => {
-        event.preventDefault();
+      on:click={(ev) => {
+        ev.preventDefault();
         showReviewPrompt = false;
       }}
     >
@@ -1342,6 +1429,40 @@ exports[`Svelte > jsx > Javascript Test > Stamped.io 1`] = `
 </style>"
 `;
 
+exports[`Svelte > jsx > Javascript Test > StoreComment 1`] = `
+"<script>
+  function bar() {}
+
+  let foo = true;
+</script>
+
+{foo}"
+`;
+
+exports[`Svelte > jsx > Javascript Test > StoreShadowVars 1`] = `
+"<script>
+  function foo(errors) {
+    return errors;
+  }
+
+  let errors = {};
+</script>
+
+{foo(errors)}"
+`;
+
+exports[`Svelte > jsx > Javascript Test > StoreWithState 1`] = `
+"<script>
+  function bar() {
+    return foo;
+  }
+
+  let foo = false;
+</script>
+
+{bar()}"
+`;
+
 exports[`Svelte > jsx > Javascript Test > Submit 1`] = `
 "<script>
   export let attributes;
@@ -1383,6 +1504,33 @@ exports[`Svelte > jsx > Javascript Test > Textarea 1`] = `
 <textarea {...attributes} {placeholder} {name} {value} {defaultValue} />"
 `;
 
+exports[`Svelte > jsx > Javascript Test > UseValueAndFnFromStore 1`] = `
+"<script>
+  import { afterUpdate } from \\"svelte\\";
+
+  export let onChange;
+
+  function _do(id) {
+    _active = !!id;
+
+    if (onChange) {
+      onChange(_active);
+    }
+  }
+
+  let _id = \\"abc\\";
+  let _active = false;
+
+  afterUpdate(() => {
+    if (_do) {
+      _do(_id);
+    }
+  });
+</script>
+
+<div>Test</div>"
+`;
+
 exports[`Svelte > jsx > Javascript Test > Video 1`] = `
 "<script>
   export let attributes;
@@ -1394,20 +1542,20 @@ exports[`Svelte > jsx > Javascript Test > Video 1`] = `
   export let muted;
   export let controls;
   export let loop;
-
-  function mitosis_styling(node, vars) {
-    Object.entries(vars || {}).forEach(([p, v]) => {
-      if (p.startsWith(\\"--\\")) {
-        node.style.setProperty(p, v);
-      } else {
-        node.style[p] = v;
-      }
-    });
+  function stringifyStyles(stylesObj) {
+    let styles = \\"\\";
+    for (let key in stylesObj) {
+      const dashedKey = key.replace(/[A-Z]/g, function (match) {
+        return \\"-\\" + match.toLowerCase();
+      });
+      styles += dashedKey + \\":\\" + stylesObj[key] + \\";\\";
+    }
+    return styles;
   }
 </script>
 
 <video
-  use:mitosis_styling={{
+  style={stringifyStyles({
     width: \\"100%\\",
     height: \\"100%\\",
     ...attributes?.style,
@@ -1416,7 +1564,7 @@ exports[`Svelte > jsx > Javascript Test > Video 1`] = `
     // Hack to get object fit to work as expected and
     // not have the video overflow
     borderRadius: 1,
-  }}
+  })}
   preload=\\"none\\"
   {...attributes}
   key={video || \\"no-src\\"}
@@ -1442,6 +1590,27 @@ exports[`Svelte > jsx > Javascript Test > arrowFunctionInUseStore 1`] = `
 </script>
 
 <div>Hello {name}</div>"
+`;
+
+exports[`Svelte > jsx > Javascript Test > basicForFragment 1`] = `
+"<script>
+  let id = \\"xyz\\";
+</script>
+
+<div>
+  {#each [\\"a\\", \\"b\\", \\"c\\"] as option (\`key-\${option}\`)}
+    <div>{option}</div>
+  {/each}
+
+  {#each [\\"a\\", \\"b\\", \\"c\\"] as option (\`\${id}-\${option}\`)}
+    <div>{option}</div>
+  {/each}
+  <select>
+    {#each [\\"d\\", \\"e\\", \\"f\\"] as option (\`\${id}-\${option}\`)}
+      <option value={option}>{option}</option>
+    {/each}
+  </select>
+</div>"
 `;
 
 exports[`Svelte > jsx > Javascript Test > basicForNoTagReference 1`] = `
@@ -1485,19 +1654,50 @@ exports[`Svelte > jsx > Javascript Test > basicForwardRef 1`] = `
 `;
 
 exports[`Svelte > jsx > Javascript Test > basicForwardRefMetadata 1`] = `
-"<script>
-  export let inputRef;
+"/**
+          useMetadata:
+          {\\"forwardRef\\":\\"inputRef\\"}
+          */
+          
+          <script >
 
-  let name = \\"PatrickJS\\";
-</script>
 
-<div><input class=\\"input\\" bind:this={inputRef} bind:value={name} /></div>
 
-<style>
-  .input {
-    color: red;
-  }
-</style>"
+
+
+
+
+
+
+
+    export let inputRef;
+
+
+
+
+
+
+
+
+    let name = 'PatrickJS';
+
+
+
+
+
+
+
+
+
+  </script>
+
+  <div ><input  class=\\"input\\"  bind:this={inputRef}  bind:value={name}  /></div>
+
+  <style>
+    .input {
+color: red;
+}
+  </style>"
 `;
 
 exports[`Svelte > jsx > Javascript Test > basicOnUpdateReturn 1`] = `
@@ -1527,9 +1727,100 @@ exports[`Svelte > jsx > Javascript Test > basicOnUpdateReturn 1`] = `
 <div>Hello! {name}</div>"
 `;
 
+exports[`Svelte > jsx > Javascript Test > basicRefAttributePassing 1`] = `
+"/**
+          useMetadata:
+          {\\"attributePassing\\":{\\"enabled\\":true}}
+          */
+          
+          <script >
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  let buttonRef
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+<button  bind:this={buttonRef} >Attribute Passing</button>"
+`;
+
+exports[`Svelte > jsx > Javascript Test > basicRefAttributePassingCustomRef 1`] = `
+"/**
+          useMetadata:
+          {\\"attributePassing\\":{\\"enabled\\":true,\\"customRef\\":\\"buttonRef\\"}}
+          */
+          
+          <script >
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  let buttonRef
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+<div ><button  bind:this={buttonRef} >Attribute Passing</button></div>"
+`;
+
 exports[`Svelte > jsx > Javascript Test > class + ClassName + css 1`] = `
-"<div class=\\"test2 test div\\">
-  Hello! I can run in React, Vue, Solid, or Liquid!
+"<script>
+  import MyComp from \\"./my-component.svelte\\";
+</script>
+
+<div>
+  <MyComp class=\\"test\\" className=\\"test2\\">
+    Hello! I can run in React, Vue, Solid, or Liquid!
+  </MyComp>
+  <div class=\\"test2 test div\\">
+    Hello! I can run in React, Vue, Solid, or Liquid!
+  </div>
 </div>
 
 <style>
@@ -1572,14 +1863,15 @@ exports[`Svelte > jsx > Javascript Test > className 1`] = `
 
 exports[`Svelte > jsx > Javascript Test > classState 1`] = `
 "<script>
-  function mitosis_styling(node, vars) {
-    Object.entries(vars || {}).forEach(([p, v]) => {
-      if (p.startsWith(\\"--\\")) {
-        node.style.setProperty(p, v);
-      } else {
-        node.style[p] = v;
-      }
-    });
+  function stringifyStyles(stylesObj) {
+    let styles = \\"\\";
+    for (let key in stylesObj) {
+      const dashedKey = key.replace(/[A-Z]/g, function (match) {
+        return \\"-\\" + match.toLowerCase();
+      });
+      styles += dashedKey + \\":\\" + stylesObj[key] + \\";\\";
+    }
+    return styles;
   }
 
   let classState = \\"testClassName\\";
@@ -1588,7 +1880,7 @@ exports[`Svelte > jsx > Javascript Test > classState 1`] = `
   };
 </script>
 
-<div use:mitosis_styling={styleState} class={classState + \\" div\\"}>
+<div style={stringifyStyles(styleState)} class={classState + \\" div\\"}>
   Hello! I can run in React, Vue, Solid, or Liquid!
 </div>
 
@@ -1597,6 +1889,47 @@ exports[`Svelte > jsx > Javascript Test > classState 1`] = `
     padding: 10px;
   }
 </style>"
+`;
+
+exports[`Svelte > jsx > Javascript Test > complexMeta 1`] = `
+"/**
+          useMetadata:
+          {\\"x\\":\\"y\\",\\"asdf\\":{\\"stringValue\\":\\"d\\",\\"booleanValue\\":true,\\"numberValue\\":1,\\"innerObject\\":{\\"stringValue\\":\\"inner\\",\\"numberValue\\":2,\\"booleanValue\\":false},\\"spreadStringValue\\":\\"f\\"}}
+          */
+          
+          <script >
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+<div ></div>"
 `;
 
 exports[`Svelte > jsx > Javascript Test > componentWithContext 1`] = `
@@ -1695,7 +2028,7 @@ exports[`Svelte > jsx > Javascript Test > defaultProps 1`] = `
       type=\\"button\\"
       {...attributes}
       on:click={(event) => {
-        onClick(event);
+        onClick();
       }}>{buttonText}</button
     >
   {/if}
@@ -1743,6 +2076,29 @@ exports[`Svelte > jsx > Javascript Test > defaultValsWithTypes 1`] = `
 <div>Hello {name || DEFAULT_VALUES.name}</div>"
 `;
 
+exports[`Svelte > jsx > Javascript Test > eventInputAndChange 1`] = `
+"<script>
+  let name = \\"Steve\\";
+</script>
+
+<div>
+  <input
+    class=\\"input\\"
+    on:input={(event) => {
+      name = event.target.value;
+    }}
+    bind:value={name}
+  />
+  Hello! I can run in React, Vue, Solid, or Liquid!
+</div>
+
+<style>
+  .input {
+    color: red;
+  }
+</style>"
+`;
+
 exports[`Svelte > jsx > Javascript Test > expressionState 1`] = `
 "<script>
   export let componentRef;
@@ -1751,6 +2107,74 @@ exports[`Svelte > jsx > Javascript Test > expressionState 1`] = `
 </script>
 
 <div>{refToUse}</div>"
+`;
+
+exports[`Svelte > jsx > Javascript Test > figmaMeta 1`] = `
+"/**
+          useMetadata:
+          {\\"figma\\":{\\"name\\":\\"def-button-beta-outlined\\",\\"url\\":\\"https://www.figma.com/xxx\\",\\"props\\":{\\"iconSmall\\":{\\"type\\":\\"instance\\",\\"key\\":\\"📍 Icon Small\\"},\\"iconMedium\\":{\\"type\\":\\"instance\\",\\"key\\":\\"📍 Icon Medium\\"},\\"label\\":{\\"type\\":\\"string\\",\\"key\\":\\"✏️ Label\\"},\\"icon\\":{\\"type\\":\\"boolean\\",\\"key\\":\\"👁️ Icon\\",\\"value\\":{\\"false\\":false,\\"true\\":\\"placeholder\\"}},\\"interactiveState\\":{\\"type\\":\\"enum\\",\\"key\\":\\"Interactive State\\",\\"value\\":{\\"(Def) Enabled\\":false,\\"Hovered\\":false,\\"Pressed\\":false,\\"Focused\\":false,\\"Disabled\\":\\"true\\"}},\\"size\\":{\\"type\\":\\"enum\\",\\"key\\":\\"Size\\",\\"value\\":{\\"(Def) Medium\\":false,\\"Small\\":\\"small\\"}},\\"width\\":{\\"type\\":\\"enum\\",\\"key\\":\\"Width\\",\\"value\\":{\\"(Def) Auto Width\\":false,\\"Full Width\\":\\"full\\"}}}}}
+          */
+          
+          <script >
+
+
+
+
+
+
+
+
+
+
+  export let icon;
+export let interactiveState;
+export let width;
+export let size;
+export let label;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+<button  data-icon={icon}  data-disabled={interactiveState}  data-width={width}  data-size={size} >{label}</button>"
+`;
+
+exports[`Svelte > jsx > Javascript Test > getterState 1`] = `
+"<script>
+  export let foo;
+
+  function baz(i) {
+    return i + foo2().length;
+  }
+  $: foo2 = () => {
+    return foo + \\"foo\\";
+  };
+
+  $: bar = () => {
+    return \\"bar\\";
+  };
+</script>
+
+<div>
+  <p>{foo2()}</p>
+  <p>{bar()}</p>
+  <p>{baz(1)}</p>
+</div>"
 `;
 
 exports[`Svelte > jsx > Javascript Test > import types 1`] = `
@@ -1801,6 +2225,7 @@ exports[`Svelte > jsx > Javascript Test > multipleOnUpdateWithDeps 1`] = `
   }
 
   $: onUpdateFn_0(...[a, b]);
+
   function onUpdateFn_1(..._args) {
     console.log(\\"Runs when c or d changes\\", c, d);
 
@@ -1933,6 +2358,14 @@ exports[`Svelte > jsx > Javascript Test > onInit 1`] = `
 </script>
 
 <div>Default name defined by parent {name}</div>"
+`;
+
+exports[`Svelte > jsx > Javascript Test > onInitPlain 1`] = `
+"<script>
+  console.log(\\"onInit\\");
+</script>
+
+<div />"
 `;
 
 exports[`Svelte > jsx > Javascript Test > onMount 1`] = `
@@ -2320,8 +2753,8 @@ exports[`Svelte > jsx > Javascript Test > renderContentExample 1`] = `
   } from \\"@dummy/injection-js\\";
   import RenderBlocks from \\"@dummy/RenderBlocks.svelte\\";
 
-  export let content;
   export let customComponents;
+  export let content;
 
   onMount(() => {
     sendComponentsToVisualEditor(customComponents);
@@ -2420,6 +2853,119 @@ exports[`Svelte > jsx > Javascript Test > self-referencing component with childr
 </div>"
 `;
 
+exports[`Svelte > jsx > Javascript Test > setState 1`] = `
+"<script>
+  import { writable } from \\"svelte/store\\";
+
+  function someFn() {
+    $n[0] = \\"123\\";
+  }
+
+  let n = writable([\\"123\\"]);
+</script>
+
+<div>
+  <button
+    on:click={(event) => {
+      someFn();
+    }}>Click me</button
+  >
+</div>"
+`;
+
+exports[`Svelte > jsx > Javascript Test > showExpressions 1`] = `
+"<script>
+  export let conditionA;
+  export let conditionB;
+  export let conditionC;
+</script>
+
+<div>
+  {#if conditionA}
+    Content0
+  {:else}
+    ContentA
+  {/if}
+  {#if conditionA}
+    ContentA
+  {/if}
+  {#if conditionA}{:else}
+    ContentA
+  {/if}
+  {#if conditionA}
+    ContentB
+  {:else}
+    {undefined}
+  {/if}
+  {#if conditionA}
+    {undefined}
+  {:else}
+    ContentB
+  {/if}
+  {#if conditionA}
+    ContentC
+  {/if}
+  {#if conditionA}{:else}
+    ContentC
+  {/if}
+  {#if conditionA}
+    ContentD
+  {/if}
+  {#if conditionA}{:else}
+    ContentD
+  {/if}
+  {#if conditionA}
+    ContentE
+  {:else}
+    hello
+  {/if}
+  {#if conditionA}
+    hello
+  {:else}
+    ContentE
+  {/if}
+  {#if conditionA}
+    ContentF
+  {:else}
+    123
+  {/if}
+  {#if conditionA}
+    123
+  {:else}
+    ContentF
+  {/if}
+  {#if conditionA === \\"Default\\"}
+    4mb
+  {:else if conditionB === \\"Complete\\"}
+    20mb
+  {:else}
+    9mb
+  {/if}
+  {#if conditionA === \\"Default\\"}
+    {#if conditionB === \\"Complete\\"}
+      20mb
+    {:else}
+      9mb
+    {/if}
+  {:else}
+    4mb
+  {/if}
+  {#if conditionA === \\"Default\\"}
+    {#if conditionB === \\"Complete\\"}
+      <div>complete</div>
+    {:else}
+      9mb
+    {/if}
+  {:else}
+    {#if conditionC === \\"Complete\\"}
+      dff
+    {:else}
+      <div>complete else</div>
+    {/if}
+  {/if}
+</div>"
+`;
+
 exports[`Svelte > jsx > Javascript Test > showWithFor 1`] = `
 "<script>
   export let conditionA;
@@ -2433,6 +2979,39 @@ exports[`Svelte > jsx > Javascript Test > showWithFor 1`] = `
 {:else}
   <div>else-condition-A</div>
 {/if}"
+`;
+
+exports[`Svelte > jsx > Javascript Test > showWithOtherValues 1`] = `
+"<script>
+  export let conditionA;
+</script>
+
+<div>
+  {#if conditionA}
+    ContentA
+  {/if}
+  {#if conditionA}
+    ContentB
+  {:else}
+    {undefined}
+  {/if}
+  {#if conditionA}
+    ContentC
+  {/if}
+  {#if conditionA}
+    ContentD
+  {/if}
+  {#if conditionA}
+    ContentE
+  {:else}
+    hello
+  {/if}
+  {#if conditionA}
+    ContentF
+  {:else}
+    123
+  {/if}
+</div>"
 `;
 
 exports[`Svelte > jsx > Javascript Test > showWithRootText 1`] = `
@@ -2481,23 +3060,50 @@ exports[`Svelte > jsx > Javascript Test > spreadNestedProps 1`] = `
 
 exports[`Svelte > jsx > Javascript Test > spreadProps 1`] = `"<input {...$$props} />"`;
 
+exports[`Svelte > jsx > Javascript Test > store-async-function 1`] = `
+"<script>
+  async function arrowFunction() {
+    return Promise.resolve();
+  }
+
+  async function namedFunction() {
+    return Promise.resolve();
+  }
+
+  async function fetchUsers() {
+    return Promise.resolve();
+  }
+</script>
+
+<div />"
+`;
+
+exports[`Svelte > jsx > Javascript Test > string-literal-store 1`] = `
+"<script>
+  let foo = 123;
+</script>
+
+<div>{foo}</div>"
+`;
+
 exports[`Svelte > jsx > Javascript Test > styleClassAndCss 1`] = `
 "<script>
-  function mitosis_styling(node, vars) {
-    Object.entries(vars || {}).forEach(([p, v]) => {
-      if (p.startsWith(\\"--\\")) {
-        node.style.setProperty(p, v);
-      } else {
-        node.style[p] = v;
-      }
-    });
+  function stringifyStyles(stylesObj) {
+    let styles = \\"\\";
+    for (let key in stylesObj) {
+      const dashedKey = key.replace(/[A-Z]/g, function (match) {
+        return \\"-\\" + match.toLowerCase();
+      });
+      styles += dashedKey + \\":\\" + stylesObj[key] + \\";\\";
+    }
+    return styles;
   }
 </script>
 
 <div
-  use:mitosis_styling={{
+  style={stringifyStyles({
     width: \\"100%\\",
-  }}
+  })}
   class=\\"builder-column div\\"
 />
 
@@ -2513,20 +3119,20 @@ exports[`Svelte > jsx > Javascript Test > styleClassAndCss 1`] = `
 exports[`Svelte > jsx > Javascript Test > stylePropClassAndCss 1`] = `
 "<script>
   export let attributes;
-
-  function mitosis_styling(node, vars) {
-    Object.entries(vars || {}).forEach(([p, v]) => {
-      if (p.startsWith(\\"--\\")) {
-        node.style.setProperty(p, v);
-      } else {
-        node.style[p] = v;
-      }
-    });
+  function stringifyStyles(stylesObj) {
+    let styles = \\"\\";
+    for (let key in stylesObj) {
+      const dashedKey = key.replace(/[A-Z]/g, function (match) {
+        return \\"-\\" + match.toLowerCase();
+      });
+      styles += dashedKey + \\":\\" + stylesObj[key] + \\";\\";
+    }
+    return styles;
   }
 </script>
 
 <div
-  use:mitosis_styling={attributes.style}
+  style={stringifyStyles(attributes.style)}
   class={attributes.classfdsa + \\" div\\"}
 />
 
@@ -2575,6 +3181,33 @@ exports[`Svelte > jsx > Javascript Test > typeDependency 1`] = `
 </script>
 
 <div>{foo}</div>"
+`;
+
+exports[`Svelte > jsx > Javascript Test > typeExternalStore 1`] = `
+"<script>
+  let _name = \\"test\\";
+</script>
+
+<div>Hello {_name}!</div>"
+`;
+
+exports[`Svelte > jsx > Javascript Test > typeGetterStore 1`] = `
+"<script>
+  function getName() {
+    if (name === \\"a\\") {
+      return \\"b\\";
+    }
+
+    return name;
+  }
+  $: test = () => {
+    return \\"test\\";
+  };
+
+  let name = \\"test\\";
+</script>
+
+<div>Hello {name}!</div>"
 `;
 
 exports[`Svelte > jsx > Javascript Test > use-style 1`] = `
@@ -2629,8 +3262,12 @@ exports[`Svelte > jsx > Javascript Test > useTarget 1`] = `
   };
 
   let lastName = \\"bar\\";
+  let foo = \\"bar\\";
 
-  onMount(() => {});
+  onMount(() => {
+    console.log(foo);
+    foo = \\"bar\\";
+  });
 </script>
 
 <div>{name()}</div>"
@@ -2661,6 +3298,51 @@ exports[`Svelte > jsx > Remove Internal mitosis package 1`] = `
 </script>
 
 <div>Hello {name}! I can run in React, Qwik, Vue, Solid, or Liquid!</div>"
+`;
+
+exports[`Svelte > jsx > Typescript Test > Advanced 1`] = `
+"<script lang=\\"ts\\">
+  let name = \\"PatrickJS\\";
+  let names = [\\"Steve\\", \\"PatrickJS\\"];
+</script>
+
+<main>
+  {#each names as person, i}
+    <div>{i}: {person}</div>
+  {/each}
+
+  {#each names as person}
+    <span>{person}</span>
+  {/each}
+
+  {#each names as item}
+    <br />
+  {/each}
+
+  {#each Array.from({ length: 10 }) as _, ee}
+    <pre>{ee}</pre>
+  {/each}
+
+  {#each Array.from({ length: 10 }) as item}
+    <p>{index}</p>
+  {/each}
+
+  {#each names as person, index}
+    <span>{person}{index}</span>
+  {/each}
+
+  {#each Array.from({ length: 10 }) as person, count}
+    <span>{person}{count}</span>
+  {/each}
+
+  {#each names as person, i}
+    <span>{person}{i}</span>
+  {/each}
+
+  {#each Array.from({ length: 10 }) as person, index}
+    <span>{person}{index}</span>
+  {/each}
+</main>"
 `;
 
 exports[`Svelte > jsx > Typescript Test > AdvancedRef 1`] = `
@@ -2749,7 +3431,7 @@ exports[`Svelte > jsx > Typescript Test > Basic 1`] = `
       name = myEvent.target.value;
     }}
   />
-  Hello! I can run in React, Vue, Solid, or Liquid!
+  Hello! I can run in React, Vue, Solid, or Liquid! &gt;
 </div>
 
 <style>
@@ -2861,22 +3543,47 @@ exports[`Svelte > jsx > Typescript Test > Basic Outputs 1`] = `
 `;
 
 exports[`Svelte > jsx > Typescript Test > Basic Outputs Meta 1`] = `
-"<script lang=\\"ts\\">
-  import { onMount } from \\"svelte\\";
+"/**
+          useMetadata:
+          {\\"outputs\\":[\\"onMessage\\",\\"onEvent\\"],\\"baz\\":\\"metadata inside component\\"}
+          */
+          
+          <script lang='ts'>
+  import { onMount } from 'svelte'
+
+
+
+
+
+
+
+
 
   export let onMessage;
-  export let onEvent;
-  export let message;
+export let onEvent;
+export let message;
 
-  let name = \\"PatrickJS\\";
 
-  onMount(() => {
-    onMessage(name);
-    onEvent(message);
-  });
+
+
+
+
+
+
+  let name = 'PatrickJS';
+
+
+  onMount(() => { onMessage(name);
+onEvent(message); });
+
+
+
+
+
+
 </script>
 
-<div />"
+<div ></div>"
 `;
 
 exports[`Svelte > jsx > Typescript Test > BasicAttribute 1`] = `
@@ -2965,7 +3672,7 @@ exports[`Svelte > jsx > Typescript Test > BasicRef 1`] = `
 
   function onBlur() {
     // Maintain focus
-    inputRef.focus();
+    inputRef?.focus();
   }
 
   function lowerCaseName() {
@@ -3022,8 +3729,8 @@ exports[`Svelte > jsx > Typescript Test > BasicRefAssignment 1`] = `
 
 <div>
   <button
-    on:click={(evt) => {
-      handlerClick(evt);
+    on:click={async (evt) => {
+      await handlerClick(evt);
     }}>Click</button
   >
 </div>"
@@ -3870,23 +4577,23 @@ exports[`Svelte > jsx > Typescript Test > Img 1`] = `
   export let attributes: ImgProps[\\"attributes\\"] = undefined;
   export let imgSrc: ImgProps[\\"imgSrc\\"] = undefined;
   export let altText: ImgProps[\\"altText\\"] = undefined;
-
-  function mitosis_styling(node, vars) {
-    Object.entries(vars || {}).forEach(([p, v]) => {
-      if (p.startsWith(\\"--\\")) {
-        node.style.setProperty(p, v);
-      } else {
-        node.style[p] = v;
-      }
-    });
+  function stringifyStyles(stylesObj) {
+    let styles = \\"\\";
+    for (let key in stylesObj) {
+      const dashedKey = key.replace(/[A-Z]/g, function (match) {
+        return \\"-\\" + match.toLowerCase();
+      });
+      styles += dashedKey + \\":\\" + stylesObj[key] + \\";\\";
+    }
+    return styles;
   }
 </script>
 
 <img
-  use:mitosis_styling={{
+  style={stringifyStyles({
     objectFit: backgroundSize || \\"cover\\",
     objectPosition: backgroundPosition || \\"center\\",
-  }}
+  })}
   {...attributes}
   key={(Builder.isEditing && imgSrc) || \\"default-key\\"}
   alt={altText}
@@ -3952,6 +4659,26 @@ exports[`Svelte > jsx > Typescript Test > InputParent 1`] = `
 />"
 `;
 
+exports[`Svelte > jsx > Typescript Test > NestedStore 1`] = `
+"<script context=\\"module\\" lang=\\"ts\\">
+  type MyStore = {
+    _id?: string;
+    _messageId?: string;
+  };
+</script>
+
+<script lang=\\"ts\\">
+  let _id = \\"abc\\";
+
+  let _messageId = _id + \\"-message\\";
+</script>
+
+<div id={_id}>
+  Test
+  <p id={_messageId}>Message</p>
+</div>"
+`;
+
 exports[`Svelte > jsx > Typescript Test > RawText 1`] = `
 "<script context=\\"module\\" lang=\\"ts\\">
   export interface RawTextProps {
@@ -3983,23 +4710,26 @@ exports[`Svelte > jsx > Typescript Test > Section 1`] = `
   export let attributes: SectionProps[\\"attributes\\"] = undefined;
   export let maxWidth: SectionProps[\\"maxWidth\\"] = undefined;
 
-  function mitosis_styling(node, vars) {
-    Object.entries(vars || {}).forEach(([p, v]) => {
-      if (p.startsWith(\\"--\\")) {
-        node.style.setProperty(p, v);
-      } else {
-        node.style[p] = v;
-      }
-    });
+  function stringifyStyles(stylesObj) {
+    let styles = \\"\\";
+    for (let key in stylesObj) {
+      const dashedKey = key.replace(/[A-Z]/g, function (match) {
+        return \\"-\\" + match.toLowerCase();
+      });
+      styles += dashedKey + \\":\\" + stylesObj[key] + \\";\\";
+    }
+    return styles;
   }
 </script>
 
 <section
-  use:mitosis_styling={maxWidth && typeof maxWidth === \\"number\\"
-    ? {
-        maxWidth: maxWidth,
-      }
-    : undefined}
+  style={stringifyStyles(
+    maxWidth && typeof maxWidth === \\"number\\"
+      ? {
+          maxWidth: maxWidth,
+        }
+      : undefined
+  )}
   {...attributes}
 >
   <slot />
@@ -4018,14 +4748,15 @@ exports[`Svelte > jsx > Typescript Test > Section 2`] = `
 <script lang=\\"ts\\">
   export let attributes: SectionProps[\\"attributes\\"] = undefined;
 
-  function mitosis_styling(node, vars) {
-    Object.entries(vars || {}).forEach(([p, v]) => {
-      if (p.startsWith(\\"--\\")) {
-        node.style.setProperty(p, v);
-      } else {
-        node.style[p] = v;
-      }
-    });
+  function stringifyStyles(stylesObj) {
+    let styles = \\"\\";
+    for (let key in stylesObj) {
+      const dashedKey = key.replace(/[A-Z]/g, function (match) {
+        return \\"-\\" + match.toLowerCase();
+      });
+      styles += dashedKey + \\":\\" + stylesObj[key] + \\";\\";
+    }
+    return styles;
   }
 
   let max = 42;
@@ -4035,9 +4766,9 @@ exports[`Svelte > jsx > Typescript Test > Section 2`] = `
 {#if max}
   {#each items as item}
     <section
-      use:mitosis_styling={{
+      style={stringifyStyles({
         maxWidth: item + max,
-      }}
+      })}
       {...attributes}
     >
       <slot />
@@ -4174,9 +4905,9 @@ exports[`Svelte > jsx > Typescript Test > SlotNamed 1`] = `
 </script>
 
 <div>
-  <slot name=\\"top\\" /><slot name=\\"left\\">Default left</slot><slot
-    >Default Child</slot
-  >
+  <slot name=\\"my-awesome-slot\\" /><slot name=\\"top\\" /><slot name=\\"left\\"
+    >Default left</slot
+  ><slot>Default Child</slot>
 </div>"
 `;
 
@@ -4233,8 +4964,8 @@ exports[`Svelte > jsx > Typescript Test > Stamped.io 1`] = `
     <textarea placeholder=\\"How was your experience?\\" class=\\"textarea\\" />
     <button
       class=\\"button\\"
-      on:click={(event) => {
-        event.preventDefault();
+      on:click={(ev) => {
+        ev.preventDefault();
         showReviewPrompt = false;
       }}
     >
@@ -4278,6 +5009,40 @@ exports[`Svelte > jsx > Typescript Test > Stamped.io 1`] = `
     margin-right: 10px;
   }
 </style>"
+`;
+
+exports[`Svelte > jsx > Typescript Test > StoreComment 1`] = `
+"<script lang=\\"ts\\">
+  function bar() {}
+
+  let foo = true;
+</script>
+
+{foo}"
+`;
+
+exports[`Svelte > jsx > Typescript Test > StoreShadowVars 1`] = `
+"<script lang=\\"ts\\">
+  function foo(errors) {
+    return errors;
+  }
+
+  let errors = {};
+</script>
+
+{foo(errors)}"
+`;
+
+exports[`Svelte > jsx > Typescript Test > StoreWithState 1`] = `
+"<script lang=\\"ts\\">
+  function bar() {
+    return foo;
+  }
+
+  let foo = false;
+</script>
+
+{bar()}"
 `;
 
 exports[`Svelte > jsx > Typescript Test > Submit 1`] = `
@@ -4348,6 +5113,45 @@ exports[`Svelte > jsx > Typescript Test > Textarea 1`] = `
 <textarea {...attributes} {placeholder} {name} {value} {defaultValue} />"
 `;
 
+exports[`Svelte > jsx > Typescript Test > UseValueAndFnFromStore 1`] = `
+"<script context=\\"module\\" lang=\\"ts\\">
+  type MyProps = {
+    onChange?: (active: boolean) => void;
+  };
+
+  type MyStore = {
+    _id?: string;
+    _active?: boolean;
+    _do?: (id?: string) => void;
+  };
+</script>
+
+<script lang=\\"ts\\">
+  import { afterUpdate } from \\"svelte\\";
+
+  export let onChange: MyProps[\\"onChange\\"] = undefined;
+
+  function _do(id?: string) {
+    _active = !!id;
+
+    if (onChange) {
+      onChange(_active);
+    }
+  }
+
+  let _id = \\"abc\\";
+  let _active = false;
+
+  afterUpdate(() => {
+    if (_do) {
+      _do(_id);
+    }
+  });
+</script>
+
+<div>Test</div>"
+`;
+
 exports[`Svelte > jsx > Typescript Test > Video 1`] = `
 "<script context=\\"module\\" lang=\\"ts\\">
   export interface VideoProps {
@@ -4387,20 +5191,20 @@ exports[`Svelte > jsx > Typescript Test > Video 1`] = `
   export let muted: VideoProps[\\"muted\\"] = undefined;
   export let controls: VideoProps[\\"controls\\"] = undefined;
   export let loop: VideoProps[\\"loop\\"] = undefined;
-
-  function mitosis_styling(node, vars) {
-    Object.entries(vars || {}).forEach(([p, v]) => {
-      if (p.startsWith(\\"--\\")) {
-        node.style.setProperty(p, v);
-      } else {
-        node.style[p] = v;
-      }
-    });
+  function stringifyStyles(stylesObj) {
+    let styles = \\"\\";
+    for (let key in stylesObj) {
+      const dashedKey = key.replace(/[A-Z]/g, function (match) {
+        return \\"-\\" + match.toLowerCase();
+      });
+      styles += dashedKey + \\":\\" + stylesObj[key] + \\";\\";
+    }
+    return styles;
   }
 </script>
 
 <video
-  use:mitosis_styling={{
+  style={stringifyStyles({
     width: \\"100%\\",
     height: \\"100%\\",
     ...attributes?.style,
@@ -4409,7 +5213,7 @@ exports[`Svelte > jsx > Typescript Test > Video 1`] = `
     // Hack to get object fit to work as expected and
     // not have the video overflow
     borderRadius: 1,
-  }}
+  })}
   preload=\\"none\\"
   {...attributes}
   key={video || \\"no-src\\"}
@@ -4435,6 +5239,27 @@ exports[`Svelte > jsx > Typescript Test > arrowFunctionInUseStore 1`] = `
 </script>
 
 <div>Hello {name}</div>"
+`;
+
+exports[`Svelte > jsx > Typescript Test > basicForFragment 1`] = `
+"<script lang=\\"ts\\">
+  let id = \\"xyz\\";
+</script>
+
+<div>
+  {#each [\\"a\\", \\"b\\", \\"c\\"] as option (\`key-\${option}\`)}
+    <div>{option}</div>
+  {/each}
+
+  {#each [\\"a\\", \\"b\\", \\"c\\"] as option (\`\${id}-\${option}\`)}
+    <div>{option}</div>
+  {/each}
+  <select>
+    {#each [\\"d\\", \\"e\\", \\"f\\"] as option (\`\${id}-\${option}\`)}
+      <option value={option}>{option}</option>
+    {/each}
+  </select>
+</div>"
 `;
 
 exports[`Svelte > jsx > Typescript Test > basicForNoTagReference 1`] = `
@@ -4485,26 +5310,60 @@ exports[`Svelte > jsx > Typescript Test > basicForwardRef 1`] = `
 `;
 
 exports[`Svelte > jsx > Typescript Test > basicForwardRefMetadata 1`] = `
-"<script context=\\"module\\" lang=\\"ts\\">
-  export interface Props {
-    showInput: boolean;
-    inputRef: HTMLInputElement;
-  }
-</script>
+"/**
+          useMetadata:
+          {\\"forwardRef\\":\\"inputRef\\"}
+          */
+          
+          <script context='module' lang='ts'>
+      export interface Props {
+showInput: boolean;
+inputRef: HTMLInputElement;
+}
 
-<script lang=\\"ts\\">
-  export let inputRef: Props[\\"inputRef\\"];
+    </script>
+    
 
-  let name = \\"PatrickJS\\";
-</script>
+    
+<script lang='ts'>
 
-<div><input class=\\"input\\" bind:this={inputRef} bind:value={name} /></div>
 
-<style>
-  .input {
-    color: red;
-  }
-</style>"
+
+
+
+
+
+
+
+
+    export let inputRef: Props['inputRef'];
+
+
+
+
+
+
+
+
+    let name = 'PatrickJS';
+
+
+
+
+
+
+
+
+
+  </script>
+
+  <div ><input  class=\\"input\\"  bind:this={inputRef}  bind:value={name}  /></div>
+
+  <style>
+    .input {
+color: red;
+}
+  </style>"
 `;
 
 exports[`Svelte > jsx > Typescript Test > basicOnUpdateReturn 1`] = `
@@ -4534,12 +5393,100 @@ exports[`Svelte > jsx > Typescript Test > basicOnUpdateReturn 1`] = `
 <div>Hello! {name}</div>"
 `;
 
-exports[`Svelte > jsx > Typescript Test > class + ClassName + css 1`] = `
-"<script lang=\\"ts\\">
+exports[`Svelte > jsx > Typescript Test > basicRefAttributePassing 1`] = `
+"/**
+          useMetadata:
+          {\\"attributePassing\\":{\\"enabled\\":true}}
+          */
+          
+          <script lang='ts'>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  let buttonRef
+
+
+
+
+
+
+
+
+
+
+
 </script>
 
-<div class=\\"test2 test div\\">
-  Hello! I can run in React, Vue, Solid, or Liquid!
+<button  bind:this={buttonRef} >Attribute Passing</button>"
+`;
+
+exports[`Svelte > jsx > Typescript Test > basicRefAttributePassingCustomRef 1`] = `
+"/**
+          useMetadata:
+          {\\"attributePassing\\":{\\"enabled\\":true,\\"customRef\\":\\"buttonRef\\"}}
+          */
+          
+          <script lang='ts'>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  let buttonRef
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+<div ><button  bind:this={buttonRef} >Attribute Passing</button></div>"
+`;
+
+exports[`Svelte > jsx > Typescript Test > class + ClassName + css 1`] = `
+"<script lang=\\"ts\\">
+  import MyComp from \\"./my-component.svelte\\";
+</script>
+
+<div>
+  <MyComp class=\\"test\\" className=\\"test2\\">
+    Hello! I can run in React, Vue, Solid, or Liquid!
+  </MyComp>
+  <div class=\\"test2 test div\\">
+    Hello! I can run in React, Vue, Solid, or Liquid!
+  </div>
 </div>
 
 <style>
@@ -4597,14 +5544,15 @@ exports[`Svelte > jsx > Typescript Test > className 1`] = `
 
 exports[`Svelte > jsx > Typescript Test > classState 1`] = `
 "<script lang=\\"ts\\">
-  function mitosis_styling(node, vars) {
-    Object.entries(vars || {}).forEach(([p, v]) => {
-      if (p.startsWith(\\"--\\")) {
-        node.style.setProperty(p, v);
-      } else {
-        node.style[p] = v;
-      }
-    });
+  function stringifyStyles(stylesObj) {
+    let styles = \\"\\";
+    for (let key in stylesObj) {
+      const dashedKey = key.replace(/[A-Z]/g, function (match) {
+        return \\"-\\" + match.toLowerCase();
+      });
+      styles += dashedKey + \\":\\" + stylesObj[key] + \\";\\";
+    }
+    return styles;
   }
 
   let classState = \\"testClassName\\";
@@ -4613,7 +5561,7 @@ exports[`Svelte > jsx > Typescript Test > classState 1`] = `
   };
 </script>
 
-<div use:mitosis_styling={styleState} class={classState + \\" div\\"}>
+<div style={stringifyStyles(styleState)} class={classState + \\" div\\"}>
   Hello! I can run in React, Vue, Solid, or Liquid!
 </div>
 
@@ -4622,6 +5570,47 @@ exports[`Svelte > jsx > Typescript Test > classState 1`] = `
     padding: 10px;
   }
 </style>"
+`;
+
+exports[`Svelte > jsx > Typescript Test > complexMeta 1`] = `
+"/**
+          useMetadata:
+          {\\"x\\":\\"y\\",\\"asdf\\":{\\"stringValue\\":\\"d\\",\\"booleanValue\\":true,\\"numberValue\\":1,\\"innerObject\\":{\\"stringValue\\":\\"inner\\",\\"numberValue\\":2,\\"booleanValue\\":false},\\"spreadStringValue\\":\\"f\\"}}
+          */
+          
+          <script lang='ts'>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+<div ></div>"
 `;
 
 exports[`Svelte > jsx > Typescript Test > componentWithContext 1`] = `
@@ -4745,7 +5734,7 @@ exports[`Svelte > jsx > Typescript Test > defaultProps 1`] = `
       type=\\"button\\"
       {...attributes}
       on:click={(event) => {
-        onClick(event);
+        onClick();
       }}>{buttonText}</button
     >
   {/if}
@@ -4810,6 +5799,29 @@ exports[`Svelte > jsx > Typescript Test > defaultValsWithTypes 1`] = `
 <div>Hello {name || DEFAULT_VALUES.name}</div>"
 `;
 
+exports[`Svelte > jsx > Typescript Test > eventInputAndChange 1`] = `
+"<script lang=\\"ts\\">
+  let name = \\"Steve\\";
+</script>
+
+<div>
+  <input
+    class=\\"input\\"
+    on:input={(event) => {
+      name = event.target.value;
+    }}
+    bind:value={name}
+  />
+  Hello! I can run in React, Vue, Solid, or Liquid!
+</div>
+
+<style>
+  .input {
+    color: red;
+  }
+</style>"
+`;
+
 exports[`Svelte > jsx > Typescript Test > expressionState 1`] = `
 "<script lang=\\"ts\\">
   export let componentRef;
@@ -4818,6 +5830,80 @@ exports[`Svelte > jsx > Typescript Test > expressionState 1`] = `
 </script>
 
 <div>{refToUse}</div>"
+`;
+
+exports[`Svelte > jsx > Typescript Test > figmaMeta 1`] = `
+"/**
+          useMetadata:
+          {\\"figma\\":{\\"name\\":\\"def-button-beta-outlined\\",\\"url\\":\\"https://www.figma.com/xxx\\",\\"props\\":{\\"iconSmall\\":{\\"type\\":\\"instance\\",\\"key\\":\\"📍 Icon Small\\"},\\"iconMedium\\":{\\"type\\":\\"instance\\",\\"key\\":\\"📍 Icon Medium\\"},\\"label\\":{\\"type\\":\\"string\\",\\"key\\":\\"✏️ Label\\"},\\"icon\\":{\\"type\\":\\"boolean\\",\\"key\\":\\"👁️ Icon\\",\\"value\\":{\\"false\\":false,\\"true\\":\\"placeholder\\"}},\\"interactiveState\\":{\\"type\\":\\"enum\\",\\"key\\":\\"Interactive State\\",\\"value\\":{\\"(Def) Enabled\\":false,\\"Hovered\\":false,\\"Pressed\\":false,\\"Focused\\":false,\\"Disabled\\":\\"true\\"}},\\"size\\":{\\"type\\":\\"enum\\",\\"key\\":\\"Size\\",\\"value\\":{\\"(Def) Medium\\":false,\\"Small\\":\\"small\\"}},\\"width\\":{\\"type\\":\\"enum\\",\\"key\\":\\"Width\\",\\"value\\":{\\"(Def) Auto Width\\":false,\\"Full Width\\":\\"full\\"}}}}}
+          */
+          
+          <script lang='ts'>
+
+
+
+
+
+
+
+
+
+
+  export let icon;
+export let interactiveState;
+export let width;
+export let size;
+export let label;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+<button  data-icon={icon}  data-disabled={interactiveState}  data-width={width}  data-size={size} >{label}</button>"
+`;
+
+exports[`Svelte > jsx > Typescript Test > getterState 1`] = `
+"<script context=\\"module\\" lang=\\"ts\\">
+  export interface ButtonProps {
+    foo: string;
+  }
+</script>
+
+<script lang=\\"ts\\">
+  export let foo: ButtonProps[\\"foo\\"];
+
+  function baz(i: number) {
+    return i + foo2().length;
+  }
+  $: foo2 = () => {
+    return foo + \\"foo\\";
+  };
+
+  $: bar = () => {
+    return \\"bar\\";
+  };
+</script>
+
+<div>
+  <p>{foo2()}</p>
+  <p>{bar()}</p>
+  <p>{baz(1)}</p>
+</div>"
 `;
 
 exports[`Svelte > jsx > Typescript Test > import types 1`] = `
@@ -4877,6 +5963,7 @@ exports[`Svelte > jsx > Typescript Test > multipleOnUpdateWithDeps 1`] = `
   }
 
   $: onUpdateFn_0(...[a, b]);
+
   function onUpdateFn_1(..._args: any[]) {
     console.log(\\"Runs when c or d changes\\", c, d);
 
@@ -5025,6 +6112,14 @@ exports[`Svelte > jsx > Typescript Test > onInit 1`] = `
 </script>
 
 <div>Default name defined by parent {name}</div>"
+`;
+
+exports[`Svelte > jsx > Typescript Test > onInitPlain 1`] = `
+"<script lang=\\"ts\\">
+  console.log(\\"onInit\\");
+</script>
+
+<div />"
 `;
 
 exports[`Svelte > jsx > Typescript Test > onMount 1`] = `
@@ -5497,8 +6592,8 @@ exports[`Svelte > jsx > Typescript Test > renderContentExample 1`] = `
   } from \\"@dummy/injection-js\\";
   import RenderBlocks from \\"@dummy/RenderBlocks.svelte\\";
 
-  export let content: Props[\\"content\\"];
   export let customComponents: Props[\\"customComponents\\"];
+  export let content: Props[\\"content\\"];
 
   onMount(() => {
     sendComponentsToVisualEditor(customComponents);
@@ -5612,6 +6707,126 @@ exports[`Svelte > jsx > Typescript Test > self-referencing component with childr
 </div>"
 `;
 
+exports[`Svelte > jsx > Typescript Test > setState 1`] = `
+"<script lang=\\"ts\\">
+  import { writable } from \\"svelte/store\\";
+
+  function someFn() {
+    $n[0] = \\"123\\";
+  }
+
+  let n = writable([\\"123\\"]);
+</script>
+
+<div>
+  <button
+    on:click={(event) => {
+      someFn();
+    }}>Click me</button
+  >
+</div>"
+`;
+
+exports[`Svelte > jsx > Typescript Test > showExpressions 1`] = `
+"<script context=\\"module\\" lang=\\"ts\\">
+  interface Props {
+    conditionA: boolean;
+    conditionB: boolean;
+  }
+</script>
+
+<script lang=\\"ts\\">
+  export let conditionA: Props[\\"conditionA\\"];
+  export let conditionB: Props[\\"conditionB\\"];
+  export let conditionC: Props[\\"conditionC\\"];
+</script>
+
+<div>
+  {#if conditionA}
+    Content0
+  {:else}
+    ContentA
+  {/if}
+  {#if conditionA}
+    ContentA
+  {/if}
+  {#if conditionA}{:else}
+    ContentA
+  {/if}
+  {#if conditionA}
+    ContentB
+  {:else}
+    {undefined}
+  {/if}
+  {#if conditionA}
+    {undefined}
+  {:else}
+    ContentB
+  {/if}
+  {#if conditionA}
+    ContentC
+  {/if}
+  {#if conditionA}{:else}
+    ContentC
+  {/if}
+  {#if conditionA}
+    ContentD
+  {/if}
+  {#if conditionA}{:else}
+    ContentD
+  {/if}
+  {#if conditionA}
+    ContentE
+  {:else}
+    hello
+  {/if}
+  {#if conditionA}
+    hello
+  {:else}
+    ContentE
+  {/if}
+  {#if conditionA}
+    ContentF
+  {:else}
+    123
+  {/if}
+  {#if conditionA}
+    123
+  {:else}
+    ContentF
+  {/if}
+  {#if conditionA === \\"Default\\"}
+    4mb
+  {:else if conditionB === \\"Complete\\"}
+    20mb
+  {:else}
+    9mb
+  {/if}
+  {#if conditionA === \\"Default\\"}
+    {#if conditionB === \\"Complete\\"}
+      20mb
+    {:else}
+      9mb
+    {/if}
+  {:else}
+    4mb
+  {/if}
+  {#if conditionA === \\"Default\\"}
+    {#if conditionB === \\"Complete\\"}
+      <div>complete</div>
+    {:else}
+      9mb
+    {/if}
+  {:else}
+    {#if conditionC === \\"Complete\\"}
+      dff
+    {:else}
+      <div>complete else</div>
+    {/if}
+  {/if}
+</div>"
+`;
+
 exports[`Svelte > jsx > Typescript Test > showWithFor 1`] = `
 "<script context=\\"module\\" lang=\\"ts\\">
   interface Props {
@@ -5632,6 +6847,45 @@ exports[`Svelte > jsx > Typescript Test > showWithFor 1`] = `
 {:else}
   <div>else-condition-A</div>
 {/if}"
+`;
+
+exports[`Svelte > jsx > Typescript Test > showWithOtherValues 1`] = `
+"<script context=\\"module\\" lang=\\"ts\\">
+  interface Props {
+    conditionA: boolean;
+  }
+</script>
+
+<script lang=\\"ts\\">
+  export let conditionA: Props[\\"conditionA\\"];
+</script>
+
+<div>
+  {#if conditionA}
+    ContentA
+  {/if}
+  {#if conditionA}
+    ContentB
+  {:else}
+    {undefined}
+  {/if}
+  {#if conditionA}
+    ContentC
+  {/if}
+  {#if conditionA}
+    ContentD
+  {/if}
+  {#if conditionA}
+    ContentE
+  {:else}
+    hello
+  {/if}
+  {#if conditionA}
+    ContentF
+  {:else}
+    123
+  {/if}
+</div>"
 `;
 
 exports[`Svelte > jsx > Typescript Test > showWithRootText 1`] = `
@@ -5709,23 +6963,50 @@ exports[`Svelte > jsx > Typescript Test > spreadProps 1`] = `
 <input {...$$props} />"
 `;
 
+exports[`Svelte > jsx > Typescript Test > store-async-function 1`] = `
+"<script lang=\\"ts\\">
+  async function arrowFunction() {
+    return Promise.resolve();
+  }
+
+  async function namedFunction() {
+    return Promise.resolve();
+  }
+
+  async function fetchUsers() {
+    return Promise.resolve();
+  }
+</script>
+
+<div />"
+`;
+
+exports[`Svelte > jsx > Typescript Test > string-literal-store 1`] = `
+"<script lang=\\"ts\\">
+  let foo = 123;
+</script>
+
+<div>{foo}</div>"
+`;
+
 exports[`Svelte > jsx > Typescript Test > styleClassAndCss 1`] = `
 "<script lang=\\"ts\\">
-  function mitosis_styling(node, vars) {
-    Object.entries(vars || {}).forEach(([p, v]) => {
-      if (p.startsWith(\\"--\\")) {
-        node.style.setProperty(p, v);
-      } else {
-        node.style[p] = v;
-      }
-    });
+  function stringifyStyles(stylesObj) {
+    let styles = \\"\\";
+    for (let key in stylesObj) {
+      const dashedKey = key.replace(/[A-Z]/g, function (match) {
+        return \\"-\\" + match.toLowerCase();
+      });
+      styles += dashedKey + \\":\\" + stylesObj[key] + \\";\\";
+    }
+    return styles;
   }
 </script>
 
 <div
-  use:mitosis_styling={{
+  style={stringifyStyles({
     width: \\"100%\\",
-  }}
+  })}
   class=\\"builder-column div\\"
 />
 
@@ -5741,20 +7022,20 @@ exports[`Svelte > jsx > Typescript Test > styleClassAndCss 1`] = `
 exports[`Svelte > jsx > Typescript Test > stylePropClassAndCss 1`] = `
 "<script lang=\\"ts\\">
   export let attributes;
-
-  function mitosis_styling(node, vars) {
-    Object.entries(vars || {}).forEach(([p, v]) => {
-      if (p.startsWith(\\"--\\")) {
-        node.style.setProperty(p, v);
-      } else {
-        node.style[p] = v;
-      }
-    });
+  function stringifyStyles(stylesObj) {
+    let styles = \\"\\";
+    for (let key in stylesObj) {
+      const dashedKey = key.replace(/[A-Z]/g, function (match) {
+        return \\"-\\" + match.toLowerCase();
+      });
+      styles += dashedKey + \\":\\" + stylesObj[key] + \\";\\";
+    }
+    return styles;
   }
 </script>
 
 <div
-  use:mitosis_styling={attributes.style}
+  style={stringifyStyles(attributes.style)}
   class={attributes.classfdsa + \\" div\\"}
 />
 
@@ -5818,6 +7099,43 @@ exports[`Svelte > jsx > Typescript Test > typeDependency 1`] = `
 <div>{foo}</div>"
 `;
 
+exports[`Svelte > jsx > Typescript Test > typeExternalStore 1`] = `
+"<script lang=\\"ts\\">
+  import { FooStore } from \\"./foo-store\\";
+
+  let _name = \\"test\\";
+</script>
+
+<div>Hello {_name}!</div>"
+`;
+
+exports[`Svelte > jsx > Typescript Test > typeGetterStore 1`] = `
+"<script context=\\"module\\" lang=\\"ts\\">
+  type GetterStore = {
+    getName: () => string;
+    name: string;
+    get test(): string;
+  };
+</script>
+
+<script lang=\\"ts\\">
+  function getName() {
+    if (name === \\"a\\") {
+      return \\"b\\";
+    }
+
+    return name;
+  }
+  $: test = () => {
+    return \\"test\\";
+  };
+
+  let name = \\"test\\";
+</script>
+
+<div>Hello {name}!</div>"
+`;
+
 exports[`Svelte > jsx > Typescript Test > use-style 1`] = `
 "<script lang=\\"ts\\">
 </script>
@@ -5879,8 +7197,12 @@ exports[`Svelte > jsx > Typescript Test > useTarget 1`] = `
   };
 
   let lastName = \\"bar\\";
+  let foo = \\"bar\\";
 
-  onMount(() => {});
+  onMount(() => {
+    console.log(foo);
+    foo = \\"bar\\";
+  });
 </script>
 
 <div>{name()}</div>"

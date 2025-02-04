@@ -21,13 +21,13 @@ import { hasStyle } from '@/helpers/styles/helpers';
 import { MitosisComponent } from '@/types/mitosis-component';
 import { TranspilerGenerator } from '@/types/transpiler';
 import { flow, pipe } from 'fp-ts/lib/function';
+import traverse from 'neotraverse/legacy';
 import * as prettierPluginSvelte from 'prettier-plugin-svelte';
 import prettierParserBabel from 'prettier/parser-babel';
 import prettierParserHtml from 'prettier/parser-html';
 import prettierParserPostcss from 'prettier/parser-postcss';
 import prettierParserTypescript from 'prettier/parser-typescript';
 import { format } from 'prettier/standalone';
-import traverse from 'traverse';
 import {
   runPostCodePlugins,
   runPostJsonPlugins,
@@ -338,18 +338,19 @@ export const componentToSvelte: TranspilerGenerator<ToSvelteOptions> =
         })
         .join('\n')}
       ${
-        // https://svelte.dev/repl/bd9b56891f04414982517bbd10c52c82?version=3.31.0
+        // https://github.com/sveltejs/svelte/issues/7311
         hasStyle(json)
-          ? `
-        function mitosis_styling (node, vars) {
-          Object.entries(vars || {}).forEach(([ p, v ]) => {
-            if (p.startsWith('--')) {
-              node.style.setProperty(p, v);
-            } else {
-              node.style[p] = v;
+          ? dedent`
+        	function stringifyStyles(stylesObj) {
+            let styles = '';
+            for (let key in stylesObj) {
+              const dashedKey = key.replace(/[A-Z]/g, function(match) {
+                return '-' + match.toLowerCase();
+              });
+              styles += dashedKey + ":" + stylesObj[key] + ";";
             }
-          })
-        }
+            return styles;
+          }
       `
           : ''
       }
@@ -412,7 +413,7 @@ export const componentToSvelte: TranspilerGenerator<ToSvelteOptions> =
               $: ${fnName}(...[${depsArrayStr}]);
             `;
           })
-          .join(';') || ''
+          .join('\n') || ''
       }
 
       ${

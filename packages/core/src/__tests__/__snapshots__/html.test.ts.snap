@@ -1,5 +1,278 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`Html > jsx > Javascript Test > Advanced 1`] = `
+"<main>
+  <template data-el=\\"for\\">
+    <div>
+      <template data-el=\\"div-1\\"><!-- i --></template>
+      :
+      <template data-el=\\"div-2\\"><!-- person --></template>
+    </div>
+  </template>
+
+  <template data-el=\\"for-2\\">
+    <span>
+      <template data-el=\\"div-3\\"><!-- person --></template>
+    </span>
+  </template>
+
+  <template data-el=\\"for-3\\"><br /></template>
+
+  <template data-el=\\"for-4\\">
+    <pre><template data-el=\\"div-4\\"><!-- ee --></template></pre>
+  </template>
+
+  <template data-el=\\"for-5\\">
+    <p>
+      <template data-el=\\"div-5\\"><!-- index --></template>
+    </p>
+  </template>
+
+  <template data-el=\\"for-6\\">
+    <span>
+      <template data-el=\\"div-6\\"><!-- person --></template>
+      <template data-el=\\"div-7\\"><!-- index --></template>
+    </span>
+  </template>
+
+  <template data-el=\\"for-7\\">
+    <span>
+      <template data-el=\\"div-8\\"><!-- person --></template>
+      <template data-el=\\"div-9\\"><!-- count --></template>
+    </span>
+  </template>
+
+  <template data-el=\\"for-8\\">
+    <span>
+      <template data-el=\\"div-10\\"><!-- person --></template>
+      <template data-el=\\"div-11\\"><!-- i --></template>
+    </span>
+  </template>
+
+  <template data-el=\\"for-9\\">
+    <span>
+      <template data-el=\\"div-12\\"><!-- person --></template>
+      <template data-el=\\"div-13\\"><!-- index --></template>
+    </span>
+  </template>
+</main>
+<script>
+  (() => {
+    const state = { name: \\"PatrickJS\\", names: [\\"Steve\\", \\"PatrickJS\\"] };
+
+    let context = null;
+    let nodesToDestroy = [];
+    let pendingUpdate = false;
+
+    function destroyAnyNodes() {
+      // destroy current view template refs before rendering again
+      nodesToDestroy.forEach((el) => el.remove());
+      nodesToDestroy = [];
+    }
+
+    // Function to update data bindings and loops
+    // call update() when you mutate state and need the updates to reflect
+    // in the dom
+    function update() {
+      if (pendingUpdate === true) {
+        return;
+      }
+      pendingUpdate = true;
+
+      document.querySelectorAll(\\"[data-el='for']\\").forEach((el) => {
+        let array = state.names;
+        renderLoop(el, array, \\"person\\", \\"i\\");
+      });
+
+      document.querySelectorAll(\\"[data-el='div-1']\\").forEach((el) => {
+        const i = getScope(el, \\"i\\");
+        renderTextNode(el, i);
+      });
+
+      document.querySelectorAll(\\"[data-el='div-2']\\").forEach((el) => {
+        const person = getScope(el, \\"person\\");
+        renderTextNode(el, person);
+      });
+
+      document.querySelectorAll(\\"[data-el='for-2']\\").forEach((el) => {
+        let array = state.names;
+        renderLoop(el, array, \\"person\\");
+      });
+
+      document.querySelectorAll(\\"[data-el='div-3']\\").forEach((el) => {
+        const person = getScope(el, \\"person\\");
+        renderTextNode(el, person);
+      });
+
+      document.querySelectorAll(\\"[data-el='for-3']\\").forEach((el) => {
+        let array = state.names;
+        renderLoop(el, array, \\"item\\");
+      });
+
+      document.querySelectorAll(\\"[data-el='for-4']\\").forEach((el) => {
+        let array = Array.from({
+          length: 10,
+        });
+        renderLoop(el, array, \\"_\\", \\"ee\\");
+      });
+
+      document.querySelectorAll(\\"[data-el='div-4']\\").forEach((el) => {
+        const ee = getScope(el, \\"ee\\");
+        renderTextNode(el, ee);
+      });
+
+      document.querySelectorAll(\\"[data-el='for-5']\\").forEach((el) => {
+        let array = Array.from({
+          length: 10,
+        });
+        renderLoop(el, array, \\"item\\");
+      });
+
+      document.querySelectorAll(\\"[data-el='div-5']\\").forEach((el) => {
+        renderTextNode(el, index);
+      });
+
+      document.querySelectorAll(\\"[data-el='for-6']\\").forEach((el) => {
+        let array = state.names;
+        renderLoop(el, array, \\"person\\", \\"index\\");
+      });
+
+      document.querySelectorAll(\\"[data-el='div-6']\\").forEach((el) => {
+        const person = getScope(el, \\"person\\");
+        renderTextNode(el, person);
+      });
+
+      document.querySelectorAll(\\"[data-el='div-7']\\").forEach((el) => {
+        const index = getScope(el, \\"index\\");
+        renderTextNode(el, index);
+      });
+
+      document.querySelectorAll(\\"[data-el='for-7']\\").forEach((el) => {
+        let array = Array.from({
+          length: 10,
+        });
+        renderLoop(el, array, \\"person\\", \\"count\\");
+      });
+
+      document.querySelectorAll(\\"[data-el='div-8']\\").forEach((el) => {
+        const person = getScope(el, \\"person\\");
+        renderTextNode(el, person);
+      });
+
+      document.querySelectorAll(\\"[data-el='div-9']\\").forEach((el) => {
+        const count = getScope(el, \\"count\\");
+        renderTextNode(el, count);
+      });
+
+      document.querySelectorAll(\\"[data-el='for-8']\\").forEach((el) => {
+        let array = state.names;
+        renderLoop(el, array, \\"person\\", \\"i\\");
+      });
+
+      document.querySelectorAll(\\"[data-el='div-10']\\").forEach((el) => {
+        const person = getScope(el, \\"person\\");
+        renderTextNode(el, person);
+      });
+
+      document.querySelectorAll(\\"[data-el='div-11']\\").forEach((el) => {
+        const i = getScope(el, \\"i\\");
+        renderTextNode(el, i);
+      });
+
+      document.querySelectorAll(\\"[data-el='for-9']\\").forEach((el) => {
+        let array = Array.from({
+          length: 10,
+        });
+        renderLoop(el, array, \\"person\\", \\"index\\");
+      });
+
+      document.querySelectorAll(\\"[data-el='div-12']\\").forEach((el) => {
+        const person = getScope(el, \\"person\\");
+        renderTextNode(el, person);
+      });
+
+      document.querySelectorAll(\\"[data-el='div-13']\\").forEach((el) => {
+        const index = getScope(el, \\"index\\");
+        renderTextNode(el, index);
+      });
+
+      destroyAnyNodes();
+
+      pendingUpdate = false;
+    }
+
+    // Update with initial state on first load
+    update();
+
+    // Helper text DOM nodes
+    function renderTextNode(el, text) {
+      const textNode = document.createTextNode(text);
+      if (el?.scope) {
+        textNode.scope = el.scope;
+      }
+      if (el?.context) {
+        child.context = el.context;
+      }
+      el.after(textNode);
+      nodesToDestroy.push(el.nextSibling);
+    }
+
+    // Helper to render loops
+    function renderLoop(template, array, itemName, itemIndex, collectionName) {
+      const collection = [];
+      for (let [index, value] of array.entries()) {
+        const elementFragment = template.content.cloneNode(true);
+        const children = Array.from(elementFragment.childNodes);
+        const localScope = {};
+        let scope = localScope;
+        if (template?.scope) {
+          const getParent = {
+            get(target, prop, receiver) {
+              if (prop in target) {
+                return target[prop];
+              }
+              if (prop in template.scope) {
+                return template.scope[prop];
+              }
+              return target[prop];
+            },
+          };
+          scope = new Proxy(localScope, getParent);
+        }
+        children.forEach((child) => {
+          if (itemName !== undefined) {
+            scope[itemName] = value;
+          }
+          if (itemIndex !== undefined) {
+            scope[itemIndex] = index;
+          }
+          if (collectionName !== undefined) {
+            scope[collectionName] = array;
+          }
+          child.scope = scope;
+          if (template.context) {
+            child.context = template.context;
+          }
+          this.nodesToDestroy.push(child);
+          collection.unshift(child);
+        });
+        collection.forEach((child) => template.after(child));
+      }
+    }
+
+    function getScope(el, name) {
+      do {
+        let value = el?.scope?.[name];
+        if (value !== undefined) {
+          return value;
+        }
+      } while ((el = el.parentNode));
+    }
+  })();
+</script>
+"
+`;
+
 exports[`Html > jsx > Javascript Test > AdvancedRef 1`] = `
 "<div>
   <template data-el=\\"show\\">
@@ -73,8 +346,8 @@ exports[`Html > jsx > Javascript Test > AdvancedRef 1`] = `
         el.removeEventListener(\\"blur\\", onInput1Blur);
         el.addEventListener(\\"blur\\", onInput1Blur);
 
-        el.removeEventListener(\\"input\\", onInput1Input);
-        el.addEventListener(\\"input\\", onInput1Input);
+        el.removeEventListener(\\"change\\", onInput1Change);
+        el.addEventListener(\\"change\\", onInput1Change);
       });
 
       document.querySelectorAll(\\"[data-el='div-1']\\").forEach((el) => {
@@ -93,8 +366,8 @@ exports[`Html > jsx > Javascript Test > AdvancedRef 1`] = `
       state.onBlur();
     }
 
-    // Event handler for 'input' event on input-1
-    function onInput1Input(event) {
+    // Event handler for 'change' event on input-1
+    function onInput1Change(event) {
       state.name = event.target.value;
       update();
     }
@@ -143,7 +416,7 @@ exports[`Html > jsx > Javascript Test > Basic 1`] = `
 "<div class=\\"test div\\">
   <input data-el=\\"input-1\\" data-dom-state=\\"input-2\\" />
 
-  Hello! I can run in React, Vue, Solid, or Liquid!
+  Hello! I can run in React, Vue, Solid, or Liquid! &gt;
 </div>
 <style>
   .div {
@@ -183,8 +456,8 @@ exports[`Html > jsx > Javascript Test > Basic 1`] = `
       document.querySelectorAll(\\"[data-el='input-1']\\").forEach((el) => {
         el.value = DEFAULT_VALUES.name || state.name;
 
-        el.removeEventListener(\\"input\\", onInput1Input);
-        el.addEventListener(\\"input\\", onInput1Input);
+        el.removeEventListener(\\"change\\", onInput1Change);
+        el.addEventListener(\\"change\\", onInput1Change);
       });
 
       destroyAnyNodes();
@@ -192,8 +465,8 @@ exports[`Html > jsx > Javascript Test > Basic 1`] = `
       pendingUpdate = false;
     }
 
-    // Event handler for 'input' event on input-1
-    function onInput1Input(myEvent) {
+    // Event handler for 'change' event on input-1
+    function onInput1Change(myEvent) {
       state.name = myEvent.target.value;
       update();
     }
@@ -256,8 +529,8 @@ exports[`Html > jsx > Javascript Test > Basic 2`] = `
       document.querySelectorAll(\\"[data-el='input-1']\\").forEach((el) => {
         el.value = state.name;
 
-        el.removeEventListener(\\"input\\", onInput1Input);
-        el.addEventListener(\\"input\\", onInput1Input);
+        el.removeEventListener(\\"change\\", onInput1Change);
+        el.addEventListener(\\"change\\", onInput1Change);
       });
 
       document.querySelectorAll(\\"[data-el='div-1']\\").forEach((el) => {
@@ -270,8 +543,8 @@ exports[`Html > jsx > Javascript Test > Basic 2`] = `
       pendingUpdate = false;
     }
 
-    // Event handler for 'input' event on input-1
-    function onInput1Input(event) {
+    // Event handler for 'change' event on input-1
+    function onInput1Change(event) {
       const person = getScope(event.currentTarget, \\"person\\");
 
       state.name = event.target.value + \\" and \\" + person;
@@ -415,8 +688,8 @@ exports[`Html > jsx > Javascript Test > Basic Context 1`] = `
       });
 
       document.querySelectorAll(\\"[data-el='input-1']\\").forEach((el) => {
-        el.removeEventListener(\\"input\\", onInput1Input);
-        el.addEventListener(\\"input\\", onInput1Input);
+        el.removeEventListener(\\"change\\", onInput1Change);
+        el.addEventListener(\\"change\\", onInput1Change);
       });
 
       destroyAnyNodes();
@@ -424,8 +697,8 @@ exports[`Html > jsx > Javascript Test > Basic Context 1`] = `
       pendingUpdate = false;
     }
 
-    // Event handler for 'input' event on input-1
-    function onInput1Input(event) {
+    // Event handler for 'change' event on input-1
+    function onInput1Change(event) {
       state.onChange;
     }
 
@@ -552,7 +825,10 @@ exports[`Html > jsx > Javascript Test > Basic Outputs 1`] = `
 `;
 
 exports[`Html > jsx > Javascript Test > Basic Outputs Meta 1`] = `
-"<div></div>
+"/** useMetadata: {\\"outputs\\":[\\"onMessage\\",\\"onEvent\\"],\\"baz\\":\\"metadata inside
+component\\"} */
+
+<div></div>
 <script>
   (() => {
     const state = { name: \\"PatrickJS\\" };
@@ -833,8 +1109,8 @@ exports[`Html > jsx > Javascript Test > BasicFor 1`] = `
       document.querySelectorAll(\\"[data-el='input-1']\\").forEach((el) => {
         el.value = state.name;
 
-        el.removeEventListener(\\"input\\", onInput1Input);
-        el.addEventListener(\\"input\\", onInput1Input);
+        el.removeEventListener(\\"change\\", onInput1Change);
+        el.addEventListener(\\"change\\", onInput1Change);
       });
 
       document.querySelectorAll(\\"[data-el='div-1']\\").forEach((el) => {
@@ -847,8 +1123,8 @@ exports[`Html > jsx > Javascript Test > BasicFor 1`] = `
       pendingUpdate = false;
     }
 
-    // Event handler for 'input' event on input-1
-    function onInput1Input(event) {
+    // Event handler for 'change' event on input-1
+    function onInput1Change(event) {
       const person = getScope(event.currentTarget, \\"person\\");
 
       state.name = event.target.value + \\" and \\" + person;
@@ -964,7 +1240,7 @@ exports[`Html > jsx > Javascript Test > BasicRef 1`] = `
       name: \\"PatrickJS\\",
       onBlur: function onBlur() {
         // Maintain focus
-        inputRef.focus();
+        inputRef?.focus();
       },
       lowerCaseName: function lowerCaseName() {
         return state.name.toLowerCase();
@@ -1003,8 +1279,8 @@ exports[`Html > jsx > Javascript Test > BasicRef 1`] = `
         el.removeEventListener(\\"blur\\", onInput1Blur);
         el.addEventListener(\\"blur\\", onInput1Blur);
 
-        el.removeEventListener(\\"input\\", onInput1Input);
-        el.addEventListener(\\"input\\", onInput1Input);
+        el.removeEventListener(\\"change\\", onInput1Change);
+        el.addEventListener(\\"change\\", onInput1Change);
       });
 
       document.querySelectorAll(\\"[data-el='div-1']\\").forEach((el) => {
@@ -1021,8 +1297,8 @@ exports[`Html > jsx > Javascript Test > BasicRef 1`] = `
       state.onBlur();
     }
 
-    // Event handler for 'input' event on input-1
-    function onInput1Input(event) {
+    // Event handler for 'change' event on input-1
+    function onInput1Change(event) {
       state.name = event.target.value;
       update();
     }
@@ -1109,8 +1385,8 @@ exports[`Html > jsx > Javascript Test > BasicRefAssignment 1`] = `
     }
 
     // Event handler for 'click' event on button-1
-    function onButton1Click(evt) {
-      state.handlerClick(evt);
+    async function onButton1Click(evt) {
+      await state.handlerClick(evt);
     }
 
     // Update with initial state on first load
@@ -2179,8 +2455,8 @@ exports[`Html > jsx > Javascript Test > Input 1`] = `
 
         el.setAttribute(\\"required\\", props.required);
 
-        el.removeEventListener(\\"input\\", onInput1Input);
-        el.addEventListener(\\"input\\", onInput1Input);
+        el.removeEventListener(\\"change\\", onInput1Change);
+        el.addEventListener(\\"change\\", onInput1Change);
       });
 
       destroyAnyNodes();
@@ -2188,8 +2464,8 @@ exports[`Html > jsx > Javascript Test > Input 1`] = `
       pendingUpdate = false;
     }
 
-    // Event handler for 'input' event on input-1
-    function onInput1Input(event) {
+    // Event handler for 'change' event on input-1
+    function onInput1Change(event) {
       props.onChange?.(event.target.value);
     }
 
@@ -2248,6 +2524,55 @@ exports[`Html > jsx > Javascript Test > InputParent 1`] = `
     // Event handler for 'change' event on form-input-component
     function onFormInputComponentChange(value) {
       state.handleChange(value);
+    }
+
+    // Update with initial state on first load
+    update();
+  })();
+</script>
+"
+`;
+
+exports[`Html > jsx > Javascript Test > NestedStore 1`] = `
+"<div data-el=\\"div-1\\">
+  Test
+
+  <p data-el=\\"p-1\\">Message</p>
+</div>
+<script>
+  (() => {
+    const state = { _id: \\"abc\\", _messageId: state._id + \\"-message\\" };
+
+    let context = null;
+    let nodesToDestroy = [];
+    let pendingUpdate = false;
+
+    function destroyAnyNodes() {
+      // destroy current view template refs before rendering again
+      nodesToDestroy.forEach((el) => el.remove());
+      nodesToDestroy = [];
+    }
+
+    // Function to update data bindings and loops
+    // call update() when you mutate state and need the updates to reflect
+    // in the dom
+    function update() {
+      if (pendingUpdate === true) {
+        return;
+      }
+      pendingUpdate = true;
+
+      document.querySelectorAll(\\"[data-el='div-1']\\").forEach((el) => {
+        el.setAttribute(\\"id\\", state._id);
+      });
+
+      document.querySelectorAll(\\"[data-el='p-1']\\").forEach((el) => {
+        el.setAttribute(\\"id\\", state._messageId);
+      });
+
+      destroyAnyNodes();
+
+      pendingUpdate = false;
     }
 
     // Update with initial state on first load
@@ -2715,6 +3040,7 @@ exports[`Html > jsx > Javascript Test > SlotJsx 1`] = `
 
 exports[`Html > jsx > Javascript Test > SlotNamed 1`] = `
 "<div>
+  <slot name=\\"myAwesomeSlot\\"></slot>
   <slot name=\\"top\\"></slot>
   <slot name=\\"left\\">Default left</slot>
   <slot>Default Child</slot>
@@ -2881,8 +3207,8 @@ exports[`Html > jsx > Javascript Test > Stamped.io 1`] = `
     }
 
     // Event handler for 'click' event on button-2
-    function onButton2Click(event) {
-      event.preventDefault();
+    function onButton2Click(ev) {
+      ev.preventDefault();
       state.showReviewPrompt = false;
       update();
     }
@@ -2985,6 +3311,178 @@ exports[`Html > jsx > Javascript Test > Stamped.io 1`] = `
           return value;
         }
       } while ((el = el.parentNode));
+    }
+  })();
+</script>
+"
+`;
+
+exports[`Html > jsx > Javascript Test > StoreComment 1`] = `
+"<template data-el=\\"div-1\\"><!-- state.foo --></template>
+<script>
+  (() => {
+    const state = { foo: true, bar() {} };
+
+    let context = null;
+    let nodesToDestroy = [];
+    let pendingUpdate = false;
+
+    function destroyAnyNodes() {
+      // destroy current view template refs before rendering again
+      nodesToDestroy.forEach((el) => el.remove());
+      nodesToDestroy = [];
+    }
+
+    // Function to update data bindings and loops
+    // call update() when you mutate state and need the updates to reflect
+    // in the dom
+    function update() {
+      if (pendingUpdate === true) {
+        return;
+      }
+      pendingUpdate = true;
+
+      document.querySelectorAll(\\"[data-el='div-1']\\").forEach((el) => {
+        renderTextNode(el, state.foo);
+      });
+
+      destroyAnyNodes();
+
+      pendingUpdate = false;
+    }
+
+    // Update with initial state on first load
+    update();
+
+    // Helper text DOM nodes
+    function renderTextNode(el, text) {
+      const textNode = document.createTextNode(text);
+      if (el?.scope) {
+        textNode.scope = el.scope;
+      }
+      if (el?.context) {
+        child.context = el.context;
+      }
+      el.after(textNode);
+      nodesToDestroy.push(el.nextSibling);
+    }
+  })();
+</script>
+"
+`;
+
+exports[`Html > jsx > Javascript Test > StoreShadowVars 1`] = `
+"<template data-el=\\"div-1\\"><!-- state.foo(state.errors) --></template>
+<script>
+  (() => {
+    const state = {
+      errors: {},
+      foo(errors) {
+        return errors;
+      },
+    };
+
+    let context = null;
+    let nodesToDestroy = [];
+    let pendingUpdate = false;
+
+    function destroyAnyNodes() {
+      // destroy current view template refs before rendering again
+      nodesToDestroy.forEach((el) => el.remove());
+      nodesToDestroy = [];
+    }
+
+    // Function to update data bindings and loops
+    // call update() when you mutate state and need the updates to reflect
+    // in the dom
+    function update() {
+      if (pendingUpdate === true) {
+        return;
+      }
+      pendingUpdate = true;
+
+      document.querySelectorAll(\\"[data-el='div-1']\\").forEach((el) => {
+        renderTextNode(el, state.foo(state.errors));
+      });
+
+      destroyAnyNodes();
+
+      pendingUpdate = false;
+    }
+
+    // Update with initial state on first load
+    update();
+
+    // Helper text DOM nodes
+    function renderTextNode(el, text) {
+      const textNode = document.createTextNode(text);
+      if (el?.scope) {
+        textNode.scope = el.scope;
+      }
+      if (el?.context) {
+        child.context = el.context;
+      }
+      el.after(textNode);
+      nodesToDestroy.push(el.nextSibling);
+    }
+  })();
+</script>
+"
+`;
+
+exports[`Html > jsx > Javascript Test > StoreWithState 1`] = `
+"<template data-el=\\"div-1\\"><!-- state.bar() --></template>
+<script>
+  (() => {
+    const state = {
+      foo: false,
+      bar() {
+        return state.foo;
+      },
+    };
+
+    let context = null;
+    let nodesToDestroy = [];
+    let pendingUpdate = false;
+
+    function destroyAnyNodes() {
+      // destroy current view template refs before rendering again
+      nodesToDestroy.forEach((el) => el.remove());
+      nodesToDestroy = [];
+    }
+
+    // Function to update data bindings and loops
+    // call update() when you mutate state and need the updates to reflect
+    // in the dom
+    function update() {
+      if (pendingUpdate === true) {
+        return;
+      }
+      pendingUpdate = true;
+
+      document.querySelectorAll(\\"[data-el='div-1']\\").forEach((el) => {
+        renderTextNode(el, state.bar());
+      });
+
+      destroyAnyNodes();
+
+      pendingUpdate = false;
+    }
+
+    // Update with initial state on first load
+    update();
+
+    // Helper text DOM nodes
+    function renderTextNode(el, text) {
+      const textNode = document.createTextNode(text);
+      if (el?.scope) {
+        textNode.scope = el.scope;
+      }
+      if (el?.context) {
+        child.context = el.context;
+      }
+      el.after(textNode);
+      nodesToDestroy.push(el.nextSibling);
     }
   })();
 </script>
@@ -3145,6 +3643,11 @@ exports[`Html > jsx > Javascript Test > Textarea 1`] = `
 "
 `;
 
+exports[`Html > jsx > Javascript Test > UseValueAndFnFromStore 1`] = `
+"<div>Test</div>
+"
+`;
+
 exports[`Html > jsx > Javascript Test > Video 1`] = `
 "<video preload=\\"none\\" data-el=\\"video-1\\"></video>
 <script>
@@ -3268,6 +3771,165 @@ exports[`Html > jsx > Javascript Test > arrowFunctionInUseStore 1`] = `
       }
       el.after(textNode);
       nodesToDestroy.push(el.nextSibling);
+    }
+  })();
+</script>
+"
+`;
+
+exports[`Html > jsx > Javascript Test > basicForFragment 1`] = `
+"<div>
+  <template data-el=\\"for\\">
+    <div>
+      <template data-el=\\"div-1\\"><!-- option --></template>
+    </div>
+  </template>
+
+  <template data-el=\\"for-2\\">
+    <div>
+      <template data-el=\\"div-2\\"><!-- option --></template>
+    </div>
+  </template>
+  <select data-dom-state=\\"select-1\\">
+    <template data-el=\\"for-3\\">
+      <option data-el=\\"option-1\\">
+        <template data-el=\\"div-3\\"><!-- option --></template>
+      </option>
+    </template>
+  </select>
+</div>
+<script>
+  (() => {
+    const state = { id: \\"xyz\\" };
+
+    let context = null;
+    let nodesToDestroy = [];
+    let pendingUpdate = false;
+
+    function destroyAnyNodes() {
+      // destroy current view template refs before rendering again
+      nodesToDestroy.forEach((el) => el.remove());
+      nodesToDestroy = [];
+    }
+
+    // Function to update data bindings and loops
+    // call update() when you mutate state and need the updates to reflect
+    // in the dom
+    function update() {
+      if (pendingUpdate === true) {
+        return;
+      }
+      pendingUpdate = true;
+
+      document.querySelectorAll(\\"[data-el='for']\\").forEach((el) => {
+        let array = [\\"a\\", \\"b\\", \\"c\\"];
+        renderLoop(el, array, \\"option\\");
+      });
+
+      document.querySelectorAll(\\"[data-el='div-1']\\").forEach((el) => {
+        const option = getScope(el, \\"option\\");
+        renderTextNode(el, option);
+      });
+
+      document.querySelectorAll(\\"[data-el='for-2']\\").forEach((el) => {
+        let array = [\\"a\\", \\"b\\", \\"c\\"];
+        renderLoop(el, array, \\"option\\");
+      });
+
+      document.querySelectorAll(\\"[data-el='div-2']\\").forEach((el) => {
+        const option = getScope(el, \\"option\\");
+        renderTextNode(el, option);
+      });
+
+      document.querySelectorAll(\\"[data-el='for-3']\\").forEach((el) => {
+        let array = [\\"d\\", \\"e\\", \\"f\\"];
+        renderLoop(el, array, \\"option\\");
+      });
+
+      document.querySelectorAll(\\"[data-el='option-1']\\").forEach((el) => {
+        const option = getScope(el, \\"option\\");
+
+        el.key = \`\${state.id}-\${option}\`;
+
+        el.value = option;
+      });
+
+      document.querySelectorAll(\\"[data-el='div-3']\\").forEach((el) => {
+        const option = getScope(el, \\"option\\");
+        renderTextNode(el, option);
+      });
+
+      destroyAnyNodes();
+
+      pendingUpdate = false;
+    }
+
+    // Update with initial state on first load
+    update();
+
+    // Helper text DOM nodes
+    function renderTextNode(el, text) {
+      const textNode = document.createTextNode(text);
+      if (el?.scope) {
+        textNode.scope = el.scope;
+      }
+      if (el?.context) {
+        child.context = el.context;
+      }
+      el.after(textNode);
+      nodesToDestroy.push(el.nextSibling);
+    }
+
+    // Helper to render loops
+    function renderLoop(template, array, itemName, itemIndex, collectionName) {
+      const collection = [];
+      for (let [index, value] of array.entries()) {
+        const elementFragment = template.content.cloneNode(true);
+        const children = Array.from(elementFragment.childNodes);
+        const localScope = {};
+        let scope = localScope;
+        if (template?.scope) {
+          const getParent = {
+            get(target, prop, receiver) {
+              if (prop in target) {
+                return target[prop];
+              }
+              if (prop in template.scope) {
+                return template.scope[prop];
+              }
+              return target[prop];
+            },
+          };
+          scope = new Proxy(localScope, getParent);
+        }
+        children.forEach((child) => {
+          if (itemName !== undefined) {
+            scope[itemName] = value;
+          }
+          if (itemIndex !== undefined) {
+            scope[itemIndex] = index;
+          }
+          if (collectionName !== undefined) {
+            scope[collectionName] = array;
+          }
+          child.scope = scope;
+          if (template.context) {
+            child.context = template.context;
+          }
+          this.nodesToDestroy.push(child);
+          collection.unshift(child);
+        });
+        collection.forEach((child) => template.after(child));
+      }
+    }
+
+    function getScope(el, name) {
+      do {
+        let value = el?.scope?.[name];
+        if (value !== undefined) {
+          return value;
+        }
+      } while ((el = el.parentNode));
     }
   })();
 </script>
@@ -3451,8 +4113,8 @@ exports[`Html > jsx > Javascript Test > basicForwardRef 1`] = `
       document.querySelectorAll(\\"[data-el='input-1']\\").forEach((el) => {
         el.value = state.name;
 
-        el.removeEventListener(\\"input\\", onInput1Input);
-        el.addEventListener(\\"input\\", onInput1Input);
+        el.removeEventListener(\\"change\\", onInput1Change);
+        el.addEventListener(\\"change\\", onInput1Change);
       });
 
       destroyAnyNodes();
@@ -3460,8 +4122,8 @@ exports[`Html > jsx > Javascript Test > basicForwardRef 1`] = `
       pendingUpdate = false;
     }
 
-    // Event handler for 'input' event on input-1
-    function onInput1Input(event) {
+    // Event handler for 'change' event on input-1
+    function onInput1Change(event) {
       state.name = event.target.value;
       update();
     }
@@ -3474,7 +4136,9 @@ exports[`Html > jsx > Javascript Test > basicForwardRef 1`] = `
 `;
 
 exports[`Html > jsx > Javascript Test > basicForwardRefMetadata 1`] = `
-"<div>
+"/** useMetadata: {\\"forwardRef\\":\\"inputRef\\"} */
+
+<div>
   <input
     class=\\"input\\"
     data-el=\\"input-1\\"
@@ -3513,8 +4177,8 @@ exports[`Html > jsx > Javascript Test > basicForwardRefMetadata 1`] = `
       document.querySelectorAll(\\"[data-el='input-1']\\").forEach((el) => {
         el.value = state.name;
 
-        el.removeEventListener(\\"input\\", onInput1Input);
-        el.addEventListener(\\"input\\", onInput1Input);
+        el.removeEventListener(\\"change\\", onInput1Change);
+        el.addEventListener(\\"change\\", onInput1Change);
       });
 
       destroyAnyNodes();
@@ -3522,8 +4186,8 @@ exports[`Html > jsx > Javascript Test > basicForwardRefMetadata 1`] = `
       pendingUpdate = false;
     }
 
-    // Event handler for 'input' event on input-1
-    function onInput1Input(event) {
+    // Event handler for 'change' event on input-1
+    function onInput1Change(event) {
       state.name = event.target.value;
       update();
     }
@@ -3608,9 +4272,35 @@ exports[`Html > jsx > Javascript Test > basicOnUpdateReturn 1`] = `
 "
 `;
 
+exports[`Html > jsx > Javascript Test > basicRefAttributePassing 1`] = `
+"/** useMetadata: {\\"attributePassing\\":{\\"enabled\\":true}} */
+
+<button data-el=\\"button-1\\" data-ref=\\"undefined-buttonRef\\">
+  Attribute Passing
+</button>
+"
+`;
+
+exports[`Html > jsx > Javascript Test > basicRefAttributePassingCustomRef 1`] = `
+"/** useMetadata: {\\"attributePassing\\":{\\"enabled\\":true,\\"customRef\\":\\"buttonRef\\"}}
+*/
+
+<div>
+  <button data-el=\\"button-1\\" data-ref=\\"undefined-buttonRef\\">
+    Attribute Passing
+  </button>
+</div>
+"
+`;
+
 exports[`Html > jsx > Javascript Test > class + ClassName + css 1`] = `
-"<div class=\\"test2 test div\\">
-  Hello! I can run in React, Vue, Solid, or Liquid!
+"<div>
+  <MyComp class=\\"test\\" className=\\"test2\\">
+    Hello! I can run in React, Vue, Solid, or Liquid!
+  </MyComp>
+  <div class=\\"test2 test div\\">
+    Hello! I can run in React, Vue, Solid, or Liquid!
+  </div>
 </div>
 <style>
   .div {
@@ -3734,6 +4424,15 @@ exports[`Html > jsx > Javascript Test > classState 1`] = `
     update();
   })();
 </script>
+"
+`;
+
+exports[`Html > jsx > Javascript Test > complexMeta 1`] = `
+"/** useMetadata:
+{\\"x\\":\\"y\\",\\"asdf\\":{\\"stringValue\\":\\"d\\",\\"booleanValue\\":true,\\"numberValue\\":1,\\"innerObject\\":{\\"stringValue\\":\\"inner\\",\\"numberValue\\":2,\\"booleanValue\\":false},\\"spreadStringValue\\":\\"f\\"}}
+*/
+
+<div></div>
 "
 `;
 
@@ -3930,7 +4629,7 @@ exports[`Html > jsx > Javascript Test > defaultProps 1`] = `
 
     // Event handler for 'click' event on button-1
     function onButton1Click(event) {
-      props.onClick(event);
+      props.onClick();
     }
 
     // Update with initial state on first load
@@ -4154,6 +4853,74 @@ exports[`Html > jsx > Javascript Test > defaultValsWithTypes 1`] = `
 "
 `;
 
+exports[`Html > jsx > Javascript Test > eventInputAndChange 1`] = `
+"<div>
+  <input class=\\"input\\" data-el=\\"input-1\\" data-dom-state=\\"input-2\\" />
+
+  Hello! I can run in React, Vue, Solid, or Liquid!
+</div>
+<style>
+  .input {
+    color: red;
+  }
+</style>
+<script>
+  (() => {
+    const state = { name: \\"Steve\\" };
+
+    let context = null;
+    let nodesToDestroy = [];
+    let pendingUpdate = false;
+
+    function destroyAnyNodes() {
+      // destroy current view template refs before rendering again
+      nodesToDestroy.forEach((el) => el.remove());
+      nodesToDestroy = [];
+    }
+
+    // Function to update data bindings and loops
+    // call update() when you mutate state and need the updates to reflect
+    // in the dom
+    function update() {
+      if (pendingUpdate === true) {
+        return;
+      }
+      pendingUpdate = true;
+
+      document.querySelectorAll(\\"[data-el='input-1']\\").forEach((el) => {
+        el.value = state.name;
+
+        el.removeEventListener(\\"input\\", onInput1Input);
+        el.addEventListener(\\"input\\", onInput1Input);
+
+        el.removeEventListener(\\"change\\", onInput1Change);
+        el.addEventListener(\\"change\\", onInput1Change);
+      });
+
+      destroyAnyNodes();
+
+      pendingUpdate = false;
+    }
+
+    // Event handler for 'input' event on input-1
+    function onInput1Input(event) {
+      state.name = event.target.value;
+      update();
+    }
+
+    // Event handler for 'change' event on input-1
+    function onInput1Change(event) {
+      state.name = event.target.value;
+      update();
+    }
+
+    // Update with initial state on first load
+    update();
+  })();
+</script>
+"
+`;
+
 exports[`Html > jsx > Javascript Test > expressionState 1`] = `
 "<div>
   <template data-el=\\"div-1\\"><!-- state.refToUse --></template>
@@ -4187,6 +4954,165 @@ exports[`Html > jsx > Javascript Test > expressionState 1`] = `
 
       document.querySelectorAll(\\"[data-el='div-1']\\").forEach((el) => {
         renderTextNode(el, state.refToUse);
+      });
+
+      destroyAnyNodes();
+
+      pendingUpdate = false;
+    }
+
+    // Update with initial state on first load
+    update();
+
+    // Helper text DOM nodes
+    function renderTextNode(el, text) {
+      const textNode = document.createTextNode(text);
+      if (el?.scope) {
+        textNode.scope = el.scope;
+      }
+      if (el?.context) {
+        child.context = el.context;
+      }
+      el.after(textNode);
+      nodesToDestroy.push(el.nextSibling);
+    }
+  })();
+</script>
+"
+`;
+
+exports[`Html > jsx > Javascript Test > figmaMeta 1`] = `
+"/** useMetadata:
+{\\"figma\\":{\\"name\\":\\"def-button-beta-outlined\\",\\"url\\":\\"https://www.figma.com/xxx\\",\\"props\\":{\\"iconSmall\\":{\\"type\\":\\"instance\\",\\"key\\":\\"📍
+Icon Small\\"},\\"iconMedium\\":{\\"type\\":\\"instance\\",\\"key\\":\\"📍 Icon
+Medium\\"},\\"label\\":{\\"type\\":\\"string\\",\\"key\\":\\"✏️
+Label\\"},\\"icon\\":{\\"type\\":\\"boolean\\",\\"key\\":\\"👁️
+Icon\\",\\"value\\":{\\"false\\":false,\\"true\\":\\"placeholder\\"}},\\"interactiveState\\":{\\"type\\":\\"enum\\",\\"key\\":\\"Interactive
+State\\",\\"value\\":{\\"(Def)
+Enabled\\":false,\\"Hovered\\":false,\\"Pressed\\":false,\\"Focused\\":false,\\"Disabled\\":\\"true\\"}},\\"size\\":{\\"type\\":\\"enum\\",\\"key\\":\\"Size\\",\\"value\\":{\\"(Def)
+Medium\\":false,\\"Small\\":\\"small\\"}},\\"width\\":{\\"type\\":\\"enum\\",\\"key\\":\\"Width\\",\\"value\\":{\\"(Def)
+Auto Width\\":false,\\"Full Width\\":\\"full\\"}}}}} */
+
+<button data-el=\\"button-1\\">
+  <template data-el=\\"div-1\\"><!-- props.label --></template>
+</button>
+<script>
+  (() => {
+    const state = {};
+    let props = {};
+    let context = null;
+    let nodesToDestroy = [];
+    let pendingUpdate = false;
+
+    function destroyAnyNodes() {
+      // destroy current view template refs before rendering again
+      nodesToDestroy.forEach((el) => el.remove());
+      nodesToDestroy = [];
+    }
+
+    // Function to update data bindings and loops
+    // call update() when you mutate state and need the updates to reflect
+    // in the dom
+    function update() {
+      if (pendingUpdate === true) {
+        return;
+      }
+      pendingUpdate = true;
+
+      document.querySelectorAll(\\"[data-el='button-1']\\").forEach((el) => {
+        el.setAttribute(\\"data-icon\\", props.icon);
+
+        el.setAttribute(\\"data-disabled\\", props.interactiveState);
+
+        el.setAttribute(\\"data-width\\", props.width);
+
+        el.setAttribute(\\"data-size\\", props.size);
+      });
+
+      document.querySelectorAll(\\"[data-el='div-1']\\").forEach((el) => {
+        renderTextNode(el, props.label);
+      });
+
+      destroyAnyNodes();
+
+      pendingUpdate = false;
+    }
+
+    // Update with initial state on first load
+    update();
+
+    // Helper text DOM nodes
+    function renderTextNode(el, text) {
+      const textNode = document.createTextNode(text);
+      if (el?.scope) {
+        textNode.scope = el.scope;
+      }
+      if (el?.context) {
+        child.context = el.context;
+      }
+      el.after(textNode);
+      nodesToDestroy.push(el.nextSibling);
+    }
+  })();
+</script>
+"
+`;
+
+exports[`Html > jsx > Javascript Test > getterState 1`] = `
+"<div>
+  <p>
+    <template data-el=\\"div-1\\"><!-- state.foo2 --></template>
+  </p>
+  <p>
+    <template data-el=\\"div-2\\"><!-- state.bar --></template>
+  </p>
+  <p>
+    <template data-el=\\"div-3\\"><!-- state.baz(1) --></template>
+  </p>
+</div>
+<script>
+  (() => {
+    const state = {
+      get foo2() {
+        return props.foo + \\"foo\\";
+      },
+      get bar() {
+        return \\"bar\\";
+      },
+      baz(i) {
+        return i + state.foo2.length;
+      },
+    };
+    let props = {};
+    let context = null;
+    let nodesToDestroy = [];
+    let pendingUpdate = false;
+
+    function destroyAnyNodes() {
+      // destroy current view template refs before rendering again
+      nodesToDestroy.forEach((el) => el.remove());
+      nodesToDestroy = [];
+    }
+
+    // Function to update data bindings and loops
+    // call update() when you mutate state and need the updates to reflect
+    // in the dom
+    function update() {
+      if (pendingUpdate === true) {
+        return;
+      }
+      pendingUpdate = true;
+
+      document.querySelectorAll(\\"[data-el='div-1']\\").forEach((el) => {
+        renderTextNode(el, state.foo2);
+      });
+
+      document.querySelectorAll(\\"[data-el='div-2']\\").forEach((el) => {
+        renderTextNode(el, state.bar);
+      });
+
+      document.querySelectorAll(\\"[data-el='div-3']\\").forEach((el) => {
+        renderTextNode(el, state.baz(1));
       });
 
       destroyAnyNodes();
@@ -4461,6 +5387,11 @@ exports[`Html > jsx > Javascript Test > onInit 1`] = `
     }
   })();
 </script>
+"
+`;
+
+exports[`Html > jsx > Javascript Test > onInitPlain 1`] = `
+"<div></div>
 "
 `;
 
@@ -5575,6 +6506,281 @@ exports[`Html > jsx > Javascript Test > self-referencing component with children
 "
 `;
 
+exports[`Html > jsx > Javascript Test > setState 1`] = `
+"<div><button data-el=\\"button-1\\">Click me</button></div>
+<script>
+  (() => {
+    const state = {
+      n: [\\"123\\"],
+      someFn() {
+        state.n[0] = \\"123\\";
+      },
+    };
+
+    let context = null;
+    let nodesToDestroy = [];
+    let pendingUpdate = false;
+
+    function destroyAnyNodes() {
+      // destroy current view template refs before rendering again
+      nodesToDestroy.forEach((el) => el.remove());
+      nodesToDestroy = [];
+    }
+
+    // Function to update data bindings and loops
+    // call update() when you mutate state and need the updates to reflect
+    // in the dom
+    function update() {
+      if (pendingUpdate === true) {
+        return;
+      }
+      pendingUpdate = true;
+
+      document.querySelectorAll(\\"[data-el='button-1']\\").forEach((el) => {
+        el.removeEventListener(\\"click\\", onButton1Click);
+        el.addEventListener(\\"click\\", onButton1Click);
+      });
+
+      destroyAnyNodes();
+
+      pendingUpdate = false;
+    }
+
+    // Event handler for 'click' event on button-1
+    function onButton1Click(event) {
+      state.someFn();
+    }
+
+    // Update with initial state on first load
+    update();
+  })();
+</script>
+"
+`;
+
+exports[`Html > jsx > Javascript Test > showExpressions 1`] = `
+"<div>
+  <template data-el=\\"show\\">Content0</template>
+  <template data-el=\\"show-2\\">ContentA</template>
+  <template data-el=\\"show-3\\"></template>
+  <template data-el=\\"show-4\\">ContentB</template>
+  <template data-el=\\"show-5\\">
+    <template data-el=\\"div-1\\"><!-- undefined --></template>
+  </template>
+  <template data-el=\\"show-6\\">ContentC</template>
+  <template data-el=\\"show-7\\"></template>
+  <template data-el=\\"show-8\\">ContentD</template>
+  <template data-el=\\"show-9\\"></template>
+  <template data-el=\\"show-10\\">ContentE</template>
+  <template data-el=\\"show-11\\">hello</template>
+  <template data-el=\\"show-12\\">ContentF</template>
+  <template data-el=\\"show-13\\">123</template>
+  <template data-el=\\"show-14\\">4mb</template>
+  <template data-el=\\"show-15\\">
+    <template data-el=\\"show-16\\">20mb</template>
+  </template>
+  <template data-el=\\"show-17\\">
+    <template data-el=\\"show-18\\"><div>complete</div></template>
+  </template>
+</div>
+<script>
+  (() => {
+    const state = {};
+    let props = {};
+    let context = null;
+    let nodesToDestroy = [];
+    let pendingUpdate = false;
+
+    function destroyAnyNodes() {
+      // destroy current view template refs before rendering again
+      nodesToDestroy.forEach((el) => el.remove());
+      nodesToDestroy = [];
+    }
+
+    // Function to update data bindings and loops
+    // call update() when you mutate state and need the updates to reflect
+    // in the dom
+    function update() {
+      if (pendingUpdate === true) {
+        return;
+      }
+      pendingUpdate = true;
+
+      document.querySelectorAll(\\"[data-el='show']\\").forEach((el) => {
+        const whenCondition = props.conditionA;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-2']\\").forEach((el) => {
+        const whenCondition = props.conditionA;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-3']\\").forEach((el) => {
+        const whenCondition = props.conditionA;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-4']\\").forEach((el) => {
+        const whenCondition = props.conditionA;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-5']\\").forEach((el) => {
+        const whenCondition = props.conditionA;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='div-1']\\").forEach((el) => {
+        renderTextNode(el, undefined);
+      });
+
+      document.querySelectorAll(\\"[data-el='show-6']\\").forEach((el) => {
+        const whenCondition = props.conditionA;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-7']\\").forEach((el) => {
+        const whenCondition = props.conditionA;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-8']\\").forEach((el) => {
+        const whenCondition = props.conditionA;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-9']\\").forEach((el) => {
+        const whenCondition = props.conditionA;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-10']\\").forEach((el) => {
+        const whenCondition = props.conditionA;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-11']\\").forEach((el) => {
+        const whenCondition = props.conditionA;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-12']\\").forEach((el) => {
+        const whenCondition = props.conditionA;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-13']\\").forEach((el) => {
+        const whenCondition = props.conditionA;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-14']\\").forEach((el) => {
+        const whenCondition = props.conditionA === \\"Default\\";
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-15']\\").forEach((el) => {
+        const whenCondition = props.conditionA === \\"Default\\";
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-16']\\").forEach((el) => {
+        const whenCondition = props.conditionB === \\"Complete\\";
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-17']\\").forEach((el) => {
+        const whenCondition = props.conditionA === \\"Default\\";
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-18']\\").forEach((el) => {
+        const whenCondition = props.conditionB === \\"Complete\\";
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      destroyAnyNodes();
+
+      pendingUpdate = false;
+    }
+
+    // Update with initial state on first load
+    update();
+
+    function showContent(el) {
+      // https://developer.mozilla.org/en-US/docs/Web/API/HTMLTemplateElement/content
+      // grabs the content of a node that is between <template> tags
+      // iterates through child nodes to register all content including text elements
+      // attaches the content after the template
+
+      const elementFragment = el.content.cloneNode(true);
+      const children = Array.from(elementFragment.childNodes);
+      children.forEach((child) => {
+        if (el?.scope) {
+          child.scope = el.scope;
+        }
+        if (el?.context) {
+          child.context = el.context;
+        }
+        nodesToDestroy.push(child);
+      });
+      el.after(elementFragment);
+    }
+
+    // Helper text DOM nodes
+    function renderTextNode(el, text) {
+      const textNode = document.createTextNode(text);
+      if (el?.scope) {
+        textNode.scope = el.scope;
+      }
+      if (el?.context) {
+        child.context = el.context;
+      }
+      el.after(textNode);
+      nodesToDestroy.push(el.nextSibling);
+    }
+  })();
+</script>
+"
+`;
+
 exports[`Html > jsx > Javascript Test > showWithFor 1`] = `
 "<template data-el=\\"show\\">
   <template data-el=\\"for\\">
@@ -5726,6 +6932,125 @@ exports[`Html > jsx > Javascript Test > showWithFor 1`] = `
 "
 `;
 
+exports[`Html > jsx > Javascript Test > showWithOtherValues 1`] = `
+"<div>
+  <template data-el=\\"show\\">ContentA</template>
+  <template data-el=\\"show-2\\">ContentB</template>
+  <template data-el=\\"show-3\\">ContentC</template>
+  <template data-el=\\"show-4\\">ContentD</template>
+  <template data-el=\\"show-5\\">ContentE</template>
+  <template data-el=\\"show-6\\">ContentF</template>
+</div>
+<script>
+  (() => {
+    const state = {};
+    let props = {};
+    let context = null;
+    let nodesToDestroy = [];
+    let pendingUpdate = false;
+
+    function destroyAnyNodes() {
+      // destroy current view template refs before rendering again
+      nodesToDestroy.forEach((el) => el.remove());
+      nodesToDestroy = [];
+    }
+
+    // Function to update data bindings and loops
+    // call update() when you mutate state and need the updates to reflect
+    // in the dom
+    function update() {
+      if (pendingUpdate === true) {
+        return;
+      }
+      pendingUpdate = true;
+
+      document.querySelectorAll(\\"[data-el='show']\\").forEach((el) => {
+        const whenCondition = props.conditionA;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-2']\\").forEach((el) => {
+        const whenCondition = props.conditionA;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-3']\\").forEach((el) => {
+        const whenCondition = props.conditionA;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-4']\\").forEach((el) => {
+        const whenCondition = props.conditionA;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-5']\\").forEach((el) => {
+        const whenCondition = props.conditionA;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-6']\\").forEach((el) => {
+        const whenCondition = props.conditionA;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      destroyAnyNodes();
+
+      pendingUpdate = false;
+    }
+
+    // Update with initial state on first load
+    update();
+
+    function showContent(el) {
+      // https://developer.mozilla.org/en-US/docs/Web/API/HTMLTemplateElement/content
+      // grabs the content of a node that is between <template> tags
+      // iterates through child nodes to register all content including text elements
+      // attaches the content after the template
+
+      const elementFragment = el.content.cloneNode(true);
+      const children = Array.from(elementFragment.childNodes);
+      children.forEach((child) => {
+        if (el?.scope) {
+          child.scope = el.scope;
+        }
+        if (el?.context) {
+          child.context = el.context;
+        }
+        nodesToDestroy.push(child);
+      });
+      el.after(elementFragment);
+    }
+
+    // Helper text DOM nodes
+    function renderTextNode(el, text) {
+      const textNode = document.createTextNode(text);
+      if (el?.scope) {
+        textNode.scope = el.scope;
+      }
+      if (el?.context) {
+        child.context = el.context;
+      }
+      el.after(textNode);
+      nodesToDestroy.push(el.nextSibling);
+    }
+  })();
+</script>
+"
+`;
+
 exports[`Html > jsx > Javascript Test > showWithRootText 1`] = `
 "<template data-el=\\"show\\">ContentA</template>
 <script>
@@ -5871,6 +7196,141 @@ exports[`Html > jsx > Javascript Test > spreadNestedProps 1`] = `
 
 exports[`Html > jsx > Javascript Test > spreadProps 1`] = `
 "<input data-el=\\"input-1\\" data-dom-state=\\"input-2\\" />
+"
+`;
+
+exports[`Html > jsx > Javascript Test > store-async-function 1`] = `
+"<div></div>
+"
+`;
+
+exports[`Html > jsx > Javascript Test > string-literal-store 1`] = `
+"<div>
+  <template data-el=\\"div-1\\"><!-- state.foo --></template>
+</div>
+<script>
+  (() => {
+    const state = { foo: 123 };
+
+    let context = null;
+    let nodesToDestroy = [];
+    let pendingUpdate = false;
+
+    function destroyAnyNodes() {
+      // destroy current view template refs before rendering again
+      nodesToDestroy.forEach((el) => el.remove());
+      nodesToDestroy = [];
+    }
+
+    // Function to update data bindings and loops
+    // call update() when you mutate state and need the updates to reflect
+    // in the dom
+    function update() {
+      if (pendingUpdate === true) {
+        return;
+      }
+      pendingUpdate = true;
+
+      document.querySelectorAll(\\"[data-el='div-1']\\").forEach((el) => {
+        renderTextNode(el, state.foo);
+      });
+
+      destroyAnyNodes();
+
+      pendingUpdate = false;
+    }
+
+    // Update with initial state on first load
+    update();
+
+    // Helper text DOM nodes
+    function renderTextNode(el, text) {
+      const textNode = document.createTextNode(text);
+      if (el?.scope) {
+        textNode.scope = el.scope;
+      }
+      if (el?.context) {
+        child.context = el.context;
+      }
+      el.after(textNode);
+      nodesToDestroy.push(el.nextSibling);
+    }
+  })();
+</script>
+"
+`;
+
+exports[`Html > jsx > Javascript Test > string-literal-store-kebab 1`] = `
+"<div>
+  <template data-el=\\"div-1\\"><!-- state['foo-bar'] --></template>
+</div>
+<script>
+  (() => {
+    const state = { foo-bar: 123,};
+
+    let context = null;
+    let nodesToDestroy = [];
+    let pendingUpdate = false;
+
+
+    function destroyAnyNodes() {
+      // destroy current view template refs before rendering again
+      nodesToDestroy.forEach(el => el.remove());
+      nodesToDestroy = [];
+    }
+
+
+    // Function to update data bindings and loops
+    // call update() when you mutate state and need the updates to reflect
+    // in the dom
+    function update() {
+      if (pendingUpdate === true) {
+        return;
+      }
+      pendingUpdate = true;
+
+          document.querySelectorAll(\\"[data-el='div-1']\\").forEach((el) => {
+
+
+  renderTextNode(el, state['foo-bar']);
+          });
+
+
+      destroyAnyNodes();
+
+
+
+      pendingUpdate = false;
+    }
+
+
+
+    // Update with initial state on first load
+    update();
+
+
+
+
+
+
+
+
+      // Helper text DOM nodes
+      function renderTextNode(el, text) {
+        const textNode = document.createTextNode(text);
+        if (el?.scope) {
+          textNode.scope = el.scope
+        }
+        if (el?.context) {
+          child.context = el.context;
+        }
+        el.after(textNode);
+        nodesToDestroy.push(el.nextSibling);
+      }
+
+
+  })()
+</script>
 "
 `;
 
@@ -6101,6 +7561,134 @@ exports[`Html > jsx > Javascript Test > typeDependency 1`] = `
 "
 `;
 
+exports[`Html > jsx > Javascript Test > typeExternalStore 1`] = `
+"<div>
+  Hello
+  <template data-el=\\"div-1\\"><!-- state._name --></template>
+  !
+</div>
+<script>
+  (() => {
+    const state = { _name: \\"test\\" };
+
+    let context = null;
+    let nodesToDestroy = [];
+    let pendingUpdate = false;
+
+    function destroyAnyNodes() {
+      // destroy current view template refs before rendering again
+      nodesToDestroy.forEach((el) => el.remove());
+      nodesToDestroy = [];
+    }
+
+    // Function to update data bindings and loops
+    // call update() when you mutate state and need the updates to reflect
+    // in the dom
+    function update() {
+      if (pendingUpdate === true) {
+        return;
+      }
+      pendingUpdate = true;
+
+      document.querySelectorAll(\\"[data-el='div-1']\\").forEach((el) => {
+        renderTextNode(el, state._name);
+      });
+
+      destroyAnyNodes();
+
+      pendingUpdate = false;
+    }
+
+    // Update with initial state on first load
+    update();
+
+    // Helper text DOM nodes
+    function renderTextNode(el, text) {
+      const textNode = document.createTextNode(text);
+      if (el?.scope) {
+        textNode.scope = el.scope;
+      }
+      if (el?.context) {
+        child.context = el.context;
+      }
+      el.after(textNode);
+      nodesToDestroy.push(el.nextSibling);
+    }
+  })();
+</script>
+"
+`;
+
+exports[`Html > jsx > Javascript Test > typeGetterStore 1`] = `
+"<div>
+  Hello
+  <template data-el=\\"div-1\\"><!-- state.name --></template>
+  !
+</div>
+<script>
+  (() => {
+    const state = {
+      name: \\"test\\",
+      getName() {
+        if (state.name === \\"a\\") {
+          return \\"b\\";
+        }
+
+        return state.name;
+      },
+      get test() {
+        return \\"test\\";
+      },
+    };
+
+    let context = null;
+    let nodesToDestroy = [];
+    let pendingUpdate = false;
+
+    function destroyAnyNodes() {
+      // destroy current view template refs before rendering again
+      nodesToDestroy.forEach((el) => el.remove());
+      nodesToDestroy = [];
+    }
+
+    // Function to update data bindings and loops
+    // call update() when you mutate state and need the updates to reflect
+    // in the dom
+    function update() {
+      if (pendingUpdate === true) {
+        return;
+      }
+      pendingUpdate = true;
+
+      document.querySelectorAll(\\"[data-el='div-1']\\").forEach((el) => {
+        renderTextNode(el, state.name);
+      });
+
+      destroyAnyNodes();
+
+      pendingUpdate = false;
+    }
+
+    // Update with initial state on first load
+    update();
+
+    // Helper text DOM nodes
+    function renderTextNode(el, text) {
+      const textNode = document.createTextNode(text);
+      if (el?.scope) {
+        textNode.scope = el.scope;
+      }
+      if (el?.context) {
+        child.context = el.context;
+      }
+      el.after(textNode);
+      nodesToDestroy.push(el.nextSibling);
+    }
+  })();
+</script>
+"
+`;
+
 exports[`Html > jsx > Javascript Test > use-style 1`] = `
 "<button type=\\"button\\">Button</button>
 <style>
@@ -6155,6 +7743,7 @@ exports[`Html > jsx > Javascript Test > useTarget 1`] = `
         return prefix + \\"foo\\";
       },
       lastName: \\"bar\\",
+      foo: \\"bar\\",
     };
 
     let context = null;
@@ -6189,6 +7778,9 @@ exports[`Html > jsx > Javascript Test > useTarget 1`] = `
     update();
 
     // onMount
+    console.log(state.foo);
+    state.foo = \\"bar\\";
+    update();
 
     // Helper text DOM nodes
     function renderTextNode(el, text) {
@@ -6274,6 +7866,279 @@ exports[`Html > jsx > Remove Internal mitosis package 1`] = `
 "
 `;
 
+exports[`Html > jsx > Typescript Test > Advanced 1`] = `
+"<main>
+  <template data-el=\\"for\\">
+    <div>
+      <template data-el=\\"div-1\\"><!-- i --></template>
+      :
+      <template data-el=\\"div-2\\"><!-- person --></template>
+    </div>
+  </template>
+
+  <template data-el=\\"for-2\\">
+    <span>
+      <template data-el=\\"div-3\\"><!-- person --></template>
+    </span>
+  </template>
+
+  <template data-el=\\"for-3\\"><br /></template>
+
+  <template data-el=\\"for-4\\">
+    <pre><template data-el=\\"div-4\\"><!-- ee --></template></pre>
+  </template>
+
+  <template data-el=\\"for-5\\">
+    <p>
+      <template data-el=\\"div-5\\"><!-- index --></template>
+    </p>
+  </template>
+
+  <template data-el=\\"for-6\\">
+    <span>
+      <template data-el=\\"div-6\\"><!-- person --></template>
+      <template data-el=\\"div-7\\"><!-- index --></template>
+    </span>
+  </template>
+
+  <template data-el=\\"for-7\\">
+    <span>
+      <template data-el=\\"div-8\\"><!-- person --></template>
+      <template data-el=\\"div-9\\"><!-- count --></template>
+    </span>
+  </template>
+
+  <template data-el=\\"for-8\\">
+    <span>
+      <template data-el=\\"div-10\\"><!-- person --></template>
+      <template data-el=\\"div-11\\"><!-- i --></template>
+    </span>
+  </template>
+
+  <template data-el=\\"for-9\\">
+    <span>
+      <template data-el=\\"div-12\\"><!-- person --></template>
+      <template data-el=\\"div-13\\"><!-- index --></template>
+    </span>
+  </template>
+</main>
+<script>
+  (() => {
+    const state = { name: \\"PatrickJS\\", names: [\\"Steve\\", \\"PatrickJS\\"] };
+
+    let context = null;
+    let nodesToDestroy = [];
+    let pendingUpdate = false;
+
+    function destroyAnyNodes() {
+      // destroy current view template refs before rendering again
+      nodesToDestroy.forEach((el) => el.remove());
+      nodesToDestroy = [];
+    }
+
+    // Function to update data bindings and loops
+    // call update() when you mutate state and need the updates to reflect
+    // in the dom
+    function update() {
+      if (pendingUpdate === true) {
+        return;
+      }
+      pendingUpdate = true;
+
+      document.querySelectorAll(\\"[data-el='for']\\").forEach((el) => {
+        let array = state.names;
+        renderLoop(el, array, \\"person\\", \\"i\\");
+      });
+
+      document.querySelectorAll(\\"[data-el='div-1']\\").forEach((el) => {
+        const i = getScope(el, \\"i\\");
+        renderTextNode(el, i);
+      });
+
+      document.querySelectorAll(\\"[data-el='div-2']\\").forEach((el) => {
+        const person = getScope(el, \\"person\\");
+        renderTextNode(el, person);
+      });
+
+      document.querySelectorAll(\\"[data-el='for-2']\\").forEach((el) => {
+        let array = state.names;
+        renderLoop(el, array, \\"person\\");
+      });
+
+      document.querySelectorAll(\\"[data-el='div-3']\\").forEach((el) => {
+        const person = getScope(el, \\"person\\");
+        renderTextNode(el, person);
+      });
+
+      document.querySelectorAll(\\"[data-el='for-3']\\").forEach((el) => {
+        let array = state.names;
+        renderLoop(el, array, \\"item\\");
+      });
+
+      document.querySelectorAll(\\"[data-el='for-4']\\").forEach((el) => {
+        let array = Array.from({
+          length: 10,
+        });
+        renderLoop(el, array, \\"_\\", \\"ee\\");
+      });
+
+      document.querySelectorAll(\\"[data-el='div-4']\\").forEach((el) => {
+        const ee = getScope(el, \\"ee\\");
+        renderTextNode(el, ee);
+      });
+
+      document.querySelectorAll(\\"[data-el='for-5']\\").forEach((el) => {
+        let array = Array.from({
+          length: 10,
+        });
+        renderLoop(el, array, \\"item\\");
+      });
+
+      document.querySelectorAll(\\"[data-el='div-5']\\").forEach((el) => {
+        renderTextNode(el, index);
+      });
+
+      document.querySelectorAll(\\"[data-el='for-6']\\").forEach((el) => {
+        let array = state.names;
+        renderLoop(el, array, \\"person\\", \\"index\\");
+      });
+
+      document.querySelectorAll(\\"[data-el='div-6']\\").forEach((el) => {
+        const person = getScope(el, \\"person\\");
+        renderTextNode(el, person);
+      });
+
+      document.querySelectorAll(\\"[data-el='div-7']\\").forEach((el) => {
+        const index = getScope(el, \\"index\\");
+        renderTextNode(el, index);
+      });
+
+      document.querySelectorAll(\\"[data-el='for-7']\\").forEach((el) => {
+        let array = Array.from({
+          length: 10,
+        });
+        renderLoop(el, array, \\"person\\", \\"count\\");
+      });
+
+      document.querySelectorAll(\\"[data-el='div-8']\\").forEach((el) => {
+        const person = getScope(el, \\"person\\");
+        renderTextNode(el, person);
+      });
+
+      document.querySelectorAll(\\"[data-el='div-9']\\").forEach((el) => {
+        const count = getScope(el, \\"count\\");
+        renderTextNode(el, count);
+      });
+
+      document.querySelectorAll(\\"[data-el='for-8']\\").forEach((el) => {
+        let array = state.names;
+        renderLoop(el, array, \\"person\\", \\"i\\");
+      });
+
+      document.querySelectorAll(\\"[data-el='div-10']\\").forEach((el) => {
+        const person = getScope(el, \\"person\\");
+        renderTextNode(el, person);
+      });
+
+      document.querySelectorAll(\\"[data-el='div-11']\\").forEach((el) => {
+        const i = getScope(el, \\"i\\");
+        renderTextNode(el, i);
+      });
+
+      document.querySelectorAll(\\"[data-el='for-9']\\").forEach((el) => {
+        let array = Array.from({
+          length: 10,
+        });
+        renderLoop(el, array, \\"person\\", \\"index\\");
+      });
+
+      document.querySelectorAll(\\"[data-el='div-12']\\").forEach((el) => {
+        const person = getScope(el, \\"person\\");
+        renderTextNode(el, person);
+      });
+
+      document.querySelectorAll(\\"[data-el='div-13']\\").forEach((el) => {
+        const index = getScope(el, \\"index\\");
+        renderTextNode(el, index);
+      });
+
+      destroyAnyNodes();
+
+      pendingUpdate = false;
+    }
+
+    // Update with initial state on first load
+    update();
+
+    // Helper text DOM nodes
+    function renderTextNode(el, text) {
+      const textNode = document.createTextNode(text);
+      if (el?.scope) {
+        textNode.scope = el.scope;
+      }
+      if (el?.context) {
+        child.context = el.context;
+      }
+      el.after(textNode);
+      nodesToDestroy.push(el.nextSibling);
+    }
+
+    // Helper to render loops
+    function renderLoop(template, array, itemName, itemIndex, collectionName) {
+      const collection = [];
+      for (let [index, value] of array.entries()) {
+        const elementFragment = template.content.cloneNode(true);
+        const children = Array.from(elementFragment.childNodes);
+        const localScope = {};
+        let scope = localScope;
+        if (template?.scope) {
+          const getParent = {
+            get(target, prop, receiver) {
+              if (prop in target) {
+                return target[prop];
+              }
+              if (prop in template.scope) {
+                return template.scope[prop];
+              }
+              return target[prop];
+            },
+          };
+          scope = new Proxy(localScope, getParent);
+        }
+        children.forEach((child) => {
+          if (itemName !== undefined) {
+            scope[itemName] = value;
+          }
+          if (itemIndex !== undefined) {
+            scope[itemIndex] = index;
+          }
+          if (collectionName !== undefined) {
+            scope[collectionName] = array;
+          }
+          child.scope = scope;
+          if (template.context) {
+            child.context = template.context;
+          }
+          this.nodesToDestroy.push(child);
+          collection.unshift(child);
+        });
+        collection.forEach((child) => template.after(child));
+      }
+    }
+
+    function getScope(el, name) {
+      do {
+        let value = el?.scope?.[name];
+        if (value !== undefined) {
+          return value;
+        }
+      } while ((el = el.parentNode));
+    }
+  })();
+</script>
+"
+`;
+
 exports[`Html > jsx > Typescript Test > AdvancedRef 1`] = `
 "<div>
   <template data-el=\\"show\\">
@@ -6347,8 +8212,8 @@ exports[`Html > jsx > Typescript Test > AdvancedRef 1`] = `
         el.removeEventListener(\\"blur\\", onInput1Blur);
         el.addEventListener(\\"blur\\", onInput1Blur);
 
-        el.removeEventListener(\\"input\\", onInput1Input);
-        el.addEventListener(\\"input\\", onInput1Input);
+        el.removeEventListener(\\"change\\", onInput1Change);
+        el.addEventListener(\\"change\\", onInput1Change);
       });
 
       document.querySelectorAll(\\"[data-el='div-1']\\").forEach((el) => {
@@ -6367,8 +8232,8 @@ exports[`Html > jsx > Typescript Test > AdvancedRef 1`] = `
       state.onBlur();
     }
 
-    // Event handler for 'input' event on input-1
-    function onInput1Input(event) {
+    // Event handler for 'change' event on input-1
+    function onInput1Change(event) {
       state.name = event.target.value;
       update();
     }
@@ -6417,7 +8282,7 @@ exports[`Html > jsx > Typescript Test > Basic 1`] = `
 "<div class=\\"test div\\">
   <input data-el=\\"input-1\\" data-dom-state=\\"input-2\\" />
 
-  Hello! I can run in React, Vue, Solid, or Liquid!
+  Hello! I can run in React, Vue, Solid, or Liquid! &gt;
 </div>
 <style>
   .div {
@@ -6457,8 +8322,8 @@ exports[`Html > jsx > Typescript Test > Basic 1`] = `
       document.querySelectorAll(\\"[data-el='input-1']\\").forEach((el) => {
         el.value = DEFAULT_VALUES.name || state.name;
 
-        el.removeEventListener(\\"input\\", onInput1Input);
-        el.addEventListener(\\"input\\", onInput1Input);
+        el.removeEventListener(\\"change\\", onInput1Change);
+        el.addEventListener(\\"change\\", onInput1Change);
       });
 
       destroyAnyNodes();
@@ -6466,8 +8331,8 @@ exports[`Html > jsx > Typescript Test > Basic 1`] = `
       pendingUpdate = false;
     }
 
-    // Event handler for 'input' event on input-1
-    function onInput1Input(myEvent) {
+    // Event handler for 'change' event on input-1
+    function onInput1Change(myEvent) {
       state.name = myEvent.target.value;
       update();
     }
@@ -6530,8 +8395,8 @@ exports[`Html > jsx > Typescript Test > Basic 2`] = `
       document.querySelectorAll(\\"[data-el='input-1']\\").forEach((el) => {
         el.value = state.name;
 
-        el.removeEventListener(\\"input\\", onInput1Input);
-        el.addEventListener(\\"input\\", onInput1Input);
+        el.removeEventListener(\\"change\\", onInput1Change);
+        el.addEventListener(\\"change\\", onInput1Change);
       });
 
       document.querySelectorAll(\\"[data-el='div-1']\\").forEach((el) => {
@@ -6544,8 +8409,8 @@ exports[`Html > jsx > Typescript Test > Basic 2`] = `
       pendingUpdate = false;
     }
 
-    // Event handler for 'input' event on input-1
-    function onInput1Input(event) {
+    // Event handler for 'change' event on input-1
+    function onInput1Change(event) {
       const person = getScope(event.currentTarget, \\"person\\");
 
       state.name = event.target.value + \\" and \\" + person;
@@ -6689,8 +8554,8 @@ exports[`Html > jsx > Typescript Test > Basic Context 1`] = `
       });
 
       document.querySelectorAll(\\"[data-el='input-1']\\").forEach((el) => {
-        el.removeEventListener(\\"input\\", onInput1Input);
-        el.addEventListener(\\"input\\", onInput1Input);
+        el.removeEventListener(\\"change\\", onInput1Change);
+        el.addEventListener(\\"change\\", onInput1Change);
       });
 
       destroyAnyNodes();
@@ -6698,8 +8563,8 @@ exports[`Html > jsx > Typescript Test > Basic Context 1`] = `
       pendingUpdate = false;
     }
 
-    // Event handler for 'input' event on input-1
-    function onInput1Input(event) {
+    // Event handler for 'change' event on input-1
+    function onInput1Change(event) {
       state.onChange;
     }
 
@@ -6826,7 +8691,10 @@ exports[`Html > jsx > Typescript Test > Basic Outputs 1`] = `
 `;
 
 exports[`Html > jsx > Typescript Test > Basic Outputs Meta 1`] = `
-"<div></div>
+"/** useMetadata: {\\"outputs\\":[\\"onMessage\\",\\"onEvent\\"],\\"baz\\":\\"metadata inside
+component\\"} */
+
+<div></div>
 <script>
   (() => {
     const state = { name: \\"PatrickJS\\" };
@@ -7107,8 +8975,8 @@ exports[`Html > jsx > Typescript Test > BasicFor 1`] = `
       document.querySelectorAll(\\"[data-el='input-1']\\").forEach((el) => {
         el.value = state.name;
 
-        el.removeEventListener(\\"input\\", onInput1Input);
-        el.addEventListener(\\"input\\", onInput1Input);
+        el.removeEventListener(\\"change\\", onInput1Change);
+        el.addEventListener(\\"change\\", onInput1Change);
       });
 
       document.querySelectorAll(\\"[data-el='div-1']\\").forEach((el) => {
@@ -7121,8 +8989,8 @@ exports[`Html > jsx > Typescript Test > BasicFor 1`] = `
       pendingUpdate = false;
     }
 
-    // Event handler for 'input' event on input-1
-    function onInput1Input(event) {
+    // Event handler for 'change' event on input-1
+    function onInput1Change(event) {
       const person = getScope(event.currentTarget, \\"person\\");
 
       state.name = event.target.value + \\" and \\" + person;
@@ -7238,7 +9106,7 @@ exports[`Html > jsx > Typescript Test > BasicRef 1`] = `
       name: \\"PatrickJS\\",
       onBlur: function onBlur() {
         // Maintain focus
-        inputRef.focus();
+        inputRef?.focus();
       },
       lowerCaseName: function lowerCaseName() {
         return state.name.toLowerCase();
@@ -7277,8 +9145,8 @@ exports[`Html > jsx > Typescript Test > BasicRef 1`] = `
         el.removeEventListener(\\"blur\\", onInput1Blur);
         el.addEventListener(\\"blur\\", onInput1Blur);
 
-        el.removeEventListener(\\"input\\", onInput1Input);
-        el.addEventListener(\\"input\\", onInput1Input);
+        el.removeEventListener(\\"change\\", onInput1Change);
+        el.addEventListener(\\"change\\", onInput1Change);
       });
 
       document.querySelectorAll(\\"[data-el='div-1']\\").forEach((el) => {
@@ -7295,8 +9163,8 @@ exports[`Html > jsx > Typescript Test > BasicRef 1`] = `
       state.onBlur();
     }
 
-    // Event handler for 'input' event on input-1
-    function onInput1Input(event) {
+    // Event handler for 'change' event on input-1
+    function onInput1Change(event) {
       state.name = event.target.value;
       update();
     }
@@ -7383,8 +9251,8 @@ exports[`Html > jsx > Typescript Test > BasicRefAssignment 1`] = `
     }
 
     // Event handler for 'click' event on button-1
-    function onButton1Click(evt) {
-      state.handlerClick(evt);
+    async function onButton1Click(evt) {
+      await state.handlerClick(evt);
     }
 
     // Update with initial state on first load
@@ -8453,8 +10321,8 @@ exports[`Html > jsx > Typescript Test > Input 1`] = `
 
         el.setAttribute(\\"required\\", props.required);
 
-        el.removeEventListener(\\"input\\", onInput1Input);
-        el.addEventListener(\\"input\\", onInput1Input);
+        el.removeEventListener(\\"change\\", onInput1Change);
+        el.addEventListener(\\"change\\", onInput1Change);
       });
 
       destroyAnyNodes();
@@ -8462,8 +10330,8 @@ exports[`Html > jsx > Typescript Test > Input 1`] = `
       pendingUpdate = false;
     }
 
-    // Event handler for 'input' event on input-1
-    function onInput1Input(event) {
+    // Event handler for 'change' event on input-1
+    function onInput1Change(event) {
       props.onChange?.(event.target.value);
     }
 
@@ -8522,6 +10390,55 @@ exports[`Html > jsx > Typescript Test > InputParent 1`] = `
     // Event handler for 'change' event on form-input-component
     function onFormInputComponentChange(value) {
       state.handleChange(value);
+    }
+
+    // Update with initial state on first load
+    update();
+  })();
+</script>
+"
+`;
+
+exports[`Html > jsx > Typescript Test > NestedStore 1`] = `
+"<div data-el=\\"div-1\\">
+  Test
+
+  <p data-el=\\"p-1\\">Message</p>
+</div>
+<script>
+  (() => {
+    const state = { _id: \\"abc\\", _messageId: state._id + \\"-message\\" };
+
+    let context = null;
+    let nodesToDestroy = [];
+    let pendingUpdate = false;
+
+    function destroyAnyNodes() {
+      // destroy current view template refs before rendering again
+      nodesToDestroy.forEach((el) => el.remove());
+      nodesToDestroy = [];
+    }
+
+    // Function to update data bindings and loops
+    // call update() when you mutate state and need the updates to reflect
+    // in the dom
+    function update() {
+      if (pendingUpdate === true) {
+        return;
+      }
+      pendingUpdate = true;
+
+      document.querySelectorAll(\\"[data-el='div-1']\\").forEach((el) => {
+        el.setAttribute(\\"id\\", state._id);
+      });
+
+      document.querySelectorAll(\\"[data-el='p-1']\\").forEach((el) => {
+        el.setAttribute(\\"id\\", state._messageId);
+      });
+
+      destroyAnyNodes();
+
+      pendingUpdate = false;
     }
 
     // Update with initial state on first load
@@ -8989,6 +10906,7 @@ exports[`Html > jsx > Typescript Test > SlotJsx 1`] = `
 
 exports[`Html > jsx > Typescript Test > SlotNamed 1`] = `
 "<div>
+  <slot name=\\"myAwesomeSlot\\"></slot>
   <slot name=\\"top\\"></slot>
   <slot name=\\"left\\">Default left</slot>
   <slot>Default Child</slot>
@@ -9155,8 +11073,8 @@ exports[`Html > jsx > Typescript Test > Stamped.io 1`] = `
     }
 
     // Event handler for 'click' event on button-2
-    function onButton2Click(event) {
-      event.preventDefault();
+    function onButton2Click(ev) {
+      ev.preventDefault();
       state.showReviewPrompt = false;
       update();
     }
@@ -9259,6 +11177,178 @@ exports[`Html > jsx > Typescript Test > Stamped.io 1`] = `
           return value;
         }
       } while ((el = el.parentNode));
+    }
+  })();
+</script>
+"
+`;
+
+exports[`Html > jsx > Typescript Test > StoreComment 1`] = `
+"<template data-el=\\"div-1\\"><!-- state.foo --></template>
+<script>
+  (() => {
+    const state = { foo: true, bar() {} };
+
+    let context = null;
+    let nodesToDestroy = [];
+    let pendingUpdate = false;
+
+    function destroyAnyNodes() {
+      // destroy current view template refs before rendering again
+      nodesToDestroy.forEach((el) => el.remove());
+      nodesToDestroy = [];
+    }
+
+    // Function to update data bindings and loops
+    // call update() when you mutate state and need the updates to reflect
+    // in the dom
+    function update() {
+      if (pendingUpdate === true) {
+        return;
+      }
+      pendingUpdate = true;
+
+      document.querySelectorAll(\\"[data-el='div-1']\\").forEach((el) => {
+        renderTextNode(el, state.foo);
+      });
+
+      destroyAnyNodes();
+
+      pendingUpdate = false;
+    }
+
+    // Update with initial state on first load
+    update();
+
+    // Helper text DOM nodes
+    function renderTextNode(el, text) {
+      const textNode = document.createTextNode(text);
+      if (el?.scope) {
+        textNode.scope = el.scope;
+      }
+      if (el?.context) {
+        child.context = el.context;
+      }
+      el.after(textNode);
+      nodesToDestroy.push(el.nextSibling);
+    }
+  })();
+</script>
+"
+`;
+
+exports[`Html > jsx > Typescript Test > StoreShadowVars 1`] = `
+"<template data-el=\\"div-1\\"><!-- state.foo(state.errors) --></template>
+<script>
+  (() => {
+    const state = {
+      errors: {},
+      foo(errors) {
+        return errors;
+      },
+    };
+
+    let context = null;
+    let nodesToDestroy = [];
+    let pendingUpdate = false;
+
+    function destroyAnyNodes() {
+      // destroy current view template refs before rendering again
+      nodesToDestroy.forEach((el) => el.remove());
+      nodesToDestroy = [];
+    }
+
+    // Function to update data bindings and loops
+    // call update() when you mutate state and need the updates to reflect
+    // in the dom
+    function update() {
+      if (pendingUpdate === true) {
+        return;
+      }
+      pendingUpdate = true;
+
+      document.querySelectorAll(\\"[data-el='div-1']\\").forEach((el) => {
+        renderTextNode(el, state.foo(state.errors));
+      });
+
+      destroyAnyNodes();
+
+      pendingUpdate = false;
+    }
+
+    // Update with initial state on first load
+    update();
+
+    // Helper text DOM nodes
+    function renderTextNode(el, text) {
+      const textNode = document.createTextNode(text);
+      if (el?.scope) {
+        textNode.scope = el.scope;
+      }
+      if (el?.context) {
+        child.context = el.context;
+      }
+      el.after(textNode);
+      nodesToDestroy.push(el.nextSibling);
+    }
+  })();
+</script>
+"
+`;
+
+exports[`Html > jsx > Typescript Test > StoreWithState 1`] = `
+"<template data-el=\\"div-1\\"><!-- state.bar() --></template>
+<script>
+  (() => {
+    const state = {
+      foo: false,
+      bar() {
+        return state.foo;
+      },
+    };
+
+    let context = null;
+    let nodesToDestroy = [];
+    let pendingUpdate = false;
+
+    function destroyAnyNodes() {
+      // destroy current view template refs before rendering again
+      nodesToDestroy.forEach((el) => el.remove());
+      nodesToDestroy = [];
+    }
+
+    // Function to update data bindings and loops
+    // call update() when you mutate state and need the updates to reflect
+    // in the dom
+    function update() {
+      if (pendingUpdate === true) {
+        return;
+      }
+      pendingUpdate = true;
+
+      document.querySelectorAll(\\"[data-el='div-1']\\").forEach((el) => {
+        renderTextNode(el, state.bar());
+      });
+
+      destroyAnyNodes();
+
+      pendingUpdate = false;
+    }
+
+    // Update with initial state on first load
+    update();
+
+    // Helper text DOM nodes
+    function renderTextNode(el, text) {
+      const textNode = document.createTextNode(text);
+      if (el?.scope) {
+        textNode.scope = el.scope;
+      }
+      if (el?.context) {
+        child.context = el.context;
+      }
+      el.after(textNode);
+      nodesToDestroy.push(el.nextSibling);
     }
   })();
 </script>
@@ -9419,6 +11509,11 @@ exports[`Html > jsx > Typescript Test > Textarea 1`] = `
 "
 `;
 
+exports[`Html > jsx > Typescript Test > UseValueAndFnFromStore 1`] = `
+"<div>Test</div>
+"
+`;
+
 exports[`Html > jsx > Typescript Test > Video 1`] = `
 "<video preload=\\"none\\" data-el=\\"video-1\\"></video>
 <script>
@@ -9542,6 +11637,165 @@ exports[`Html > jsx > Typescript Test > arrowFunctionInUseStore 1`] = `
       }
       el.after(textNode);
       nodesToDestroy.push(el.nextSibling);
+    }
+  })();
+</script>
+"
+`;
+
+exports[`Html > jsx > Typescript Test > basicForFragment 1`] = `
+"<div>
+  <template data-el=\\"for\\">
+    <div>
+      <template data-el=\\"div-1\\"><!-- option --></template>
+    </div>
+  </template>
+
+  <template data-el=\\"for-2\\">
+    <div>
+      <template data-el=\\"div-2\\"><!-- option --></template>
+    </div>
+  </template>
+  <select data-dom-state=\\"select-1\\">
+    <template data-el=\\"for-3\\">
+      <option data-el=\\"option-1\\">
+        <template data-el=\\"div-3\\"><!-- option --></template>
+      </option>
+    </template>
+  </select>
+</div>
+<script>
+  (() => {
+    const state = { id: \\"xyz\\" };
+
+    let context = null;
+    let nodesToDestroy = [];
+    let pendingUpdate = false;
+
+    function destroyAnyNodes() {
+      // destroy current view template refs before rendering again
+      nodesToDestroy.forEach((el) => el.remove());
+      nodesToDestroy = [];
+    }
+
+    // Function to update data bindings and loops
+    // call update() when you mutate state and need the updates to reflect
+    // in the dom
+    function update() {
+      if (pendingUpdate === true) {
+        return;
+      }
+      pendingUpdate = true;
+
+      document.querySelectorAll(\\"[data-el='for']\\").forEach((el) => {
+        let array = [\\"a\\", \\"b\\", \\"c\\"];
+        renderLoop(el, array, \\"option\\");
+      });
+
+      document.querySelectorAll(\\"[data-el='div-1']\\").forEach((el) => {
+        const option = getScope(el, \\"option\\");
+        renderTextNode(el, option);
+      });
+
+      document.querySelectorAll(\\"[data-el='for-2']\\").forEach((el) => {
+        let array = [\\"a\\", \\"b\\", \\"c\\"];
+        renderLoop(el, array, \\"option\\");
+      });
+
+      document.querySelectorAll(\\"[data-el='div-2']\\").forEach((el) => {
+        const option = getScope(el, \\"option\\");
+        renderTextNode(el, option);
+      });
+
+      document.querySelectorAll(\\"[data-el='for-3']\\").forEach((el) => {
+        let array = [\\"d\\", \\"e\\", \\"f\\"];
+        renderLoop(el, array, \\"option\\");
+      });
+
+      document.querySelectorAll(\\"[data-el='option-1']\\").forEach((el) => {
+        const option = getScope(el, \\"option\\");
+
+        el.key = \`\${state.id}-\${option}\`;
+
+        el.value = option;
+      });
+
+      document.querySelectorAll(\\"[data-el='div-3']\\").forEach((el) => {
+        const option = getScope(el, \\"option\\");
+        renderTextNode(el, option);
+      });
+
+      destroyAnyNodes();
+
+      pendingUpdate = false;
+    }
+
+    // Update with initial state on first load
+    update();
+
+    // Helper text DOM nodes
+    function renderTextNode(el, text) {
+      const textNode = document.createTextNode(text);
+      if (el?.scope) {
+        textNode.scope = el.scope;
+      }
+      if (el?.context) {
+        child.context = el.context;
+      }
+      el.after(textNode);
+      nodesToDestroy.push(el.nextSibling);
+    }
+
+    // Helper to render loops
+    function renderLoop(template, array, itemName, itemIndex, collectionName) {
+      const collection = [];
+      for (let [index, value] of array.entries()) {
+        const elementFragment = template.content.cloneNode(true);
+        const children = Array.from(elementFragment.childNodes);
+        const localScope = {};
+        let scope = localScope;
+        if (template?.scope) {
+          const getParent = {
+            get(target, prop, receiver) {
+              if (prop in target) {
+                return target[prop];
+              }
+              if (prop in template.scope) {
+                return template.scope[prop];
+              }
+              return target[prop];
+            },
+          };
+          scope = new Proxy(localScope, getParent);
+        }
+        children.forEach((child) => {
+          if (itemName !== undefined) {
+            scope[itemName] = value;
+          }
+          if (itemIndex !== undefined) {
+            scope[itemIndex] = index;
+          }
+          if (collectionName !== undefined) {
+            scope[collectionName] = array;
+          }
+          child.scope = scope;
+          if (template.context) {
+            child.context = template.context;
+          }
+          this.nodesToDestroy.push(child);
+          collection.unshift(child);
+        });
+        collection.forEach((child) => template.after(child));
+      }
+    }
+
+    function getScope(el, name) {
+      do {
+        let value = el?.scope?.[name];
+        if (value !== undefined) {
+          return value;
+        }
+      } while ((el = el.parentNode));
     }
   })();
 </script>
@@ -9725,8 +11979,8 @@ exports[`Html > jsx > Typescript Test > basicForwardRef 1`] = `
       document.querySelectorAll(\\"[data-el='input-1']\\").forEach((el) => {
         el.value = state.name;
 
-        el.removeEventListener(\\"input\\", onInput1Input);
-        el.addEventListener(\\"input\\", onInput1Input);
+        el.removeEventListener(\\"change\\", onInput1Change);
+        el.addEventListener(\\"change\\", onInput1Change);
       });
 
       destroyAnyNodes();
@@ -9734,8 +11988,8 @@ exports[`Html > jsx > Typescript Test > basicForwardRef 1`] = `
       pendingUpdate = false;
     }
 
-    // Event handler for 'input' event on input-1
-    function onInput1Input(event) {
+    // Event handler for 'change' event on input-1
+    function onInput1Change(event) {
       state.name = event.target.value;
       update();
     }
@@ -9748,7 +12002,9 @@ exports[`Html > jsx > Typescript Test > basicForwardRef 1`] = `
 `;
 
 exports[`Html > jsx > Typescript Test > basicForwardRefMetadata 1`] = `
-"<div>
+"/** useMetadata: {\\"forwardRef\\":\\"inputRef\\"} */
+
+<div>
   <input
     class=\\"input\\"
     data-el=\\"input-1\\"
@@ -9787,8 +12043,8 @@ exports[`Html > jsx > Typescript Test > basicForwardRefMetadata 1`] = `
       document.querySelectorAll(\\"[data-el='input-1']\\").forEach((el) => {
         el.value = state.name;
 
-        el.removeEventListener(\\"input\\", onInput1Input);
-        el.addEventListener(\\"input\\", onInput1Input);
+        el.removeEventListener(\\"change\\", onInput1Change);
+        el.addEventListener(\\"change\\", onInput1Change);
       });
 
       destroyAnyNodes();
@@ -9796,8 +12052,8 @@ exports[`Html > jsx > Typescript Test > basicForwardRefMetadata 1`] = `
       pendingUpdate = false;
     }
 
-    // Event handler for 'input' event on input-1
-    function onInput1Input(event) {
+    // Event handler for 'change' event on input-1
+    function onInput1Change(event) {
       state.name = event.target.value;
       update();
     }
@@ -9882,9 +12138,35 @@ exports[`Html > jsx > Typescript Test > basicOnUpdateReturn 1`] = `
 "
 `;
 
+exports[`Html > jsx > Typescript Test > basicRefAttributePassing 1`] = `
+"/** useMetadata: {\\"attributePassing\\":{\\"enabled\\":true}} */
+
+<button data-el=\\"button-1\\" data-ref=\\"undefined-buttonRef\\">
+  Attribute Passing
+</button>
+"
+`;
+
+exports[`Html > jsx > Typescript Test > basicRefAttributePassingCustomRef 1`] = `
+"/** useMetadata: {\\"attributePassing\\":{\\"enabled\\":true,\\"customRef\\":\\"buttonRef\\"}}
+*/
+
+<div>
+  <button data-el=\\"button-1\\" data-ref=\\"undefined-buttonRef\\">
+    Attribute Passing
+  </button>
+</div>
+"
+`;
+
 exports[`Html > jsx > Typescript Test > class + ClassName + css 1`] = `
-"<div class=\\"test2 test div\\">
-  Hello! I can run in React, Vue, Solid, or Liquid!
+"<div>
+  <MyComp class=\\"test\\" className=\\"test2\\">
+    Hello! I can run in React, Vue, Solid, or Liquid!
+  </MyComp>
+  <div class=\\"test2 test div\\">
+    Hello! I can run in React, Vue, Solid, or Liquid!
+  </div>
 </div>
 <style>
   .div {
@@ -10008,6 +12290,15 @@ exports[`Html > jsx > Typescript Test > classState 1`] = `
     update();
   })();
 </script>
+"
+`;
+
+exports[`Html > jsx > Typescript Test > complexMeta 1`] = `
+"/** useMetadata:
+{\\"x\\":\\"y\\",\\"asdf\\":{\\"stringValue\\":\\"d\\",\\"booleanValue\\":true,\\"numberValue\\":1,\\"innerObject\\":{\\"stringValue\\":\\"inner\\",\\"numberValue\\":2,\\"booleanValue\\":false},\\"spreadStringValue\\":\\"f\\"}}
+*/
+
+<div></div>
 "
 `;
 
@@ -10204,7 +12495,7 @@ exports[`Html > jsx > Typescript Test > defaultProps 1`] = `
 
     // Event handler for 'click' event on button-1
     function onButton1Click(event) {
-      props.onClick(event);
+      props.onClick();
     }
 
     // Update with initial state on first load
@@ -10428,6 +12719,74 @@ exports[`Html > jsx > Typescript Test > defaultValsWithTypes 1`] = `
 "
 `;
 
+exports[`Html > jsx > Typescript Test > eventInputAndChange 1`] = `
+"<div>
+  <input class=\\"input\\" data-el=\\"input-1\\" data-dom-state=\\"input-2\\" />
+
+  Hello! I can run in React, Vue, Solid, or Liquid!
+</div>
+<style>
+  .input {
+    color: red;
+  }
+</style>
+<script>
+  (() => {
+    const state = { name: \\"Steve\\" };
+
+    let context = null;
+    let nodesToDestroy = [];
+    let pendingUpdate = false;
+
+    function destroyAnyNodes() {
+      // destroy current view template refs before rendering again
+      nodesToDestroy.forEach((el) => el.remove());
+      nodesToDestroy = [];
+    }
+
+    // Function to update data bindings and loops
+    // call update() when you mutate state and need the updates to reflect
+    // in the dom
+    function update() {
+      if (pendingUpdate === true) {
+        return;
+      }
+      pendingUpdate = true;
+
+      document.querySelectorAll(\\"[data-el='input-1']\\").forEach((el) => {
+        el.value = state.name;
+
+        el.removeEventListener(\\"input\\", onInput1Input);
+        el.addEventListener(\\"input\\", onInput1Input);
+
+        el.removeEventListener(\\"change\\", onInput1Change);
+        el.addEventListener(\\"change\\", onInput1Change);
+      });
+
+      destroyAnyNodes();
+
+      pendingUpdate = false;
+    }
+
+    // Event handler for 'input' event on input-1
+    function onInput1Input(event) {
+      state.name = event.target.value;
+      update();
+    }
+
+    // Event handler for 'change' event on input-1
+    function onInput1Change(event) {
+      state.name = event.target.value;
+      update();
+    }
+
+    // Update with initial state on first load
+    update();
+  })();
+</script>
+"
+`;
+
 exports[`Html > jsx > Typescript Test > expressionState 1`] = `
 "<div>
   <template data-el=\\"div-1\\"><!-- state.refToUse --></template>
@@ -10461,6 +12820,165 @@ exports[`Html > jsx > Typescript Test > expressionState 1`] = `
 
       document.querySelectorAll(\\"[data-el='div-1']\\").forEach((el) => {
         renderTextNode(el, state.refToUse);
+      });
+
+      destroyAnyNodes();
+
+      pendingUpdate = false;
+    }
+
+    // Update with initial state on first load
+    update();
+
+    // Helper text DOM nodes
+    function renderTextNode(el, text) {
+      const textNode = document.createTextNode(text);
+      if (el?.scope) {
+        textNode.scope = el.scope;
+      }
+      if (el?.context) {
+        child.context = el.context;
+      }
+      el.after(textNode);
+      nodesToDestroy.push(el.nextSibling);
+    }
+  })();
+</script>
+"
+`;
+
+exports[`Html > jsx > Typescript Test > figmaMeta 1`] = `
+"/** useMetadata:
+{\\"figma\\":{\\"name\\":\\"def-button-beta-outlined\\",\\"url\\":\\"https://www.figma.com/xxx\\",\\"props\\":{\\"iconSmall\\":{\\"type\\":\\"instance\\",\\"key\\":\\"📍
+Icon Small\\"},\\"iconMedium\\":{\\"type\\":\\"instance\\",\\"key\\":\\"📍 Icon
+Medium\\"},\\"label\\":{\\"type\\":\\"string\\",\\"key\\":\\"✏️
+Label\\"},\\"icon\\":{\\"type\\":\\"boolean\\",\\"key\\":\\"👁️
+Icon\\",\\"value\\":{\\"false\\":false,\\"true\\":\\"placeholder\\"}},\\"interactiveState\\":{\\"type\\":\\"enum\\",\\"key\\":\\"Interactive
+State\\",\\"value\\":{\\"(Def)
+Enabled\\":false,\\"Hovered\\":false,\\"Pressed\\":false,\\"Focused\\":false,\\"Disabled\\":\\"true\\"}},\\"size\\":{\\"type\\":\\"enum\\",\\"key\\":\\"Size\\",\\"value\\":{\\"(Def)
+Medium\\":false,\\"Small\\":\\"small\\"}},\\"width\\":{\\"type\\":\\"enum\\",\\"key\\":\\"Width\\",\\"value\\":{\\"(Def)
+Auto Width\\":false,\\"Full Width\\":\\"full\\"}}}}} */
+
+<button data-el=\\"button-1\\">
+  <template data-el=\\"div-1\\"><!-- props.label --></template>
+</button>
+<script>
+  (() => {
+    const state = {};
+    let props = {};
+    let context = null;
+    let nodesToDestroy = [];
+    let pendingUpdate = false;
+
+    function destroyAnyNodes() {
+      // destroy current view template refs before rendering again
+      nodesToDestroy.forEach((el) => el.remove());
+      nodesToDestroy = [];
+    }
+
+    // Function to update data bindings and loops
+    // call update() when you mutate state and need the updates to reflect
+    // in the dom
+    function update() {
+      if (pendingUpdate === true) {
+        return;
+      }
+      pendingUpdate = true;
+
+      document.querySelectorAll(\\"[data-el='button-1']\\").forEach((el) => {
+        el.setAttribute(\\"data-icon\\", props.icon);
+
+        el.setAttribute(\\"data-disabled\\", props.interactiveState);
+
+        el.setAttribute(\\"data-width\\", props.width);
+
+        el.setAttribute(\\"data-size\\", props.size);
+      });
+
+      document.querySelectorAll(\\"[data-el='div-1']\\").forEach((el) => {
+        renderTextNode(el, props.label);
+      });
+
+      destroyAnyNodes();
+
+      pendingUpdate = false;
+    }
+
+    // Update with initial state on first load
+    update();
+
+    // Helper text DOM nodes
+    function renderTextNode(el, text) {
+      const textNode = document.createTextNode(text);
+      if (el?.scope) {
+        textNode.scope = el.scope;
+      }
+      if (el?.context) {
+        child.context = el.context;
+      }
+      el.after(textNode);
+      nodesToDestroy.push(el.nextSibling);
+    }
+  })();
+</script>
+"
+`;
+
+exports[`Html > jsx > Typescript Test > getterState 1`] = `
+"<div>
+  <p>
+    <template data-el=\\"div-1\\"><!-- state.foo2 --></template>
+  </p>
+  <p>
+    <template data-el=\\"div-2\\"><!-- state.bar --></template>
+  </p>
+  <p>
+    <template data-el=\\"div-3\\"><!-- state.baz(1) --></template>
+  </p>
+</div>
+<script>
+  (() => {
+    const state = {
+      get foo2() {
+        return props.foo + \\"foo\\";
+      },
+      get bar() {
+        return \\"bar\\";
+      },
+      baz(i: number) {
+        return i + state.foo2.length;
+      },
+    };
+    let props = {};
+    let context = null;
+    let nodesToDestroy = [];
+    let pendingUpdate = false;
+
+    function destroyAnyNodes() {
+      // destroy current view template refs before rendering again
+      nodesToDestroy.forEach((el) => el.remove());
+      nodesToDestroy = [];
+    }
+
+    // Function to update data bindings and loops
+    // call update() when you mutate state and need the updates to reflect
+    // in the dom
+    function update() {
+      if (pendingUpdate === true) {
+        return;
+      }
+      pendingUpdate = true;
+
+      document.querySelectorAll(\\"[data-el='div-1']\\").forEach((el) => {
+        renderTextNode(el, state.foo2);
+      });
+
+      document.querySelectorAll(\\"[data-el='div-2']\\").forEach((el) => {
+        renderTextNode(el, state.bar);
+      });
+
+      document.querySelectorAll(\\"[data-el='div-3']\\").forEach((el) => {
+        renderTextNode(el, state.baz(1));
       });
 
       destroyAnyNodes();
@@ -10735,6 +13253,11 @@ exports[`Html > jsx > Typescript Test > onInit 1`] = `
     }
   })();
 </script>
+"
+`;
+
+exports[`Html > jsx > Typescript Test > onInitPlain 1`] = `
+"<div></div>
 "
 `;
 
@@ -11852,6 +14375,281 @@ exports[`Html > jsx > Typescript Test > self-referencing component with children
 "
 `;
 
+exports[`Html > jsx > Typescript Test > setState 1`] = `
+"<div><button data-el=\\"button-1\\">Click me</button></div>
+<script>
+  (() => {
+    const state = {
+      n: [\\"123\\"],
+      someFn() {
+        state.n[0] = \\"123\\";
+      },
+    };
+
+    let context = null;
+    let nodesToDestroy = [];
+    let pendingUpdate = false;
+
+    function destroyAnyNodes() {
+      // destroy current view template refs before rendering again
+      nodesToDestroy.forEach((el) => el.remove());
+      nodesToDestroy = [];
+    }
+
+    // Function to update data bindings and loops
+    // call update() when you mutate state and need the updates to reflect
+    // in the dom
+    function update() {
+      if (pendingUpdate === true) {
+        return;
+      }
+      pendingUpdate = true;
+
+      document.querySelectorAll(\\"[data-el='button-1']\\").forEach((el) => {
+        el.removeEventListener(\\"click\\", onButton1Click);
+        el.addEventListener(\\"click\\", onButton1Click);
+      });
+
+      destroyAnyNodes();
+
+      pendingUpdate = false;
+    }
+
+    // Event handler for 'click' event on button-1
+    function onButton1Click(event) {
+      state.someFn();
+    }
+
+    // Update with initial state on first load
+    update();
+  })();
+</script>
+"
+`;
+
+exports[`Html > jsx > Typescript Test > showExpressions 1`] = `
+"<div>
+  <template data-el=\\"show\\">Content0</template>
+  <template data-el=\\"show-2\\">ContentA</template>
+  <template data-el=\\"show-3\\"></template>
+  <template data-el=\\"show-4\\">ContentB</template>
+  <template data-el=\\"show-5\\">
+    <template data-el=\\"div-1\\"><!-- undefined --></template>
+  </template>
+  <template data-el=\\"show-6\\">ContentC</template>
+  <template data-el=\\"show-7\\"></template>
+  <template data-el=\\"show-8\\">ContentD</template>
+  <template data-el=\\"show-9\\"></template>
+  <template data-el=\\"show-10\\">ContentE</template>
+  <template data-el=\\"show-11\\">hello</template>
+  <template data-el=\\"show-12\\">ContentF</template>
+  <template data-el=\\"show-13\\">123</template>
+  <template data-el=\\"show-14\\">4mb</template>
+  <template data-el=\\"show-15\\">
+    <template data-el=\\"show-16\\">20mb</template>
+  </template>
+  <template data-el=\\"show-17\\">
+    <template data-el=\\"show-18\\"><div>complete</div></template>
+  </template>
+</div>
+<script>
+  (() => {
+    const state = {};
+    let props = {};
+    let context = null;
+    let nodesToDestroy = [];
+    let pendingUpdate = false;
+
+    function destroyAnyNodes() {
+      // destroy current view template refs before rendering again
+      nodesToDestroy.forEach((el) => el.remove());
+      nodesToDestroy = [];
+    }
+
+    // Function to update data bindings and loops
+    // call update() when you mutate state and need the updates to reflect
+    // in the dom
+    function update() {
+      if (pendingUpdate === true) {
+        return;
+      }
+      pendingUpdate = true;
+
+      document.querySelectorAll(\\"[data-el='show']\\").forEach((el) => {
+        const whenCondition = props.conditionA;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-2']\\").forEach((el) => {
+        const whenCondition = props.conditionA;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-3']\\").forEach((el) => {
+        const whenCondition = props.conditionA;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-4']\\").forEach((el) => {
+        const whenCondition = props.conditionA;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-5']\\").forEach((el) => {
+        const whenCondition = props.conditionA;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='div-1']\\").forEach((el) => {
+        renderTextNode(el, undefined);
+      });
+
+      document.querySelectorAll(\\"[data-el='show-6']\\").forEach((el) => {
+        const whenCondition = props.conditionA;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-7']\\").forEach((el) => {
+        const whenCondition = props.conditionA;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-8']\\").forEach((el) => {
+        const whenCondition = props.conditionA;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-9']\\").forEach((el) => {
+        const whenCondition = props.conditionA;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-10']\\").forEach((el) => {
+        const whenCondition = props.conditionA;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-11']\\").forEach((el) => {
+        const whenCondition = props.conditionA;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-12']\\").forEach((el) => {
+        const whenCondition = props.conditionA;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-13']\\").forEach((el) => {
+        const whenCondition = props.conditionA;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-14']\\").forEach((el) => {
+        const whenCondition = props.conditionA === \\"Default\\";
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-15']\\").forEach((el) => {
+        const whenCondition = props.conditionA === \\"Default\\";
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-16']\\").forEach((el) => {
+        const whenCondition = props.conditionB === \\"Complete\\";
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-17']\\").forEach((el) => {
+        const whenCondition = props.conditionA === \\"Default\\";
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-18']\\").forEach((el) => {
+        const whenCondition = props.conditionB === \\"Complete\\";
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      destroyAnyNodes();
+
+      pendingUpdate = false;
+    }
+
+    // Update with initial state on first load
+    update();
+
+    function showContent(el) {
+      // https://developer.mozilla.org/en-US/docs/Web/API/HTMLTemplateElement/content
+      // grabs the content of a node that is between <template> tags
+      // iterates through child nodes to register all content including text elements
+      // attaches the content after the template
+
+      const elementFragment = el.content.cloneNode(true);
+      const children = Array.from(elementFragment.childNodes);
+      children.forEach((child) => {
+        if (el?.scope) {
+          child.scope = el.scope;
+        }
+        if (el?.context) {
+          child.context = el.context;
+        }
+        nodesToDestroy.push(child);
+      });
+      el.after(elementFragment);
+    }
+
+    // Helper text DOM nodes
+    function renderTextNode(el, text) {
+      const textNode = document.createTextNode(text);
+      if (el?.scope) {
+        textNode.scope = el.scope;
+      }
+      if (el?.context) {
+        child.context = el.context;
+      }
+      el.after(textNode);
+      nodesToDestroy.push(el.nextSibling);
+    }
+  })();
+</script>
+"
+`;
+
 exports[`Html > jsx > Typescript Test > showWithFor 1`] = `
 "<template data-el=\\"show\\">
   <template data-el=\\"for\\">
@@ -12003,6 +14801,125 @@ exports[`Html > jsx > Typescript Test > showWithFor 1`] = `
 "
 `;
 
+exports[`Html > jsx > Typescript Test > showWithOtherValues 1`] = `
+"<div>
+  <template data-el=\\"show\\">ContentA</template>
+  <template data-el=\\"show-2\\">ContentB</template>
+  <template data-el=\\"show-3\\">ContentC</template>
+  <template data-el=\\"show-4\\">ContentD</template>
+  <template data-el=\\"show-5\\">ContentE</template>
+  <template data-el=\\"show-6\\">ContentF</template>
+</div>
+<script>
+  (() => {
+    const state = {};
+    let props = {};
+    let context = null;
+    let nodesToDestroy = [];
+    let pendingUpdate = false;
+
+    function destroyAnyNodes() {
+      // destroy current view template refs before rendering again
+      nodesToDestroy.forEach((el) => el.remove());
+      nodesToDestroy = [];
+    }
+
+    // Function to update data bindings and loops
+    // call update() when you mutate state and need the updates to reflect
+    // in the dom
+    function update() {
+      if (pendingUpdate === true) {
+        return;
+      }
+      pendingUpdate = true;
+
+      document.querySelectorAll(\\"[data-el='show']\\").forEach((el) => {
+        const whenCondition = props.conditionA;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-2']\\").forEach((el) => {
+        const whenCondition = props.conditionA;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-3']\\").forEach((el) => {
+        const whenCondition = props.conditionA;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-4']\\").forEach((el) => {
+        const whenCondition = props.conditionA;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-5']\\").forEach((el) => {
+        const whenCondition = props.conditionA;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      document.querySelectorAll(\\"[data-el='show-6']\\").forEach((el) => {
+        const whenCondition = props.conditionA;
+        if (whenCondition) {
+          showContent(el);
+        }
+      });
+
+      destroyAnyNodes();
+
+      pendingUpdate = false;
+    }
+
+    // Update with initial state on first load
+    update();
+
+    function showContent(el) {
+      // https://developer.mozilla.org/en-US/docs/Web/API/HTMLTemplateElement/content
+      // grabs the content of a node that is between <template> tags
+      // iterates through child nodes to register all content including text elements
+      // attaches the content after the template
+
+      const elementFragment = el.content.cloneNode(true);
+      const children = Array.from(elementFragment.childNodes);
+      children.forEach((child) => {
+        if (el?.scope) {
+          child.scope = el.scope;
+        }
+        if (el?.context) {
+          child.context = el.context;
+        }
+        nodesToDestroy.push(child);
+      });
+      el.after(elementFragment);
+    }
+
+    // Helper text DOM nodes
+    function renderTextNode(el, text) {
+      const textNode = document.createTextNode(text);
+      if (el?.scope) {
+        textNode.scope = el.scope;
+      }
+      if (el?.context) {
+        child.context = el.context;
+      }
+      el.after(textNode);
+      nodesToDestroy.push(el.nextSibling);
+    }
+  })();
+</script>
+"
+`;
+
 exports[`Html > jsx > Typescript Test > showWithRootText 1`] = `
 "<template data-el=\\"show\\">ContentA</template>
 <script>
@@ -12148,6 +15065,141 @@ exports[`Html > jsx > Typescript Test > spreadNestedProps 1`] = `
 
 exports[`Html > jsx > Typescript Test > spreadProps 1`] = `
 "<input data-el=\\"input-1\\" data-dom-state=\\"input-2\\" />
+"
+`;
+
+exports[`Html > jsx > Typescript Test > store-async-function 1`] = `
+"<div></div>
+"
+`;
+
+exports[`Html > jsx > Typescript Test > string-literal-store 1`] = `
+"<div>
+  <template data-el=\\"div-1\\"><!-- state.foo --></template>
+</div>
+<script>
+  (() => {
+    const state = { foo: 123 };
+
+    let context = null;
+    let nodesToDestroy = [];
+    let pendingUpdate = false;
+
+    function destroyAnyNodes() {
+      // destroy current view template refs before rendering again
+      nodesToDestroy.forEach((el) => el.remove());
+      nodesToDestroy = [];
+    }
+
+    // Function to update data bindings and loops
+    // call update() when you mutate state and need the updates to reflect
+    // in the dom
+    function update() {
+      if (pendingUpdate === true) {
+        return;
+      }
+      pendingUpdate = true;
+
+      document.querySelectorAll(\\"[data-el='div-1']\\").forEach((el) => {
+        renderTextNode(el, state.foo);
+      });
+
+      destroyAnyNodes();
+
+      pendingUpdate = false;
+    }
+
+    // Update with initial state on first load
+    update();
+
+    // Helper text DOM nodes
+    function renderTextNode(el, text) {
+      const textNode = document.createTextNode(text);
+      if (el?.scope) {
+        textNode.scope = el.scope;
+      }
+      if (el?.context) {
+        child.context = el.context;
+      }
+      el.after(textNode);
+      nodesToDestroy.push(el.nextSibling);
+    }
+  })();
+</script>
+"
+`;
+
+exports[`Html > jsx > Typescript Test > string-literal-store-kebab 1`] = `
+"<div>
+  <template data-el=\\"div-1\\"><!-- state['foo-bar'] --></template>
+</div>
+<script>
+  (() => {
+    const state = { foo-bar: 123,};
+
+    let context = null;
+    let nodesToDestroy = [];
+    let pendingUpdate = false;
+
+
+    function destroyAnyNodes() {
+      // destroy current view template refs before rendering again
+      nodesToDestroy.forEach(el => el.remove());
+      nodesToDestroy = [];
+    }
+
+
+    // Function to update data bindings and loops
+    // call update() when you mutate state and need the updates to reflect
+    // in the dom
+    function update() {
+      if (pendingUpdate === true) {
+        return;
+      }
+      pendingUpdate = true;
+
+          document.querySelectorAll(\\"[data-el='div-1']\\").forEach((el) => {
+
+
+  renderTextNode(el, state['foo-bar']);
+          });
+
+
+      destroyAnyNodes();
+
+
+
+      pendingUpdate = false;
+    }
+
+
+
+    // Update with initial state on first load
+    update();
+
+
+
+
+
+
+
+
+      // Helper text DOM nodes
+      function renderTextNode(el, text) {
+        const textNode = document.createTextNode(text);
+        if (el?.scope) {
+          textNode.scope = el.scope
+        }
+        if (el?.context) {
+          child.context = el.context;
+        }
+        el.after(textNode);
+        nodesToDestroy.push(el.nextSibling);
+      }
+
+
+  })()
+</script>
 "
 `;
 
@@ -12378,6 +15430,134 @@ exports[`Html > jsx > Typescript Test > typeDependency 1`] = `
 "
 `;
 
+exports[`Html > jsx > Typescript Test > typeExternalStore 1`] = `
+"<div>
+  Hello
+  <template data-el=\\"div-1\\"><!-- state._name --></template>
+  !
+</div>
+<script>
+  (() => {
+    const state = { _name: \\"test\\" };
+
+    let context = null;
+    let nodesToDestroy = [];
+    let pendingUpdate = false;
+
+    function destroyAnyNodes() {
+      // destroy current view template refs before rendering again
+      nodesToDestroy.forEach((el) => el.remove());
+      nodesToDestroy = [];
+    }
+
+    // Function to update data bindings and loops
+    // call update() when you mutate state and need the updates to reflect
+    // in the dom
+    function update() {
+      if (pendingUpdate === true) {
+        return;
+      }
+      pendingUpdate = true;
+
+      document.querySelectorAll(\\"[data-el='div-1']\\").forEach((el) => {
+        renderTextNode(el, state._name);
+      });
+
+      destroyAnyNodes();
+
+      pendingUpdate = false;
+    }
+
+    // Update with initial state on first load
+    update();
+
+    // Helper text DOM nodes
+    function renderTextNode(el, text) {
+      const textNode = document.createTextNode(text);
+      if (el?.scope) {
+        textNode.scope = el.scope;
+      }
+      if (el?.context) {
+        child.context = el.context;
+      }
+      el.after(textNode);
+      nodesToDestroy.push(el.nextSibling);
+    }
+  })();
+</script>
+"
+`;
+
+exports[`Html > jsx > Typescript Test > typeGetterStore 1`] = `
+"<div>
+  Hello
+  <template data-el=\\"div-1\\"><!-- state.name --></template>
+  !
+</div>
+<script>
+  (() => {
+    const state = {
+      name: \\"test\\",
+      getName() {
+        if (state.name === \\"a\\") {
+          return \\"b\\";
+        }
+
+        return state.name;
+      },
+      get test() {
+        return \\"test\\";
+      },
+    };
+
+    let context = null;
+    let nodesToDestroy = [];
+    let pendingUpdate = false;
+
+    function destroyAnyNodes() {
+      // destroy current view template refs before rendering again
+      nodesToDestroy.forEach((el) => el.remove());
+      nodesToDestroy = [];
+    }
+
+    // Function to update data bindings and loops
+    // call update() when you mutate state and need the updates to reflect
+    // in the dom
+    function update() {
+      if (pendingUpdate === true) {
+        return;
+      }
+      pendingUpdate = true;
+
+      document.querySelectorAll(\\"[data-el='div-1']\\").forEach((el) => {
+        renderTextNode(el, state.name);
+      });
+
+      destroyAnyNodes();
+
+      pendingUpdate = false;
+    }
+
+    // Update with initial state on first load
+    update();
+
+    // Helper text DOM nodes
+    function renderTextNode(el, text) {
+      const textNode = document.createTextNode(text);
+      if (el?.scope) {
+        textNode.scope = el.scope;
+      }
+      if (el?.context) {
+        child.context = el.context;
+      }
+      el.after(textNode);
+      nodesToDestroy.push(el.nextSibling);
+    }
+  })();
+</script>
+"
+`;
+
 exports[`Html > jsx > Typescript Test > use-style 1`] = `
 "<button type=\\"button\\">Button</button>
 <style>
@@ -12432,6 +15612,7 @@ exports[`Html > jsx > Typescript Test > useTarget 1`] = `
         return prefix + \\"foo\\";
       },
       lastName: \\"bar\\",
+      foo: \\"bar\\",
     };
 
     let context = null;
@@ -12466,6 +15647,9 @@ exports[`Html > jsx > Typescript Test > useTarget 1`] = `
     update();
 
     // onMount
+    console.log(state.foo);
+    state.foo = \\"bar\\";
+    update();
 
     // Helper text DOM nodes
     function renderTextNode(el, text) {
@@ -12523,8 +15707,8 @@ exports[`Html > svelte > Javascript Test > basic 1`] = `
       pendingUpdate = true;
 
       document.querySelectorAll(\\"[data-el='input-1']\\").forEach((el) => {
-        el.removeEventListener(\\"input\\", onInput1Input);
-        el.addEventListener(\\"input\\", onInput1Input);
+        el.removeEventListener(\\"change\\", onInput1Change);
+        el.addEventListener(\\"change\\", onInput1Change);
 
         el.value = state.name;
       });
@@ -12534,8 +15718,8 @@ exports[`Html > svelte > Javascript Test > basic 1`] = `
       pendingUpdate = false;
     }
 
-    // Event handler for 'input' event on input-1
-    function onInput1Input(event) {
+    // Event handler for 'change' event on input-1
+    function onInput1Change(event) {
       state.name = event.target.value;
       update();
     }
@@ -12628,50 +15812,50 @@ exports[`Html > svelte > Javascript Test > bindGroup 1`] = `
       document.querySelectorAll(\\"[data-el='input-1']\\").forEach((el) => {
         el.setAttribute(\\"checked\\", state.tortilla === \\"Plain\\");
 
-        el.removeEventListener(\\"input\\", onInput1Input);
-        el.addEventListener(\\"input\\", onInput1Input);
+        el.removeEventListener(\\"change\\", onInput1Change);
+        el.addEventListener(\\"change\\", onInput1Change);
       });
 
       document.querySelectorAll(\\"[data-el='input-3']\\").forEach((el) => {
         el.setAttribute(\\"checked\\", state.tortilla === \\"Whole wheat\\");
 
-        el.removeEventListener(\\"input\\", onInput3Input);
-        el.addEventListener(\\"input\\", onInput3Input);
+        el.removeEventListener(\\"change\\", onInput3Change);
+        el.addEventListener(\\"change\\", onInput3Change);
       });
 
       document.querySelectorAll(\\"[data-el='input-5']\\").forEach((el) => {
         el.setAttribute(\\"checked\\", state.tortilla === \\"Spinach\\");
 
-        el.removeEventListener(\\"input\\", onInput5Input);
-        el.addEventListener(\\"input\\", onInput5Input);
+        el.removeEventListener(\\"change\\", onInput5Change);
+        el.addEventListener(\\"change\\", onInput5Change);
       });
 
       document.querySelectorAll(\\"[data-el='input-7']\\").forEach((el) => {
         el.setAttribute(\\"checked\\", state.fillings === \\"Rice\\");
 
-        el.removeEventListener(\\"input\\", onInput7Input);
-        el.addEventListener(\\"input\\", onInput7Input);
+        el.removeEventListener(\\"change\\", onInput7Change);
+        el.addEventListener(\\"change\\", onInput7Change);
       });
 
       document.querySelectorAll(\\"[data-el='input-9']\\").forEach((el) => {
         el.setAttribute(\\"checked\\", state.fillings === \\"Beans\\");
 
-        el.removeEventListener(\\"input\\", onInput9Input);
-        el.addEventListener(\\"input\\", onInput9Input);
+        el.removeEventListener(\\"change\\", onInput9Change);
+        el.addEventListener(\\"change\\", onInput9Change);
       });
 
       document.querySelectorAll(\\"[data-el='input-11']\\").forEach((el) => {
         el.setAttribute(\\"checked\\", state.fillings === \\"Cheese\\");
 
-        el.removeEventListener(\\"input\\", onInput11Input);
-        el.addEventListener(\\"input\\", onInput11Input);
+        el.removeEventListener(\\"change\\", onInput11Change);
+        el.addEventListener(\\"change\\", onInput11Change);
       });
 
       document.querySelectorAll(\\"[data-el='input-13']\\").forEach((el) => {
         el.setAttribute(\\"checked\\", state.fillings === \\"Guac (extra)\\");
 
-        el.removeEventListener(\\"input\\", onInput13Input);
-        el.addEventListener(\\"input\\", onInput13Input);
+        el.removeEventListener(\\"change\\", onInput13Change);
+        el.addEventListener(\\"change\\", onInput13Change);
       });
 
       document.querySelectorAll(\\"[data-el='div-1']\\").forEach((el) => {
@@ -12687,44 +15871,44 @@ exports[`Html > svelte > Javascript Test > bindGroup 1`] = `
       pendingUpdate = false;
     }
 
-    // Event handler for 'input' event on input-1
-    function onInput1Input(event) {
+    // Event handler for 'change' event on input-1
+    function onInput1Change(event) {
       state.tortilla = event.target.value;
       update();
     }
 
-    // Event handler for 'input' event on input-3
-    function onInput3Input(event) {
+    // Event handler for 'change' event on input-3
+    function onInput3Change(event) {
       state.tortilla = event.target.value;
       update();
     }
 
-    // Event handler for 'input' event on input-5
-    function onInput5Input(event) {
+    // Event handler for 'change' event on input-5
+    function onInput5Change(event) {
       state.tortilla = event.target.value;
       update();
     }
 
-    // Event handler for 'input' event on input-7
-    function onInput7Input(event) {
+    // Event handler for 'change' event on input-7
+    function onInput7Change(event) {
       state.fillings = event.target.value;
       update();
     }
 
-    // Event handler for 'input' event on input-9
-    function onInput9Input(event) {
+    // Event handler for 'change' event on input-9
+    function onInput9Change(event) {
       state.fillings = event.target.value;
       update();
     }
 
-    // Event handler for 'input' event on input-11
-    function onInput11Input(event) {
+    // Event handler for 'change' event on input-11
+    function onInput11Change(event) {
       state.fillings = event.target.value;
       update();
     }
 
-    // Event handler for 'input' event on input-13
-    function onInput13Input(event) {
+    // Event handler for 'change' event on input-13
+    function onInput13Change(event) {
       state.fillings = event.target.value;
       update();
     }
@@ -13377,15 +16561,15 @@ exports[`Html > svelte > Javascript Test > reactiveWithFn 1`] = `
       pendingUpdate = true;
 
       document.querySelectorAll(\\"[data-el='input-1']\\").forEach((el) => {
-        el.removeEventListener(\\"input\\", onInput1Input);
-        el.addEventListener(\\"input\\", onInput1Input);
+        el.removeEventListener(\\"change\\", onInput1Change);
+        el.addEventListener(\\"change\\", onInput1Change);
 
         el.value = state.a;
       });
 
       document.querySelectorAll(\\"[data-el='input-3']\\").forEach((el) => {
-        el.removeEventListener(\\"input\\", onInput3Input);
-        el.addEventListener(\\"input\\", onInput3Input);
+        el.removeEventListener(\\"change\\", onInput3Change);
+        el.addEventListener(\\"change\\", onInput3Change);
 
         el.value = state.b;
       });
@@ -13401,14 +16585,14 @@ exports[`Html > svelte > Javascript Test > reactiveWithFn 1`] = `
       pendingUpdate = false;
     }
 
-    // Event handler for 'input' event on input-1
-    function onInput1Input(event) {
+    // Event handler for 'change' event on input-1
+    function onInput1Change(event) {
       state.a = event.target.value;
       update();
     }
 
-    // Event handler for 'input' event on input-3
-    function onInput3Input(event) {
+    // Event handler for 'change' event on input-3
+    function onInput3Change(event) {
       state.b = event.target.value;
       update();
     }
@@ -13553,8 +16737,8 @@ exports[`Html > svelte > Typescript Test > basic 1`] = `
       pendingUpdate = true;
 
       document.querySelectorAll(\\"[data-el='input-1']\\").forEach((el) => {
-        el.removeEventListener(\\"input\\", onInput1Input);
-        el.addEventListener(\\"input\\", onInput1Input);
+        el.removeEventListener(\\"change\\", onInput1Change);
+        el.addEventListener(\\"change\\", onInput1Change);
 
         el.value = state.name;
       });
@@ -13564,8 +16748,8 @@ exports[`Html > svelte > Typescript Test > basic 1`] = `
       pendingUpdate = false;
     }
 
-    // Event handler for 'input' event on input-1
-    function onInput1Input(event) {
+    // Event handler for 'change' event on input-1
+    function onInput1Change(event) {
       state.name = event.target.value;
       update();
     }
@@ -13658,50 +16842,50 @@ exports[`Html > svelte > Typescript Test > bindGroup 1`] = `
       document.querySelectorAll(\\"[data-el='input-1']\\").forEach((el) => {
         el.setAttribute(\\"checked\\", state.tortilla === \\"Plain\\");
 
-        el.removeEventListener(\\"input\\", onInput1Input);
-        el.addEventListener(\\"input\\", onInput1Input);
+        el.removeEventListener(\\"change\\", onInput1Change);
+        el.addEventListener(\\"change\\", onInput1Change);
       });
 
       document.querySelectorAll(\\"[data-el='input-3']\\").forEach((el) => {
         el.setAttribute(\\"checked\\", state.tortilla === \\"Whole wheat\\");
 
-        el.removeEventListener(\\"input\\", onInput3Input);
-        el.addEventListener(\\"input\\", onInput3Input);
+        el.removeEventListener(\\"change\\", onInput3Change);
+        el.addEventListener(\\"change\\", onInput3Change);
       });
 
       document.querySelectorAll(\\"[data-el='input-5']\\").forEach((el) => {
         el.setAttribute(\\"checked\\", state.tortilla === \\"Spinach\\");
 
-        el.removeEventListener(\\"input\\", onInput5Input);
-        el.addEventListener(\\"input\\", onInput5Input);
+        el.removeEventListener(\\"change\\", onInput5Change);
+        el.addEventListener(\\"change\\", onInput5Change);
       });
 
       document.querySelectorAll(\\"[data-el='input-7']\\").forEach((el) => {
         el.setAttribute(\\"checked\\", state.fillings === \\"Rice\\");
 
-        el.removeEventListener(\\"input\\", onInput7Input);
-        el.addEventListener(\\"input\\", onInput7Input);
+        el.removeEventListener(\\"change\\", onInput7Change);
+        el.addEventListener(\\"change\\", onInput7Change);
       });
 
       document.querySelectorAll(\\"[data-el='input-9']\\").forEach((el) => {
         el.setAttribute(\\"checked\\", state.fillings === \\"Beans\\");
 
-        el.removeEventListener(\\"input\\", onInput9Input);
-        el.addEventListener(\\"input\\", onInput9Input);
+        el.removeEventListener(\\"change\\", onInput9Change);
+        el.addEventListener(\\"change\\", onInput9Change);
       });
 
       document.querySelectorAll(\\"[data-el='input-11']\\").forEach((el) => {
         el.setAttribute(\\"checked\\", state.fillings === \\"Cheese\\");
 
-        el.removeEventListener(\\"input\\", onInput11Input);
-        el.addEventListener(\\"input\\", onInput11Input);
+        el.removeEventListener(\\"change\\", onInput11Change);
+        el.addEventListener(\\"change\\", onInput11Change);
       });
 
       document.querySelectorAll(\\"[data-el='input-13']\\").forEach((el) => {
         el.setAttribute(\\"checked\\", state.fillings === \\"Guac (extra)\\");
 
-        el.removeEventListener(\\"input\\", onInput13Input);
-        el.addEventListener(\\"input\\", onInput13Input);
+        el.removeEventListener(\\"change\\", onInput13Change);
+        el.addEventListener(\\"change\\", onInput13Change);
       });
 
       document.querySelectorAll(\\"[data-el='div-1']\\").forEach((el) => {
@@ -13717,44 +16901,44 @@ exports[`Html > svelte > Typescript Test > bindGroup 1`] = `
       pendingUpdate = false;
     }
 
-    // Event handler for 'input' event on input-1
-    function onInput1Input(event) {
+    // Event handler for 'change' event on input-1
+    function onInput1Change(event) {
       state.tortilla = event.target.value;
       update();
     }
 
-    // Event handler for 'input' event on input-3
-    function onInput3Input(event) {
+    // Event handler for 'change' event on input-3
+    function onInput3Change(event) {
       state.tortilla = event.target.value;
       update();
     }
 
-    // Event handler for 'input' event on input-5
-    function onInput5Input(event) {
+    // Event handler for 'change' event on input-5
+    function onInput5Change(event) {
       state.tortilla = event.target.value;
       update();
     }
 
-    // Event handler for 'input' event on input-7
-    function onInput7Input(event) {
+    // Event handler for 'change' event on input-7
+    function onInput7Change(event) {
       state.fillings = event.target.value;
       update();
     }
 
-    // Event handler for 'input' event on input-9
-    function onInput9Input(event) {
+    // Event handler for 'change' event on input-9
+    function onInput9Change(event) {
       state.fillings = event.target.value;
       update();
     }
 
-    // Event handler for 'input' event on input-11
-    function onInput11Input(event) {
+    // Event handler for 'change' event on input-11
+    function onInput11Change(event) {
       state.fillings = event.target.value;
       update();
     }
 
-    // Event handler for 'input' event on input-13
-    function onInput13Input(event) {
+    // Event handler for 'change' event on input-13
+    function onInput13Change(event) {
       state.fillings = event.target.value;
       update();
     }
@@ -14407,15 +17591,15 @@ exports[`Html > svelte > Typescript Test > reactiveWithFn 1`] = `
       pendingUpdate = true;
 
       document.querySelectorAll(\\"[data-el='input-1']\\").forEach((el) => {
-        el.removeEventListener(\\"input\\", onInput1Input);
-        el.addEventListener(\\"input\\", onInput1Input);
+        el.removeEventListener(\\"change\\", onInput1Change);
+        el.addEventListener(\\"change\\", onInput1Change);
 
         el.value = state.a;
       });
 
       document.querySelectorAll(\\"[data-el='input-3']\\").forEach((el) => {
-        el.removeEventListener(\\"input\\", onInput3Input);
-        el.addEventListener(\\"input\\", onInput3Input);
+        el.removeEventListener(\\"change\\", onInput3Change);
+        el.addEventListener(\\"change\\", onInput3Change);
 
         el.value = state.b;
       });
@@ -14431,14 +17615,14 @@ exports[`Html > svelte > Typescript Test > reactiveWithFn 1`] = `
       pendingUpdate = false;
     }
 
-    // Event handler for 'input' event on input-1
-    function onInput1Input(event) {
+    // Event handler for 'change' event on input-1
+    function onInput1Change(event) {
       state.a = event.target.value;
       update();
     }
 
-    // Event handler for 'input' event on input-3
-    function onInput3Input(event) {
+    // Event handler for 'change' event on input-3
+    function onInput3Change(event) {
       state.b = event.target.value;
       update();
     }

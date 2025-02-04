@@ -1,8 +1,8 @@
-import { type Plugin } from '@builder.io/mitosis';
+import { type MitosisPlugin } from '@builder.io/mitosis';
 import { Builder, BuilderElement } from '@builder.io/sdk';
 import json5 from 'json5';
 import { omit, pick, round } from 'lodash';
-import traverse, { TraverseContext } from 'traverse';
+import traverse, { TraverseContext } from 'neotraverse/legacy';
 import { createSingleBinding } from '../helpers/bindings';
 import { createMitosisNode } from '../helpers/create-mitosis-node';
 import { filterEmptyTextNodes } from '../helpers/filter-empty-text-nodes';
@@ -364,6 +364,7 @@ export const components: CompileAwayComponentsMap = {
       bindings: noUndefined({
         src: node.bindings.image?.code && { code: node.bindings.image?.code },
         sizes: node.bindings.sizes?.code && { code: node.bindings.sizes?.code },
+        style: node.bindings.style?.code && { code: node.bindings.style?.code },
         css: createSingleBinding({
           code: JSON.stringify({
             aspectRatio: aspectRatio ? String(round(1 / aspectRatio, 2)) : undefined,
@@ -389,7 +390,7 @@ export const components: CompileAwayComponentsMap = {
       bindings: noUndefined({
         css: createSingleBinding({
           code: JSON.stringify({
-            disply: 'flex',
+            display: 'flex',
             flexDirection: 'column',
             ...css,
             position: 'relative',
@@ -581,7 +582,7 @@ export const compileAwayBuilderComponentsFromTree = (
 
 export const compileAwayBuilderComponents = (
   pluginOptions: CompileAwayBuilderComponentsOptions = {},
-): Plugin => {
+): MitosisPlugin => {
   let obj = components;
   if (pluginOptions.omit) {
     obj = omit(obj, pluginOptions.omit);

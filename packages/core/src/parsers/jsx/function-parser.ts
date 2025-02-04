@@ -23,6 +23,7 @@ const { types } = babel;
 export const componentFunctionToJson = (
   node: babel.types.FunctionDeclaration,
   context: Context,
+  stateToScope: string[],
 ): JSONOrNode => {
   const hooks: MitosisComponent['hooks'] = {
     onMount: [],
@@ -210,6 +211,7 @@ export const componentFunctionToJson = (
           code: generate(item).code,
           type: 'function',
         };
+        stateToScope.push(item.id.name);
       }
     }
 
@@ -256,6 +258,8 @@ export const componentFunctionToJson = (
               };
             }
 
+            stateToScope.push(varName);
+
             // Typescript Parameter
             if (types.isTSTypeParameterInstantiation(init.typeParameters)) {
               state[varName]!.typeParameter = generate(init.typeParameters.params[0]).code;
@@ -266,6 +270,14 @@ export const componentFunctionToJson = (
           if (types.isObjectExpression(firstArg)) {
             const useStoreState = parseStateObjectToMitosisState(firstArg);
             Object.assign(state, useStoreState);
+            const stateKeys = Object.keys(useStoreState);
+            if (types.isTSTypeParameterInstantiation(init.typeParameters)) {
+              const type = generate(init.typeParameters.params[0]);
+              // Type for store has to be an object so we can use it like this
+              for (const key of stateKeys) {
+                state[key]!.typeParameter = `${type.code}["${key}"]`;
+              }
+            }
           }
         } else if (init.callee.name === HOOKS.CONTEXT) {
           const firstArg = init.arguments[0];
@@ -308,7 +320,10 @@ export const componentFunctionToJson = (
   if (theReturn) {
     const value = (theReturn as babel.types.ReturnStatement).argument;
     if (types.isJSXElement(value) || types.isJSXFragment(value)) {
-      children.push(jsxElementToJson(value) as MitosisNode);
+      const jsxElement = jsxElementToJson(value);
+      if (jsxElement) {
+        children.push(jsxElement);
+      }
     }
   }
 

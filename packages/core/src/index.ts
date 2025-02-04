@@ -1,4 +1,4 @@
-import { JSX } from '@builder.io/mitosis/jsx-runtime';
+import { JSX } from '../jsx-runtime';
 import { Dictionary } from './helpers/typescript';
 import { ComponentMetadata } from './types/metadata';
 import { ReactivityType, TargetBlock } from './types/mitosis-component';
@@ -6,6 +6,7 @@ export * from './flow';
 export * from './generators/alpine';
 export * from './generators/angular';
 export * from './generators/builder';
+export * from './generators/context/angular';
 export * from './generators/context/qwik';
 export * from './generators/context/react';
 export * from './generators/context/rsc';
@@ -24,7 +25,7 @@ export * from './generators/rsc';
 export * from './generators/solid';
 export * from './generators/stencil';
 export * from './generators/svelte';
-export * from './generators/swift-ui';
+export * from './generators/swift';
 export * from './generators/taro';
 export * from './generators/template';
 export * from './generators/vue';
@@ -34,6 +35,7 @@ export {
   checkIsSvelteComponentFilePath,
   getComponentFileExtensionForTarget,
   renameComponentFile,
+  renameComponentImport,
   renameImport,
 } from './helpers/component-file-extensions';
 export { createMitosisNode } from './helpers/create-mitosis-node';

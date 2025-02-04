@@ -1,5 +1,63 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`Vue > jsx > Javascript Test > Advanced 1`] = `
+"<template>
+  <main>
+    <template :key=\\"i\\" v-for=\\"(person, i) in names\\">
+      <div>{{ i }}: {{ person }}</div> </template
+    ><template :key=\\"index\\" v-for=\\"(person, index) in names\\">
+      <span>{{ person }}</span> </template
+    ><template :key=\\"index\\" v-for=\\"(_, index) in names\\">
+      <br /> </template
+    ><template
+      :key=\\"ee\\"
+      v-for=\\"(_, ee) in Array.from({
+        length: 10,
+      })\\"
+    >
+      <pre>{{ ee }}</pre></template
+    ><template
+      :key=\\"index\\"
+      v-for=\\"(_, index) in Array.from({
+        length: 10,
+      })\\"
+    >
+      <p>{{ index }}</p> </template
+    ><template :key=\\"index\\" v-for=\\"(person, index) in names\\">
+      <span>{{ person }}{{ index }}</span> </template
+    ><template
+      :key=\\"count\\"
+      v-for=\\"(person, count) in Array.from({
+        length: 10,
+      })\\"
+    >
+      <span>{{ person }}{{ count }}</span> </template
+    ><template :key=\\"i\\" v-for=\\"(person, i) in names\\">
+      <span>{{ person }}{{ i }}</span> </template
+    ><template
+      :key=\\"index\\"
+      v-for=\\"(person, index) in Array.from({
+        length: 10,
+      })\\"
+    >
+      <span>{{ person }}{{ index }}</span>
+    </template>
+  </main>
+</template>
+
+<script>
+import { defineComponent } from \\"vue\\";
+
+export default defineComponent({
+  name: \\"my-basic-for-show-component\\",
+
+  data() {
+    return { name: \\"PatrickJS\\", names: [\\"Steve\\", \\"PatrickJS\\"] };
+  },
+});
+</script>"
+`;
+
 exports[`Vue > jsx > Javascript Test > AdvancedRef 1`] = `
 "<template>
   <div>
@@ -8,8 +66,8 @@ exports[`Vue > jsx > Javascript Test > AdvancedRef 1`] = `
         class=\\"input\\"
         ref=\\"inputRef\\"
         :value=\\"name\\"
-        @blur=\\"onBlur()\\"
-        @change=\\"name = $event.target.value\\"
+        @blur=\\"async (event) => onBlur()\\"
+        @change=\\"async (event) => (name = event.target.value)\\"
       />
       <label for=\\"cars\\" ref=\\"inputNoArgRef\\"> Choose a car: </label>
       <select name=\\"cars\\" id=\\"cars\\">
@@ -78,9 +136,9 @@ exports[`Vue > jsx > Javascript Test > Basic 1`] = `
   <div class=\\"test div\\">
     <input
       :value=\\"DEFAULT_VALUES.name || name\\"
-      @change=\\"name = $event.target.value\\"
+      @change=\\"async (myEvent) => (name = myEvent.target.value)\\"
     />
-    Hello! I can run in React, Vue, Solid, or Liquid!
+    Hello! I can run in React, Vue, Solid, or Liquid! &gt;
   </div>
 </template>
 
@@ -116,15 +174,21 @@ export default defineComponent({
 exports[`Vue > jsx > Javascript Test > Basic 2`] = `
 "<template>
   <div>
-    <template v-if=\\"person === name\\">
-      <input
-        :value=\\"name\\"
-        @change=\\"name = $event.target.value + ' and ' + person\\"
-      />
+    <template :key=\\"index\\" v-for=\\"(person, index) in names\\">
+      <template v-if=\\"person === name\\">
+        <input
+          :value=\\"name\\"
+          @change=\\"
+            async (event) => {
+              name = event.target.value + ' and ' + person;
+            }
+          \\"
+        />
 
-      Hello
-      {{ person }}
-      ! I can run in Qwik, Web Component, React, Vue, Solid, or Liquid!
+        Hello
+        {{ person }}
+        ! I can run in Qwik, Web Component, React, Vue, Solid, or Liquid!
+      </template>
     </template>
   </div>
 </template>
@@ -147,7 +211,7 @@ exports[`Vue > jsx > Javascript Test > Basic Context 1`] = `
   <div>
     {{ myService.method(\\"hello\\") + name }}
     Hello! I can run in React, Vue, Solid, or Liquid!
-    <input @change=\\"onChange\\" />
+    <input @change=\\"async (event) => onChange\\" />
   </div>
 </template>
 
@@ -244,7 +308,10 @@ export default defineComponent({
 `;
 
 exports[`Vue > jsx > Javascript Test > Basic Outputs Meta 1`] = `
-"<template>
+"/** useMetadata: {\\"outputs\\":[\\"onMessage\\",\\"onEvent\\"],\\"baz\\":\\"metadata inside
+component\\"} */
+
+<template>
   <div></div>
 </template>
 
@@ -290,15 +357,9 @@ exports[`Vue > jsx > Javascript Test > BasicBooleanAttribute 1`] = `
       {{ type }}
     </template>
 
-    <my-boolean-attribute-component
-      :toggle=\\"true\\"
-    ></my-boolean-attribute-component
-    ><my-boolean-attribute-component
-      :toggle=\\"true\\"
-    ></my-boolean-attribute-component
-    ><my-boolean-attribute-component
-      :list=\\"null\\"
-    ></my-boolean-attribute-component>
+    <MyBooleanAttributeComponent :toggle=\\"true\\"></MyBooleanAttributeComponent
+    ><MyBooleanAttributeComponent :toggle=\\"true\\"></MyBooleanAttributeComponent
+    ><MyBooleanAttributeComponent :list=\\"null\\"></MyBooleanAttributeComponent>
   </div>
 </template>
 
@@ -309,7 +370,7 @@ import MyBooleanAttributeComponent from \\"./basic-boolean-attribute-component.r
 
 export default defineComponent({
   name: \\"my-boolean-attribute\\",
-  components: { \\"my-boolean-attribute-component\\": MyBooleanAttributeComponent },
+  components: { MyBooleanAttributeComponent: MyBooleanAttributeComponent },
   props: [\\"type\\"],
 });
 </script>"
@@ -318,12 +379,12 @@ export default defineComponent({
 exports[`Vue > jsx > Javascript Test > BasicChildComponent 1`] = `
 "<template>
   <div>
-    <my-basic-component :id=\\"dev\\"></my-basic-component>
+    <MyBasicComponent :id=\\"dev\\"></MyBasicComponent>
     <div>
-      <my-basic-on-mount-update-component
+      <MyBasicOnMountUpdateComponent
         :hi=\\"name\\"
         :bye=\\"dev\\"
-      ></my-basic-on-mount-update-component>
+      ></MyBasicOnMountUpdateComponent>
     </div>
   </div>
 </template>
@@ -337,8 +398,8 @@ import MyBasicComponent from \\"./basic.raw\\";
 export default defineComponent({
   name: \\"my-basic-child-component\\",
   components: {
-    \\"my-basic-component\\": MyBasicComponent,
-    \\"my-basic-on-mount-update-component\\": MyBasicOnMountUpdateComponent,
+    MyBasicComponent: MyBasicComponent,
+    MyBasicOnMountUpdateComponent: MyBasicOnMountUpdateComponent,
   },
 
   data() {
@@ -351,14 +412,20 @@ export default defineComponent({
 exports[`Vue > jsx > Javascript Test > BasicFor 1`] = `
 "<template>
   <div>
-    <input
-      :value=\\"name\\"
-      @change=\\"name = $event.target.value + ' and ' + person\\"
-    />
+    <template :key=\\"index\\" v-for=\\"(person, index) in names\\">
+      <input
+        :value=\\"name\\"
+        @change=\\"
+          async (event) => {
+            name = event.target.value + ' and ' + person;
+          }
+        \\"
+      />
 
-    Hello
-    {{ person }}
-    ! I can run in Qwik, Web Component, React, Vue, Solid, or Liquid!
+      Hello
+      {{ person }}
+      ! I can run in Qwik, Web Component, React, Vue, Solid, or Liquid!
+    </template>
   </div>
 </template>
 
@@ -387,8 +454,8 @@ exports[`Vue > jsx > Javascript Test > BasicRef 1`] = `
         class=\\"input\\"
         ref=\\"inputRef\\"
         :value=\\"name\\"
-        @blur=\\"onBlur()\\"
-        @change=\\"name = $event.target.value\\"
+        @blur=\\"async (event) => onBlur()\\"
+        @change=\\"async (event) => (name = event.target.value)\\"
       />
       <label for=\\"cars\\" ref=\\"inputNoArgRef\\"> Choose a car: </label>
       <select name=\\"cars\\" id=\\"cars\\">
@@ -418,7 +485,7 @@ export default defineComponent({
   methods: {
     onBlur: function onBlur() {
       // Maintain focus
-      this.$refs.inputRef.focus();
+      this.$refs.inputRef?.focus();
     },
     lowerCaseName: function lowerCaseName() {
       return this.name.toLowerCase();
@@ -436,7 +503,7 @@ export default defineComponent({
 
 exports[`Vue > jsx > Javascript Test > BasicRefAssignment 1`] = `
 "<template>
-  <div><button @click=\\"handlerClick($event)\\">Click</button></div>
+  <div><button @click=\\"await handlerClick($event)\\">Click</button></div>
 </template>
 
 <script>
@@ -460,7 +527,7 @@ exports[`Vue > jsx > Javascript Test > BasicRefPrevious 1`] = `
 "<template>
   <div>
     <h1>Now: {{ count }}, before: {{ this.$refs.prevCount }}</h1>
-    <button @click=\\"count += 1\\">Increment</button>
+    <button @click=\\"async (event) => (count += 1)\\">Increment</button>
   </div>
 </template>
 
@@ -539,13 +606,9 @@ export default defineComponent({
 exports[`Vue > jsx > Javascript Test > Columns 1`] = `
 "<template>
   <div class=\\"builder-columns div\\">
-    <div
-      class=\\"builder-column div-2\\"
-      v-for=\\"(column, index) in columns\\"
-      :key=\\"index\\"
-    >
-      {{ column.content }}{{ index }}
-    </div>
+    <template :key=\\"index\\" v-for=\\"(column, index) in columns\\">
+      <div class=\\"builder-column div-2\\">{{ column.content }}{{ index }}</div>
+    </template>
   </div>
 </template>
 
@@ -622,21 +685,22 @@ export default defineComponent({
 
 exports[`Vue > jsx > Javascript Test > ContentSlotJSX 1`] = `
 "<template>
-  <div
-    v-if=\\"$slots.reference\\"
-    :name=\\"$slots.content ? 'name1' : 'name2'\\"
-    :title=\\"$slots.content ? 'title1' : 'title2'\\"
-    @click=\\"show()\\"
-    :class=\\"cls\\"
-    v-bind=\\"attributes\\"
-  >
-    <template v-if=\\"showContent && $slots.content\\">
-      <slot name=\\"content\\">{{ content }}</slot>
-    </template>
+  <template v-if=\\"$slots.reference\\">
+    <div
+      :name=\\"$slots.content ? 'name1' : 'name2'\\"
+      :title=\\"$slots.content ? 'title1' : 'title2'\\"
+      @click=\\"async (event) => show()\\"
+      :class=\\"cls\\"
+      v-bind=\\"attributes\\"
+    >
+      <template v-if=\\"showContent && $slots.content\\">
+        <slot name=\\"content\\">{{ content }}</slot>
+      </template>
 
-    <div><hr /></div>
-    <div><slot /></div>
-  </div>
+      <div><hr /></div>
+      <div><slot /></div>
+    </div>
+  </template>
 </template>
 
 <script>
@@ -820,30 +884,33 @@ exports[`Vue > jsx > Javascript Test > Form 1`] = `
     :action=\\"!sendWithJs && action\\"
     :method=\\"method\\"
     :name=\\"name\\"
-    @submit=\\"onSubmit($event)\\"
+    @submit=\\"async (event) => onSubmit(event)\\"
     v-bind=\\"attributes\\"
   >
     <template v-if=\\"builderBlock && builderBlock.children\\">
-      <builder-block-component
-        v-for=\\"(block, index) in builderBlock?.children\\"
-        :block=\\"block\\"
-        :index=\\"index\\"
+      <template
         :key=\\"block.id\\"
-      ></builder-block-component>
+        v-for=\\"(block, index) in builderBlock?.children\\"
+      >
+        <BuilderBlockComponent
+          :block=\\"block\\"
+          :index=\\"index\\"
+        ></BuilderBlockComponent>
+      </template>
     </template>
 
     <template v-if=\\"submissionState === 'error'\\">
-      <builder-blocks
+      <BuilderBlocks
         dataPath=\\"errorMessage\\"
         :blocks=\\"errorMessage\\"
-      ></builder-blocks>
+      ></BuilderBlocks>
     </template>
 
     <template v-if=\\"submissionState === 'sending'\\">
-      <builder-blocks
+      <BuilderBlocks
         dataPath=\\"sendingMessage\\"
         :blocks=\\"sendingMessage\\"
-      ></builder-blocks>
+      ></BuilderBlocks>
     </template>
 
     <template v-if=\\"submissionState === 'error' && responseData\\">
@@ -853,10 +920,10 @@ exports[`Vue > jsx > Javascript Test > Form 1`] = `
     </template>
 
     <template v-if=\\"submissionState === 'success'\\">
-      <builder-blocks
+      <BuilderBlocks
         dataPath=\\"successMessage\\"
         :blocks=\\"successMessage\\"
-      ></builder-blocks>
+      ></BuilderBlocks>
     </template>
   </form>
 </template>
@@ -875,8 +942,8 @@ import {
 export default defineComponent({
   name: \\"form-component\\",
   components: {
-    \\"builder-block-component\\": BuilderBlockComponent,
-    \\"builder-blocks\\": BuilderBlocks,
+    BuilderBlockComponent: BuilderBlockComponent,
+    BuilderBlocks: BuilderBlocks,
   },
   props: [
     \\"previewState\\",
@@ -1151,7 +1218,7 @@ exports[`Vue > jsx > Javascript Test > Image 1`] = `
           :aria-role=\\"altText ? 'presentation' : undefined\\"
           :class=\\"'builder-image' + (_class ? ' ' + _class : '') + ' img'\\"
           :src=\\"image\\"
-          @load=\\"setLoaded()\\"
+          @load=\\"async (event) => setLoaded()\\"
           :srcset=\\"srcset\\"
           :sizes=\\"sizes\\"
         />
@@ -1235,7 +1302,11 @@ export default defineComponent({
 
 exports[`Vue > jsx > Javascript Test > Image State 1`] = `
 "<template>
-  <div><img class=\\"custom-class\\" :src=\\"item\\" :key=\\"itemIndex\\" /></div>
+  <div>
+    <template :key=\\"itemIndex\\" v-for=\\"(item, itemIndex) in images\\">
+      <img class=\\"custom-class\\" :src=\\"item\\" :key=\\"itemIndex\\" />
+    </template>
+  </div>
 </template>
 
 <script>
@@ -1294,7 +1365,7 @@ exports[`Vue > jsx > Javascript Test > Input 1`] = `
     :value=\\"value\\"
     :defaultValue=\\"defaultValue\\"
     :required=\\"required\\"
-    @change=\\"onChange?.($event.target.value)\\"
+    @change=\\"async (event) => onChange?.(event.target.value)\\"
     v-bind=\\"attributes\\"
   />
 </template>
@@ -1323,11 +1394,11 @@ export default defineComponent({
 
 exports[`Vue > jsx > Javascript Test > InputParent 1`] = `
 "<template>
-  <form-input-component
+  <FormInputComponent
     name=\\"kingzez\\"
     type=\\"text\\"
     :onChange=\\"(value) => handleChange(value)\\"
-  ></form-input-component>
+  ></FormInputComponent>
 </template>
 
 <script>
@@ -1337,12 +1408,33 @@ import FormInputComponent from \\"./input.raw\\";
 
 export default defineComponent({
   name: \\"stepper\\",
-  components: { \\"form-input-component\\": FormInputComponent },
+  components: { FormInputComponent: FormInputComponent },
 
   methods: {
     handleChange(value) {
       console.log(value);
     },
+  },
+});
+</script>"
+`;
+
+exports[`Vue > jsx > Javascript Test > NestedStore 1`] = `
+"<template>
+  <div :id=\\"_id\\">
+    Test
+    <p :id=\\"_messageId\\">Message</p>
+  </div>
+</template>
+
+<script>
+import { defineComponent } from \\"vue\\";
+
+export default defineComponent({
+  name: \\"nested-store\\",
+
+  data() {
+    return { _id: \\"abc\\", _messageId: this._id + \\"-message\\" };
   },
 });
 </script>"
@@ -1396,17 +1488,18 @@ export default defineComponent({
 
 exports[`Vue > jsx > Javascript Test > Section 2`] = `
 "<template>
-  <section
-    v-for=\\"(item, index) in items\\"
-    v-if=\\"max\\"
-    :style=\\"{
-      maxWidth: item + max,
-    }\\"
-    :key=\\"index\\"
-    v-bind=\\"attributes\\"
-  >
-    <slot />
-  </section>
+  <template v-if=\\"max\\">
+    <template :key=\\"index\\" v-for=\\"(item, index) in items\\">
+      <section
+        :style=\\"{
+          maxWidth: item + max,
+        }\\"
+        v-bind=\\"attributes\\"
+      >
+        <slot />
+      </section>
+    </template>
+  </template>
 </template>
 
 <script>
@@ -1433,14 +1526,11 @@ exports[`Vue > jsx > Javascript Test > Select 1`] = `
     :name=\\"name\\"
     v-bind=\\"attributes\\"
   >
-    <option
-      v-for=\\"(option, index) in options\\"
-      :value=\\"option.value\\"
-      :data-index=\\"index\\"
-      :key=\\"index\\"
-    >
-      {{ option.name || option.value }}
-    </option>
+    <template :key=\\"index\\" v-for=\\"(option, index) in options\\">
+      <option :value=\\"option.value\\" :data-index=\\"index\\">
+        {{ option.name || option.value }}
+      </option>
+    </template>
   </select>
 </template>
 
@@ -1476,11 +1566,11 @@ export default defineComponent({
 exports[`Vue > jsx > Javascript Test > SlotHtml 1`] = `
 "<template>
   <div>
-    <content-slot-code>
+    <ContentSlotCode>
       <template #testing>
         <div>Hello</div>
       </template>
-    </content-slot-code>
+    </ContentSlotCode>
   </div>
 </template>
 
@@ -1491,16 +1581,14 @@ import ContentSlotCode from \\"./content-slot-jsx.raw\\";
 
 export default defineComponent({
   name: \\"slot-code\\",
-  components: { \\"content-slot-code\\": ContentSlotCode },
+  components: { ContentSlotCode: ContentSlotCode },
 });
 </script>"
 `;
 
 exports[`Vue > jsx > Javascript Test > SlotJsx 1`] = `
 "<template>
-  <div>
-    <content-slot-code :slotTesting=\\"<div>Hello</div>\\"></content-slot-code>
-  </div>
+  <div><ContentSlotCode :slotTesting=\\"<div>Hello</div>\\"></ContentSlotCode></div>
 </template>
 
 <script>
@@ -1510,7 +1598,7 @@ import ContentSlotCode from \\"./content-slot-jsx.raw\\";
 
 export default defineComponent({
   name: \\"slot-code\\",
-  components: { \\"content-slot-code\\": ContentSlotCode },
+  components: { ContentSlotCode: ContentSlotCode },
 });
 </script>"
 `;
@@ -1518,8 +1606,8 @@ export default defineComponent({
 exports[`Vue > jsx > Javascript Test > SlotNamed 1`] = `
 "<template>
   <div>
-    <slot name=\\"top\\"></slot><slot name=\\"left\\">Default left</slot
-    ><slot>Default Child</slot>
+    <slot name=\\"my-awesome-slot\\"></slot><slot name=\\"top\\"></slot
+    ><slot name=\\"left\\">Default left</slot><slot>Default Child</slot>
   </div>
 </template>
 
@@ -1535,7 +1623,9 @@ export default defineComponent({
 exports[`Vue > jsx > Javascript Test > Stamped.io 1`] = `
 "<template>
   <div :data-user=\\"name\\">
-    <button @click=\\"showReviewPrompt = true\\">Write a review</button>
+    <button @click=\\"async (event) => (showReviewPrompt = true)\\">
+      Write a review
+    </button>
     <template v-if=\\"showReviewPrompt || 'asdf'\\">
       <input placeholder=\\"Email\\" />
       <input placeholder=\\"Title\\" class=\\"input\\" />
@@ -1546,22 +1636,26 @@ exports[`Vue > jsx > Javascript Test > Stamped.io 1`] = `
       <button
         class=\\"button\\"
         @click=\\"
-          $event.preventDefault();
-          showReviewPrompt = false;
+          async (ev) => {
+            ev.preventDefault();
+            showReviewPrompt = false;
+          }
         \\"
       >
         Submit
       </button>
     </template>
 
-    <div class=\\"review\\" v-for=\\"(review, index) in reviews\\" :key=\\"review.id\\">
-      <img class=\\"img\\" :src=\\"review.avatar\\" />
-      <div :class=\\"showReviewPrompt ? 'bg-primary' : 'bg-secondary'\\">
-        <div>N: {{ index }}</div>
-        <div>{{ review.author }}</div>
-        <div>{{ review.reviewMessage }}</div>
+    <template :key=\\"review.id\\" v-for=\\"(review, index) in reviews\\">
+      <div class=\\"review\\">
+        <img class=\\"img\\" :src=\\"review.avatar\\" />
+        <div :class=\\"showReviewPrompt ? 'bg-primary' : 'bg-secondary'\\">
+          <div>N: {{ index }}</div>
+          <div>{{ review.author }}</div>
+          <div>{{ review.reviewMessage }}</div>
+        </div>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 
@@ -1629,6 +1723,74 @@ export default defineComponent({
 </style>"
 `;
 
+exports[`Vue > jsx > Javascript Test > StoreComment 1`] = `
+"<template>
+  {{ foo }}
+</template>
+
+<script>
+import { defineComponent } from \\"vue\\";
+
+export default defineComponent({
+  name: \\"string-literal-store\\",
+
+  data() {
+    return { foo: true };
+  },
+
+  methods: { bar() {} },
+});
+</script>"
+`;
+
+exports[`Vue > jsx > Javascript Test > StoreShadowVars 1`] = `
+"<template>
+  {{ foo(errors) }}
+</template>
+
+<script>
+import { defineComponent } from \\"vue\\";
+
+export default defineComponent({
+  name: \\"my-component\\",
+
+  data() {
+    return { errors: {} };
+  },
+
+  methods: {
+    foo(errors) {
+      return errors;
+    },
+  },
+});
+</script>"
+`;
+
+exports[`Vue > jsx > Javascript Test > StoreWithState 1`] = `
+"<template>
+  {{ bar() }}
+</template>
+
+<script>
+import { defineComponent } from \\"vue\\";
+
+export default defineComponent({
+  name: \\"my-component\\",
+
+  data() {
+    return { foo: false };
+  },
+
+  methods: {
+    bar() {
+      return this.foo;
+    },
+  },
+});
+</script>"
+`;
+
 exports[`Vue > jsx > Javascript Test > Submit 1`] = `
 "<template>
   <button type=\\"submit\\" v-bind=\\"attributes\\">{{ text }}</button>
@@ -1691,6 +1853,42 @@ export default defineComponent({
   name: \\"textarea\\",
 
   props: [\\"attributes\\", \\"placeholder\\", \\"name\\", \\"value\\", \\"defaultValue\\"],
+});
+</script>"
+`;
+
+exports[`Vue > jsx > Javascript Test > UseValueAndFnFromStore 1`] = `
+"<template>
+  <div>Test</div>
+</template>
+
+<script>
+import { defineComponent } from \\"vue\\";
+
+export default defineComponent({
+  name: \\"use-value-and-fn-from-store\\",
+
+  props: [\\"onChange\\"],
+
+  data() {
+    return { _id: \\"abc\\", _active: false };
+  },
+
+  updated() {
+    if (this._do) {
+      this._do(this._id);
+    }
+  },
+
+  methods: {
+    _do(id) {
+      this._active = !!id;
+
+      if (this.onChange) {
+        this.onChange(this._active);
+      }
+    },
+  },
 });
 </script>"
 `;
@@ -1767,14 +1965,50 @@ export default defineComponent({
 </script>"
 `;
 
+exports[`Vue > jsx > Javascript Test > basicForFragment 1`] = `
+"<template>
+  <div>
+    <template :key=\\"\`key-\${option}\`\\" v-for=\\"(option, index) in ['a', 'b', 'c']\\">
+      <div>{{ option }}</div> </template
+    ><template
+      :key=\\"\`\${id}-\${option}\`\\"
+      v-for=\\"(option, index) in ['a', 'b', 'c']\\"
+    >
+      <div>{{ option }}</div> </template
+    ><select>
+      <template
+        :key=\\"\`\${id}-\${option}\`\\"
+        v-for=\\"(option, index) in ['d', 'e', 'f']\\"
+      >
+        <option :value=\\"option\\">{{ option }}</option>
+      </template>
+    </select>
+  </div>
+</template>
+
+<script>
+import { defineComponent } from \\"vue\\";
+
+export default defineComponent({
+  name: \\"basic-for-fragment\\",
+
+  data() {
+    return { id: \\"xyz\\" };
+  },
+});
+</script>"
+`;
+
 exports[`Vue > jsx > Javascript Test > basicForNoTagReference 1`] = `
 "<template>
   <component :is=\\"TagNameGetter\\">
     Hello <component :is=\\"tag\\">{{ name }}</component
-    ><component v-for=\\"(action, index) in actions\\" :is=\\"TagName\\" :key=\\"index\\"
-      ><component :is=\\"action.icon\\"></component
-      ><span>{{ action.text }}</span></component
-    ></component
+    ><template :key=\\"index\\" v-for=\\"(action, index) in actions\\">
+      <component :is=\\"TagName\\"
+        ><component :is=\\"action.icon\\"></component
+        ><span>{{ action.text }}</span></component
+      >
+    </template></component
   >
 </template>
 
@@ -1806,7 +2040,7 @@ exports[`Vue > jsx > Javascript Test > basicForwardRef 1`] = `
       class=\\"input\\"
       ref=\\"inputRef\\"
       :value=\\"name\\"
-      @change=\\"name = $event.target.value\\"
+      @change=\\"async (event) => (name = event.target.value)\\"
     />
   </div>
 </template>
@@ -1833,13 +2067,15 @@ export default defineComponent({
 `;
 
 exports[`Vue > jsx > Javascript Test > basicForwardRefMetadata 1`] = `
-"<template>
+"/** useMetadata: {\\"forwardRef\\":\\"inputRef\\"} */
+
+<template>
   <div>
     <input
       class=\\"input\\"
       ref=\\"inputRef\\"
       :value=\\"name\\"
-      @change=\\"name = $event.target.value\\"
+      @change=\\"async (event) => (name = event.target.value)\\"
     />
   </div>
 </template>
@@ -1913,18 +2149,59 @@ export default defineComponent({
 </script>"
 `;
 
-exports[`Vue > jsx > Javascript Test > class + ClassName + css 1`] = `
-"<template>
-  <div class=\\"test2 test div\\">
-    Hello! I can run in React, Vue, Solid, or Liquid!
-  </div>
+exports[`Vue > jsx > Javascript Test > basicRefAttributePassing 1`] = `
+"/** useMetadata: {\\"attributePassing\\":{\\"enabled\\":true}} */
+
+<template>
+  <button ref=\\"buttonRef\\">Attribute Passing</button>
 </template>
 
 <script>
 import { defineComponent } from \\"vue\\";
 
 export default defineComponent({
+  name: \\"basic-ref-attribute-passing-component\\",
+});
+</script>"
+`;
+
+exports[`Vue > jsx > Javascript Test > basicRefAttributePassingCustomRef 1`] = `
+"/** useMetadata: {\\"attributePassing\\":{\\"enabled\\":true,\\"customRef\\":\\"buttonRef\\"}}
+*/
+
+<template>
+  <div><button ref=\\"buttonRef\\">Attribute Passing</button></div>
+</template>
+
+<script>
+import { defineComponent } from \\"vue\\";
+
+export default defineComponent({
+  name: \\"basic-ref-attribute-passing-custom-ref-component\\",
+});
+</script>"
+`;
+
+exports[`Vue > jsx > Javascript Test > class + ClassName + css 1`] = `
+"<template>
+  <div>
+    <MyComp class=\\"test\\">
+      Hello! I can run in React, Vue, Solid, or Liquid!
+    </MyComp>
+    <div class=\\"test2 test div\\">
+      Hello! I can run in React, Vue, Solid, or Liquid!
+    </div>
+  </div>
+</template>
+
+<script>
+import { defineComponent } from \\"vue\\";
+
+import MyComp from \\"./my-component.vue\\";
+
+export default defineComponent({
   name: \\"my-basic-component\\",
+  components: { MyComp: MyComp },
 });
 </script>
 
@@ -2027,6 +2304,24 @@ export default defineComponent({
 </style>"
 `;
 
+exports[`Vue > jsx > Javascript Test > complexMeta 1`] = `
+"/** useMetadata:
+{\\"x\\":\\"y\\",\\"asdf\\":{\\"stringValue\\":\\"d\\",\\"booleanValue\\":true,\\"numberValue\\":1,\\"innerObject\\":{\\"stringValue\\":\\"inner\\",\\"numberValue\\":2,\\"booleanValue\\":false},\\"spreadStringValue\\":\\"f\\"}}
+*/
+
+<template>
+  <div></div>
+</template>
+
+<script>
+import { defineComponent } from \\"vue\\";
+
+export default defineComponent({
+  name: \\"complex-meta-raw\\",
+});
+</script>"
+`;
+
 exports[`Vue > jsx > Javascript Test > componentWithContext 1`] = `
 "<template>
   {{ foo.value }}
@@ -2064,10 +2359,8 @@ export default defineComponent({
 
 exports[`Vue > jsx > Javascript Test > componentWithContextMultiRoot 1`] = `
 "<template>
-  <div>
-    {{ foo.value }}
-    <div>other</div>
-  </div>
+  {{ foo.value }}
+  <div>other</div>
 </template>
 
 <script>
@@ -2141,7 +2434,11 @@ exports[`Vue > jsx > Javascript Test > defaultProps 1`] = `
     </template>
 
     <template v-if=\\"!link\\">
-      <button type=\\"button\\" @click=\\"onClick($event)\\" v-bind=\\"attributes\\">
+      <button
+        type=\\"button\\"
+        @click=\\"async (event) => onClick()\\"
+        v-bind=\\"attributes\\"
+      >
         {{ buttonText }}
       </button>
     </template>
@@ -2183,7 +2480,11 @@ exports[`Vue > jsx > Javascript Test > defaultPropsOutsideComponent 1`] = `
     </template>
 
     <template v-if=\\"!link\\">
-      <button type=\\"button\\" @click=\\"onClick($event)\\" v-bind=\\"attributes\\">
+      <button
+        type=\\"button\\"
+        @click=\\"async (event) => onClick(event)\\"
+        v-bind=\\"attributes\\"
+      >
         {{ text }}
       </button>
     </template>
@@ -2231,6 +2532,38 @@ export default defineComponent({
 </script>"
 `;
 
+exports[`Vue > jsx > Javascript Test > eventInputAndChange 1`] = `
+"<template>
+  <div>
+    <input
+      class=\\"input\\"
+      :value=\\"name\\"
+      @input=\\"async (event) => (name = event.target.value)\\"
+      @change=\\"async (event) => (name = event.target.value)\\"
+    />
+    Hello! I can run in React, Vue, Solid, or Liquid!
+  </div>
+</template>
+
+<script>
+import { defineComponent } from \\"vue\\";
+
+export default defineComponent({
+  name: \\"event-input-and-change\\",
+
+  data() {
+    return { name: \\"Steve\\" };
+  },
+});
+</script>
+
+<style scoped>
+.input {
+  color: red;
+}
+</style>"
+`;
+
 exports[`Vue > jsx > Javascript Test > expressionState 1`] = `
 "<template>
   <div>{{ refToUse }}</div>
@@ -2255,11 +2588,80 @@ export default defineComponent({
 </script>"
 `;
 
+exports[`Vue > jsx > Javascript Test > figmaMeta 1`] = `
+"/** useMetadata:
+{\\"figma\\":{\\"name\\":\\"def-button-beta-outlined\\",\\"url\\":\\"https://www.figma.com/xxx\\",\\"props\\":{\\"iconSmall\\":{\\"type\\":\\"instance\\",\\"key\\":\\"📍
+Icon Small\\"},\\"iconMedium\\":{\\"type\\":\\"instance\\",\\"key\\":\\"📍 Icon
+Medium\\"},\\"label\\":{\\"type\\":\\"string\\",\\"key\\":\\"✏️
+Label\\"},\\"icon\\":{\\"type\\":\\"boolean\\",\\"key\\":\\"👁️
+Icon\\",\\"value\\":{\\"false\\":false,\\"true\\":\\"placeholder\\"}},\\"interactiveState\\":{\\"type\\":\\"enum\\",\\"key\\":\\"Interactive
+State\\",\\"value\\":{\\"(Def)
+Enabled\\":false,\\"Hovered\\":false,\\"Pressed\\":false,\\"Focused\\":false,\\"Disabled\\":\\"true\\"}},\\"size\\":{\\"type\\":\\"enum\\",\\"key\\":\\"Size\\",\\"value\\":{\\"(Def)
+Medium\\":false,\\"Small\\":\\"small\\"}},\\"width\\":{\\"type\\":\\"enum\\",\\"key\\":\\"Width\\",\\"value\\":{\\"(Def)
+Auto Width\\":false,\\"Full Width\\":\\"full\\"}}}}} */
+
+<template>
+  <button
+    :data-icon=\\"icon\\"
+    :data-disabled=\\"interactiveState\\"
+    :data-width=\\"width\\"
+    :data-size=\\"size\\"
+  >
+    {{ label }}
+  </button>
+</template>
+
+<script>
+import { defineComponent } from \\"vue\\";
+
+export default defineComponent({
+  name: \\"figma-button\\",
+
+  props: [\\"icon\\", \\"interactiveState\\", \\"width\\", \\"size\\", \\"label\\"],
+});
+</script>"
+`;
+
+exports[`Vue > jsx > Javascript Test > getterState 1`] = `
+"<template>
+  <div>
+    <p>{{ foo2 }}</p>
+    <p>{{ bar }}</p>
+    <p>{{ baz(1) }}</p>
+  </div>
+</template>
+
+<script>
+import { defineComponent } from \\"vue\\";
+
+export default defineComponent({
+  name: \\"button\\",
+
+  props: [\\"foo\\"],
+
+  computed: {
+    foo2() {
+      return this.foo + \\"foo\\";
+    },
+    bar() {
+      return \\"bar\\";
+    },
+  },
+
+  methods: {
+    baz(i) {
+      return i + this.foo2.length;
+    },
+  },
+});
+</script>"
+`;
+
 exports[`Vue > jsx > Javascript Test > import types 1`] = `
 "<template>
-  <render-block
+  <RenderBlock
     v-bind=\\"getRenderContentProps(renderContentProps.block, 0)\\"
-  ></render-block>
+  ></RenderBlock>
 </template>
 
 <script>
@@ -2269,7 +2671,7 @@ import RenderBlock from \\"./builder-render-block.raw\\";
 
 export default defineComponent({
   name: \\"render-content\\",
-  components: { \\"render-block\\": RenderBlock },
+  components: { RenderBlock: RenderBlock },
   props: [\\"renderContentProps\\"],
 
   methods: {
@@ -2383,11 +2785,19 @@ export default defineComponent({
 
 exports[`Vue > jsx > Javascript Test > nestedShow 1`] = `
 "<template>
-  <div v-if=\\"!Boolean(conditionA)\\">else-condition-A</div>
+  <template v-if=\\"conditionA\\">
+    <template v-if=\\"!conditionB\\">
+      <div>if condition A and condition B</div>
+    </template>
 
-  <div v-else-if=\\"!Boolean(!conditionB)\\">else-condition-B</div>
+    <template v-else>
+      <div>else-condition-B</div>
+    </template>
+  </template>
 
-  <div v-else>if condition A and condition B</div>
+  <template v-else>
+    <div>else-condition-A</div>
+  </template>
 </template>
 
 <script>
@@ -2448,7 +2858,7 @@ exports[`Vue > jsx > Javascript Test > onEvent 1`] = `
   <div
     class=\\"builder-embed\\"
     ref=\\"elem\\"
-    @initeditingbldr=\\"elem_onInitEditingBldr($event)\\"
+    @initeditingbldr=\\"async (event) => elem_onInitEditingBldr(event)\\"
   >
     <div>Test</div>
   </div>
@@ -2522,6 +2932,24 @@ export default defineComponent({
   created() {
     this.name = defaultValues.name || this.name;
     console.log(\\"set defaults with props\\");
+  },
+});
+</script>"
+`;
+
+exports[`Vue > jsx > Javascript Test > onInitPlain 1`] = `
+"<template>
+  <div></div>
+</template>
+
+<script>
+import { defineComponent } from \\"vue\\";
+
+export default defineComponent({
+  name: \\"on-init-plain\\",
+
+  created() {
+    console.log(\\"onInit\\");
   },
 });
 </script>"
@@ -2763,40 +3191,52 @@ export default defineComponent({
 
 exports[`Vue > jsx > Javascript Test > renderBlock 1`] = `
 "<template>
-  <component
-    v-if=\\"!Boolean(shouldWrap)\\"
-    :is=\\"renderComponentTag\\"
-    v-bind=\\"renderComponentProps\\"
-  ></component>
-  <component
-    v-else-if=\\"isEmptyHtmlElement(tag)\\"
-    :is=\\"tag\\"
-    v-bind=\\"{ ...attributes, ...actions }\\"
-  ></component>
-  <render-repeated-block
-    v-for=\\"(data, index) in repeatItemData\\"
-    :repeatContext=\\"data.context\\"
-    :block=\\"data.block\\"
-    :key=\\"index\\"
-  ></render-repeated-block>
-  <component v-else :is=\\"tag\\" v-bind=\\"{ ...attributes, ...actions }\\"
-    ><component
+  <template v-if=\\"shouldWrap\\">
+    <template v-if=\\"isEmptyHtmlElement(tag)\\">
+      <component :is=\\"tag\\" v-bind=\\"{ ...attributes, ...actions }\\"></component>
+    </template>
+
+    <template v-if=\\"!isEmptyHtmlElement(tag) && repeatItemData\\">
+      <template :key=\\"index\\" v-for=\\"(data, index) in repeatItemData\\">
+        <RenderRepeatedBlock
+          :repeatContext=\\"data.context\\"
+          :block=\\"data.block\\"
+        ></RenderRepeatedBlock>
+      </template>
+    </template>
+
+    <template v-if=\\"!isEmptyHtmlElement(tag) && !repeatItemData\\">
+      <component :is=\\"tag\\" v-bind=\\"{ ...attributes, ...actions }\\"
+        ><component
+          :is=\\"renderComponentTag\\"
+          v-bind=\\"renderComponentProps\\"
+        ></component
+        ><template
+          :key=\\"'render-block-' + child.id\\"
+          v-for=\\"(child, index) in childrenWithoutParentComponent\\"
+        >
+          <RenderBlock
+            :block=\\"child\\"
+            :context=\\"childrenContext\\"
+          ></RenderBlock> </template
+        ><template
+          :key=\\"'block-style-' + child.id\\"
+          v-for=\\"(child, index) in childrenWithoutParentComponent\\"
+        >
+          <BlockStyles
+            :block=\\"child\\"
+            :context=\\"childrenContext\\"
+          ></BlockStyles> </template
+      ></component>
+    </template>
+  </template>
+
+  <template v-else>
+    <component
       :is=\\"renderComponentTag\\"
       v-bind=\\"renderComponentProps\\"
-    ></component
-    ><render-block
-      v-for=\\"(child, index) in childrenWithoutParentComponent\\"
-      :block=\\"child\\"
-      :context=\\"childrenContext\\"
-      :key=\\"'render-block-' + child.id\\"
-    ></render-block
-    ><block-styles
-      v-for=\\"(child, index) in childrenWithoutParentComponent\\"
-      :block=\\"child\\"
-      :context=\\"childrenContext\\"
-      :key=\\"'block-style-' + child.id\\"
-    ></block-styles
-  ></component>
+    ></component>
+  </template>
 </template>
 
 <script>
@@ -2820,9 +3260,9 @@ import RenderRepeatedBlock from \\"./render-repeated-block.vue\\";
 export default defineComponent({
   name: \\"render-block\\",
   components: {
-    \\"render-repeated-block\\": RenderRepeatedBlock,
-    \\"block-styles\\": BlockStyles,
-    \\"render-component\\": RenderComponent,
+    RenderRepeatedBlock: RenderRepeatedBlock,
+    BlockStyles: BlockStyles,
+    RenderComponent: RenderComponent,
   },
   props: [\\"block\\", \\"context\\"],
 
@@ -3010,8 +3450,8 @@ export default defineComponent({
 
 exports[`Vue > jsx > Javascript Test > renderContentExample 1`] = `
 "<template>
-  <div class=\\"div\\" @click=\\"trackClick(content.id)\\">
-    <render-blocks :blocks=\\"content.blocks\\"></render-blocks>
+  <div class=\\"div\\" @click=\\"async (event) => trackClick(content.id)\\">
+    <RenderBlocks :blocks=\\"content.blocks\\"></RenderBlocks>
   </div>
 </template>
 
@@ -3028,8 +3468,8 @@ import RenderBlocks from \\"@dummy/RenderBlocks.vue\\";
 
 export default defineComponent({
   name: \\"render-content\\",
-  components: { \\"render-blocks\\": RenderBlocks },
-  props: [\\"content\\", \\"customComponents\\"],
+  components: { RenderBlocks: RenderBlocks },
+  props: [\\"customComponents\\", \\"content\\"],
 
   data() {
     return { trackClick };
@@ -3082,20 +3522,18 @@ export default defineComponent({
 
 exports[`Vue > jsx > Javascript Test > rootFragmentMultiNode 1`] = `
 "<template>
-  <div>
-    <template v-if=\\"link\\">
-      <a
-        :href=\\"link\\"
-        :target=\\"openLinkInNewTab ? '_blank' : undefined\\"
-        v-bind=\\"attributes\\"
-        >{{ text }}</a
-      >
-    </template>
+  <template v-if=\\"link\\">
+    <a
+      :href=\\"link\\"
+      :target=\\"openLinkInNewTab ? '_blank' : undefined\\"
+      v-bind=\\"attributes\\"
+      >{{ text }}</a
+    >
+  </template>
 
-    <template v-if=\\"!link\\">
-      <button type=\\"button\\" v-bind=\\"attributes\\">{{ text }}</button>
-    </template>
-  </div>
+  <template v-if=\\"!link\\">
+    <button type=\\"button\\" v-bind=\\"attributes\\">{{ text }}</button>
+  </template>
 </template>
 
 <script>
@@ -3111,8 +3549,13 @@ export default defineComponent({
 
 exports[`Vue > jsx > Javascript Test > rootShow 1`] = `
 "<template>
-  <div v-if=\\"foo === 'bar'\\">Bar</div>
-  <div v-else>Foo</div>
+  <template v-if=\\"foo === 'bar'\\">
+    <div>Bar</div>
+  </template>
+
+  <template v-else>
+    <div>Foo</div>
+  </template>
 </template>
 
 <script>
@@ -3131,7 +3574,7 @@ exports[`Vue > jsx > Javascript Test > self-referencing component 1`] = `
   <div>
     {{ name }}
     <template v-if=\\"name === 'Batman'\\">
-      <my-component name=\\"Bruce Wayne\\"></my-component>
+      <MyComponent name=\\"Bruce Wayne\\"></MyComponent>
     </template>
   </div>
 </template>
@@ -3152,7 +3595,7 @@ exports[`Vue > jsx > Javascript Test > self-referencing component with children 
   <div>
     {{ name }}<slot />
     <template v-if=\\"name === 'Batman'\\">
-      <my-component name=\\"Bruce\\"><div>Wayne</div></my-component>
+      <MyComponent name=\\"Bruce\\"><div>Wayne</div></MyComponent>
     </template>
   </div>
 </template>
@@ -3168,12 +3611,139 @@ export default defineComponent({
 </script>"
 `;
 
+exports[`Vue > jsx > Javascript Test > setState 1`] = `
+"<template>
+  <div><button @click=\\"async (event) => someFn()\\">Click me</button></div>
+</template>
+
+<script>
+import { defineComponent } from \\"vue\\";
+
+export default defineComponent({
+  name: \\"set-state\\",
+
+  data() {
+    return { n: [\\"123\\"] };
+  },
+
+  methods: {
+    someFn() {
+      this.n[0] = \\"123\\";
+    },
+  },
+});
+</script>"
+`;
+
+exports[`Vue > jsx > Javascript Test > showExpressions 1`] = `
+"<template>
+  <div>
+    <template v-if=\\"conditionA\\"> Content0 </template>
+
+    <template v-else> ContentA </template>
+
+    <template v-if=\\"conditionA\\"> ContentA </template>
+
+    <template v-if=\\"conditionA\\"> </template>
+
+    <template v-else> ContentA </template>
+
+    <template v-if=\\"conditionA\\"> ContentB </template>
+
+    <template v-else>
+      {{ undefined }}
+    </template>
+
+    <template v-if=\\"conditionA\\">
+      {{ undefined }}
+    </template>
+
+    <template v-else> ContentB </template>
+
+    <template v-if=\\"conditionA\\"> ContentC </template>
+
+    <template v-if=\\"conditionA\\"> </template>
+
+    <template v-else> ContentC </template>
+
+    <template v-if=\\"conditionA\\"> ContentD </template>
+
+    <template v-if=\\"conditionA\\"> </template>
+
+    <template v-else> ContentD </template>
+
+    <template v-if=\\"conditionA\\"> ContentE </template>
+
+    <template v-else> hello </template>
+
+    <template v-if=\\"conditionA\\"> hello </template>
+
+    <template v-else> ContentE </template>
+
+    <template v-if=\\"conditionA\\"> ContentF </template>
+
+    <template v-else> 123 </template>
+
+    <template v-if=\\"conditionA\\"> 123 </template>
+
+    <template v-else> ContentF </template>
+
+    <template v-if=\\"conditionA === 'Default'\\"> 4mb </template>
+
+    <template v-else>
+      <template v-if=\\"conditionB === 'Complete'\\"> 20mb </template>
+
+      <template v-else> 9mb </template>
+    </template>
+
+    <template v-if=\\"conditionA === 'Default'\\">
+      <template v-if=\\"conditionB === 'Complete'\\"> 20mb </template>
+
+      <template v-else> 9mb </template>
+    </template>
+
+    <template v-else> 4mb </template>
+
+    <template v-if=\\"conditionA === 'Default'\\">
+      <template v-if=\\"conditionB === 'Complete'\\">
+        <div>complete</div>
+      </template>
+
+      <template v-else> 9mb </template>
+    </template>
+
+    <template v-else>
+      <template v-if=\\"conditionC === 'Complete'\\"> dff </template>
+
+      <template v-else>
+        <div>complete else</div>
+      </template>
+    </template>
+  </div>
+</template>
+
+<script>
+import { defineComponent } from \\"vue\\";
+
+export default defineComponent({
+  name: \\"show-with-other-values\\",
+
+  props: [\\"conditionA\\", \\"conditionB\\", \\"conditionC\\"],
+});
+</script>"
+`;
+
 exports[`Vue > jsx > Javascript Test > showWithFor 1`] = `
 "<template>
-  <div v-for=\\"(item, index) in items\\" v-if=\\"conditionA\\" :key=\\"idx\\">
-    {{ item }}
-  </div>
-  <div v-else>else-condition-A</div>
+  <template v-if=\\"conditionA\\">
+    <template :key=\\"idx\\" v-for=\\"(item, idx) in items\\">
+      <div>{{ item }}</div>
+    </template>
+  </template>
+
+  <template v-else>
+    <div>else-condition-A</div>
+  </template>
 </template>
 
 <script>
@@ -3187,11 +3757,49 @@ export default defineComponent({
 </script>"
 `;
 
+exports[`Vue > jsx > Javascript Test > showWithOtherValues 1`] = `
+"<template>
+  <div>
+    <template v-if=\\"conditionA\\"> ContentA </template>
+
+    <template v-if=\\"conditionA\\"> ContentB </template>
+
+    <template v-else>
+      {{ undefined }}
+    </template>
+
+    <template v-if=\\"conditionA\\"> ContentC </template>
+
+    <template v-if=\\"conditionA\\"> ContentD </template>
+
+    <template v-if=\\"conditionA\\"> ContentE </template>
+
+    <template v-else> hello </template>
+
+    <template v-if=\\"conditionA\\"> ContentF </template>
+
+    <template v-else> 123 </template>
+  </div>
+</template>
+
+<script>
+import { defineComponent } from \\"vue\\";
+
+export default defineComponent({
+  name: \\"show-with-other-values\\",
+
+  props: [\\"conditionA\\"],
+});
+</script>"
+`;
+
 exports[`Vue > jsx > Javascript Test > showWithRootText 1`] = `
 "<template>
-  ContentA
+  <template v-if=\\"conditionA\\"> ContentA </template>
 
-  <div v-else>else-condition-A</div>
+  <template v-else>
+    <div>else-condition-A</div>
+  </template>
 </template>
 
 <script>
@@ -3290,6 +3898,93 @@ export default defineComponent({
 </script>"
 `;
 
+exports[`Vue > jsx > Javascript Test > store-async-function 1`] = `
+"<template>
+  <div></div>
+</template>
+
+<script>
+import { defineComponent } from \\"vue\\";
+
+export default defineComponent({
+  name: \\"string-literal-store\\",
+
+  methods: {
+    arrowFunction: async function arrowFunction() {
+      return Promise.resolve();
+    },
+    namedFunction: async function namedFunction() {
+      return Promise.resolve();
+    },
+    fetchUsers: async function fetchUsers() {
+      return Promise.resolve();
+    },
+  },
+});
+</script>"
+`;
+
+exports[`Vue > jsx > Javascript Test > string-literal-store 1`] = `
+"<template>
+  <div>{{ foo }}</div>
+</template>
+
+<script>
+import { defineComponent } from \\"vue\\";
+
+export default defineComponent({
+  name: \\"string-literal-store\\",
+
+  data() {
+    return { foo: 123 };
+  },
+});
+</script>"
+`;
+
+exports[`Vue > jsx > Javascript Test > string-literal-store-kebab 1`] = `
+"<template>
+  <div>{{ \\"foo-bar\\" }}</div>
+</template>
+
+<script>
+import { defineComponent } from \\"vue\\"
+
+
+
+
+
+
+
+
+
+
+  export default defineComponent( {
+  name: 'string-literal-store',
+
+
+
+  data() {
+    return { foo-bar: 123,}
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+
+  }
+  )
+</script>"
+`;
+
 exports[`Vue > jsx > Javascript Test > styleClassAndCss 1`] = `
 "<template>
   <div
@@ -3343,7 +4038,7 @@ export default defineComponent({
 
 exports[`Vue > jsx > Javascript Test > subComponent 1`] = `
 "<template>
-  <foo></foo>
+  <Foo></Foo>
 </template>
 
 <script>
@@ -3353,7 +4048,7 @@ import Foo from \\"./foo-sub-component.vue\\";
 
 export default defineComponent({
   name: \\"sub-component\\",
-  components: { foo: Foo },
+  components: { Foo: Foo },
 });
 </script>"
 `;
@@ -3405,6 +4100,58 @@ export default defineComponent({
   name: \\"type-dependency\\",
 
   props: [\\"foo\\"],
+});
+</script>"
+`;
+
+exports[`Vue > jsx > Javascript Test > typeExternalStore 1`] = `
+"<template>
+  <div>Hello {{ _name }}!</div>
+</template>
+
+<script>
+import { defineComponent } from \\"vue\\";
+
+export default defineComponent({
+  name: \\"type-external-store\\",
+
+  data() {
+    return { _name: \\"test\\" };
+  },
+});
+</script>"
+`;
+
+exports[`Vue > jsx > Javascript Test > typeGetterStore 1`] = `
+"<template>
+  <div>Hello {{ name }}!</div>
+</template>
+
+<script>
+import { defineComponent } from \\"vue\\";
+
+export default defineComponent({
+  name: \\"type-getter-store\\",
+
+  data() {
+    return { name: \\"test\\" };
+  },
+
+  computed: {
+    test() {
+      return \\"test\\";
+    },
+  },
+
+  methods: {
+    getName() {
+      if (this.name === \\"a\\") {
+        return \\"b\\";
+      }
+
+      return this.name;
+    },
+  },
 });
 </script>"
 `;
@@ -3493,14 +4240,17 @@ export default defineComponent({
   name: \\"use-target-component\\",
 
   data() {
-    return { lastName: \\"bar\\" };
+    return { lastName: \\"bar\\", foo: \\"bar\\" };
   },
 
-  mounted() {},
+  mounted() {
+    console.log(this.foo);
+    this.foo = \\"bar\\";
+  },
 
   computed: {
     name() {
-      const prefix = \\"v2\\";
+      const prefix = \\"v\\";
       return prefix + \\"foo\\";
     },
   },
@@ -3549,6 +4299,64 @@ export default defineComponent({
 </script>"
 `;
 
+exports[`Vue > jsx > Typescript Test > Advanced 1`] = `
+"<template>
+  <main>
+    <template :key=\\"i\\" v-for=\\"(person, i) in names\\">
+      <div>{{ i }}: {{ person }}</div> </template
+    ><template :key=\\"index\\" v-for=\\"(person, index) in names\\">
+      <span>{{ person }}</span> </template
+    ><template :key=\\"index\\" v-for=\\"(_, index) in names\\">
+      <br /> </template
+    ><template
+      :key=\\"ee\\"
+      v-for=\\"(_, ee) in Array.from({
+        length: 10,
+      })\\"
+    >
+      <pre>{{ ee }}</pre></template
+    ><template
+      :key=\\"index\\"
+      v-for=\\"(_, index) in Array.from({
+        length: 10,
+      })\\"
+    >
+      <p>{{ index }}</p> </template
+    ><template :key=\\"index\\" v-for=\\"(person, index) in names\\">
+      <span>{{ person }}{{ index }}</span> </template
+    ><template
+      :key=\\"count\\"
+      v-for=\\"(person, count) in Array.from({
+        length: 10,
+      })\\"
+    >
+      <span>{{ person }}{{ count }}</span> </template
+    ><template :key=\\"i\\" v-for=\\"(person, i) in names\\">
+      <span>{{ person }}{{ i }}</span> </template
+    ><template
+      :key=\\"index\\"
+      v-for=\\"(person, index) in Array.from({
+        length: 10,
+      })\\"
+    >
+      <span>{{ person }}{{ index }}</span>
+    </template>
+  </main>
+</template>
+
+<script lang=\\"ts\\">
+import { defineComponent } from \\"vue\\";
+
+export default defineComponent({
+  name: \\"my-basic-for-show-component\\",
+
+  data() {
+    return { name: \\"PatrickJS\\", names: [\\"Steve\\", \\"PatrickJS\\"] };
+  },
+});
+</script>"
+`;
+
 exports[`Vue > jsx > Typescript Test > AdvancedRef 1`] = `
 "<template>
   <div>
@@ -3557,8 +4365,8 @@ exports[`Vue > jsx > Typescript Test > AdvancedRef 1`] = `
         class=\\"input\\"
         ref=\\"inputRef\\"
         :value=\\"name\\"
-        @blur=\\"onBlur()\\"
-        @change=\\"name = $event.target.value\\"
+        @blur=\\"async (event) => onBlur()\\"
+        @change=\\"async (event) => (name = event.target.value)\\"
       />
       <label for=\\"cars\\" ref=\\"inputNoArgRef\\"> Choose a car: </label>
       <select name=\\"cars\\" id=\\"cars\\">
@@ -3631,9 +4439,9 @@ exports[`Vue > jsx > Typescript Test > Basic 1`] = `
   <div class=\\"test div\\">
     <input
       :value=\\"DEFAULT_VALUES.name || name\\"
-      @change=\\"name = $event.target.value\\"
+      @change=\\"async (myEvent) => (name = myEvent.target.value)\\"
     />
-    Hello! I can run in React, Vue, Solid, or Liquid!
+    Hello! I can run in React, Vue, Solid, or Liquid! &gt;
   </div>
 </template>
 
@@ -3673,15 +4481,21 @@ export default defineComponent({
 exports[`Vue > jsx > Typescript Test > Basic 2`] = `
 "<template>
   <div>
-    <template v-if=\\"person === name\\">
-      <input
-        :value=\\"name\\"
-        @change=\\"name = $event.target.value + ' and ' + person\\"
-      />
+    <template :key=\\"index\\" v-for=\\"(person, index) in names\\">
+      <template v-if=\\"person === name\\">
+        <input
+          :value=\\"name\\"
+          @change=\\"
+            async (event) => {
+              name = event.target.value + ' and ' + person;
+            }
+          \\"
+        />
 
-      Hello
-      {{ person }}
-      ! I can run in Qwik, Web Component, React, Vue, Solid, or Liquid!
+        Hello
+        {{ person }}
+        ! I can run in Qwik, Web Component, React, Vue, Solid, or Liquid!
+      </template>
     </template>
   </div>
 </template>
@@ -3704,7 +4518,7 @@ exports[`Vue > jsx > Typescript Test > Basic Context 1`] = `
   <div>
     {{ myService.method(\\"hello\\") + name }}
     Hello! I can run in React, Vue, Solid, or Liquid!
-    <input @change=\\"onChange\\" />
+    <input @change=\\"async (event) => onChange\\" />
   </div>
 </template>
 
@@ -3806,7 +4620,10 @@ export default defineComponent({
 `;
 
 exports[`Vue > jsx > Typescript Test > Basic Outputs Meta 1`] = `
-"<template>
+"/** useMetadata: {\\"outputs\\":[\\"onMessage\\",\\"onEvent\\"],\\"baz\\":\\"metadata inside
+component\\"} */
+
+<template>
   <div></div>
 </template>
 
@@ -3852,15 +4669,9 @@ exports[`Vue > jsx > Typescript Test > BasicBooleanAttribute 1`] = `
       {{ type }}
     </template>
 
-    <my-boolean-attribute-component
-      :toggle=\\"true\\"
-    ></my-boolean-attribute-component
-    ><my-boolean-attribute-component
-      :toggle=\\"true\\"
-    ></my-boolean-attribute-component
-    ><my-boolean-attribute-component
-      :list=\\"null\\"
-    ></my-boolean-attribute-component>
+    <MyBooleanAttributeComponent :toggle=\\"true\\"></MyBooleanAttributeComponent
+    ><MyBooleanAttributeComponent :toggle=\\"true\\"></MyBooleanAttributeComponent
+    ><MyBooleanAttributeComponent :list=\\"null\\"></MyBooleanAttributeComponent>
   </div>
 </template>
 
@@ -3876,7 +4687,7 @@ type Props = {
 
 export default defineComponent({
   name: \\"my-boolean-attribute\\",
-  components: { \\"my-boolean-attribute-component\\": MyBooleanAttributeComponent },
+  components: { MyBooleanAttributeComponent: MyBooleanAttributeComponent },
   props: [\\"type\\"],
 });
 </script>"
@@ -3885,12 +4696,12 @@ export default defineComponent({
 exports[`Vue > jsx > Typescript Test > BasicChildComponent 1`] = `
 "<template>
   <div>
-    <my-basic-component :id=\\"dev\\"></my-basic-component>
+    <MyBasicComponent :id=\\"dev\\"></MyBasicComponent>
     <div>
-      <my-basic-on-mount-update-component
+      <MyBasicOnMountUpdateComponent
         :hi=\\"name\\"
         :bye=\\"dev\\"
-      ></my-basic-on-mount-update-component>
+      ></MyBasicOnMountUpdateComponent>
     </div>
   </div>
 </template>
@@ -3904,8 +4715,8 @@ import MyBasicComponent from \\"./basic.raw\\";
 export default defineComponent({
   name: \\"my-basic-child-component\\",
   components: {
-    \\"my-basic-component\\": MyBasicComponent,
-    \\"my-basic-on-mount-update-component\\": MyBasicOnMountUpdateComponent,
+    MyBasicComponent: MyBasicComponent,
+    MyBasicOnMountUpdateComponent: MyBasicOnMountUpdateComponent,
   },
 
   data() {
@@ -3918,14 +4729,20 @@ export default defineComponent({
 exports[`Vue > jsx > Typescript Test > BasicFor 1`] = `
 "<template>
   <div>
-    <input
-      :value=\\"name\\"
-      @change=\\"name = $event.target.value + ' and ' + person\\"
-    />
+    <template :key=\\"index\\" v-for=\\"(person, index) in names\\">
+      <input
+        :value=\\"name\\"
+        @change=\\"
+          async (event) => {
+            name = event.target.value + ' and ' + person;
+          }
+        \\"
+      />
 
-    Hello
-    {{ person }}
-    ! I can run in Qwik, Web Component, React, Vue, Solid, or Liquid!
+      Hello
+      {{ person }}
+      ! I can run in Qwik, Web Component, React, Vue, Solid, or Liquid!
+    </template>
   </div>
 </template>
 
@@ -3954,8 +4771,8 @@ exports[`Vue > jsx > Typescript Test > BasicRef 1`] = `
         class=\\"input\\"
         ref=\\"inputRef\\"
         :value=\\"name\\"
-        @blur=\\"onBlur()\\"
-        @change=\\"name = $event.target.value\\"
+        @blur=\\"async (event) => onBlur()\\"
+        @change=\\"async (event) => (name = event.target.value)\\"
       />
       <label for=\\"cars\\" ref=\\"inputNoArgRef\\"> Choose a car: </label>
       <select name=\\"cars\\" id=\\"cars\\">
@@ -3989,7 +4806,7 @@ export default defineComponent({
   methods: {
     onBlur: function onBlur() {
       // Maintain focus
-      this.$refs.inputRef.focus();
+      this.$refs.inputRef?.focus();
     },
     lowerCaseName: function lowerCaseName() {
       return this.name.toLowerCase();
@@ -4007,7 +4824,7 @@ export default defineComponent({
 
 exports[`Vue > jsx > Typescript Test > BasicRefAssignment 1`] = `
 "<template>
-  <div><button @click=\\"handlerClick($event)\\">Click</button></div>
+  <div><button @click=\\"await handlerClick($event)\\">Click</button></div>
 </template>
 
 <script lang=\\"ts\\">
@@ -4035,7 +4852,7 @@ exports[`Vue > jsx > Typescript Test > BasicRefPrevious 1`] = `
 "<template>
   <div>
     <h1>Now: {{ count }}, before: {{ this.$refs.prevCount }}</h1>
-    <button @click=\\"count += 1\\">Increment</button>
+    <button @click=\\"async (event) => (count += 1)\\">Increment</button>
   </div>
 </template>
 
@@ -4125,13 +4942,9 @@ export default defineComponent({
 exports[`Vue > jsx > Typescript Test > Columns 1`] = `
 "<template>
   <div class=\\"builder-columns div\\">
-    <div
-      class=\\"builder-column div-2\\"
-      v-for=\\"(column, index) in columns\\"
-      :key=\\"index\\"
-    >
-      {{ column.content }}{{ index }}
-    </div>
+    <template :key=\\"index\\" v-for=\\"(column, index) in columns\\">
+      <div class=\\"builder-column div-2\\">{{ column.content }}{{ index }}</div>
+    </template>
   </div>
 </template>
 
@@ -4230,21 +5043,22 @@ export default defineComponent({
 
 exports[`Vue > jsx > Typescript Test > ContentSlotJSX 1`] = `
 "<template>
-  <div
-    v-if=\\"$slots.reference\\"
-    :name=\\"$slots.content ? 'name1' : 'name2'\\"
-    :title=\\"$slots.content ? 'title1' : 'title2'\\"
-    @click=\\"show()\\"
-    :class=\\"cls\\"
-    v-bind=\\"attributes\\"
-  >
-    <template v-if=\\"showContent && $slots.content\\">
-      <slot name=\\"content\\">{{ content }}</slot>
-    </template>
+  <template v-if=\\"$slots.reference\\">
+    <div
+      :name=\\"$slots.content ? 'name1' : 'name2'\\"
+      :title=\\"$slots.content ? 'title1' : 'title2'\\"
+      @click=\\"async (event) => show()\\"
+      :class=\\"cls\\"
+      v-bind=\\"attributes\\"
+    >
+      <template v-if=\\"showContent && $slots.content\\">
+        <slot name=\\"content\\">{{ content }}</slot>
+      </template>
 
-    <div><hr /></div>
-    <div><slot /></div>
-  </div>
+      <div><hr /></div>
+      <div><slot /></div>
+    </div>
+  </template>
 </template>
 
 <script lang=\\"ts\\">
@@ -4444,30 +5258,33 @@ exports[`Vue > jsx > Typescript Test > Form 1`] = `
     :action=\\"!sendWithJs && action\\"
     :method=\\"method\\"
     :name=\\"name\\"
-    @submit=\\"onSubmit($event)\\"
+    @submit=\\"async (event) => onSubmit(event)\\"
     v-bind=\\"attributes\\"
   >
     <template v-if=\\"builderBlock && builderBlock.children\\">
-      <builder-block-component
-        v-for=\\"(block, index) in builderBlock?.children\\"
-        :block=\\"block\\"
-        :index=\\"index\\"
+      <template
         :key=\\"block.id\\"
-      ></builder-block-component>
+        v-for=\\"(block, index) in builderBlock?.children\\"
+      >
+        <BuilderBlockComponent
+          :block=\\"block\\"
+          :index=\\"index\\"
+        ></BuilderBlockComponent>
+      </template>
     </template>
 
     <template v-if=\\"submissionState === 'error'\\">
-      <builder-blocks
+      <BuilderBlocks
         dataPath=\\"errorMessage\\"
         :blocks=\\"errorMessage\\"
-      ></builder-blocks>
+      ></BuilderBlocks>
     </template>
 
     <template v-if=\\"submissionState === 'sending'\\">
-      <builder-blocks
+      <BuilderBlocks
         dataPath=\\"sendingMessage\\"
         :blocks=\\"sendingMessage\\"
-      ></builder-blocks>
+      ></BuilderBlocks>
     </template>
 
     <template v-if=\\"submissionState === 'error' && responseData\\">
@@ -4477,10 +5294,10 @@ exports[`Vue > jsx > Typescript Test > Form 1`] = `
     </template>
 
     <template v-if=\\"submissionState === 'success'\\">
-      <builder-blocks
+      <BuilderBlocks
         dataPath=\\"successMessage\\"
         :blocks=\\"successMessage\\"
-      ></builder-blocks>
+      ></BuilderBlocks>
     </template>
   </form>
 </template>
@@ -4523,8 +5340,8 @@ export type FormState = \\"unsubmitted\\" | \\"sending\\" | \\"success\\" | \\"e
 export default defineComponent({
   name: \\"form-component\\",
   components: {
-    \\"builder-block-component\\": BuilderBlockComponent,
-    \\"builder-blocks\\": BuilderBlocks,
+    BuilderBlockComponent: BuilderBlockComponent,
+    BuilderBlocks: BuilderBlocks,
   },
   props: [
     \\"previewState\\",
@@ -4806,7 +5623,7 @@ exports[`Vue > jsx > Typescript Test > Image 1`] = `
           :aria-role=\\"altText ? 'presentation' : undefined\\"
           :class=\\"'builder-image' + (_class ? ' ' + _class : '') + ' img'\\"
           :src=\\"image\\"
-          @load=\\"setLoaded()\\"
+          @load=\\"async (event) => setLoaded()\\"
           :srcset=\\"srcset\\"
           :sizes=\\"sizes\\"
         />
@@ -4909,7 +5726,11 @@ export default defineComponent({
 
 exports[`Vue > jsx > Typescript Test > Image State 1`] = `
 "<template>
-  <div><img class=\\"custom-class\\" :src=\\"item\\" :key=\\"itemIndex\\" /></div>
+  <div>
+    <template :key=\\"itemIndex\\" v-for=\\"(item, itemIndex) in images\\">
+      <img class=\\"custom-class\\" :src=\\"item\\" :key=\\"itemIndex\\" />
+    </template>
+  </div>
 </template>
 
 <script lang=\\"ts\\">
@@ -4985,7 +5806,7 @@ exports[`Vue > jsx > Typescript Test > Input 1`] = `
     :value=\\"value\\"
     :defaultValue=\\"defaultValue\\"
     :required=\\"required\\"
-    @change=\\"onChange?.($event.target.value)\\"
+    @change=\\"async (event) => onChange?.(event.target.value)\\"
     v-bind=\\"attributes\\"
   />
 </template>
@@ -5025,11 +5846,11 @@ export default defineComponent({
 
 exports[`Vue > jsx > Typescript Test > InputParent 1`] = `
 "<template>
-  <form-input-component
+  <FormInputComponent
     name=\\"kingzez\\"
     type=\\"text\\"
     :onChange=\\"(value) => handleChange(value)\\"
-  ></form-input-component>
+  ></FormInputComponent>
 </template>
 
 <script lang=\\"ts\\">
@@ -5039,12 +5860,38 @@ import FormInputComponent from \\"./input.raw\\";
 
 export default defineComponent({
   name: \\"stepper\\",
-  components: { \\"form-input-component\\": FormInputComponent },
+  components: { FormInputComponent: FormInputComponent },
 
   methods: {
     handleChange(value: string) {
       console.log(value);
     },
+  },
+});
+</script>"
+`;
+
+exports[`Vue > jsx > Typescript Test > NestedStore 1`] = `
+"<template>
+  <div :id=\\"_id\\">
+    Test
+    <p :id=\\"_messageId\\">Message</p>
+  </div>
+</template>
+
+<script lang=\\"ts\\">
+import { defineComponent } from \\"vue\\";
+
+type MyStore = {
+  _id?: string;
+  _messageId?: string;
+};
+
+export default defineComponent({
+  name: \\"nested-store\\",
+
+  data() {
+    return { _id: \\"abc\\", _messageId: this._id + \\"-message\\" };
   },
 });
 </script>"
@@ -5109,17 +5956,18 @@ export default defineComponent({
 
 exports[`Vue > jsx > Typescript Test > Section 2`] = `
 "<template>
-  <section
-    v-for=\\"(item, index) in items\\"
-    v-if=\\"max\\"
-    :style=\\"{
-      maxWidth: item + max,
-    }\\"
-    :key=\\"index\\"
-    v-bind=\\"attributes\\"
-  >
-    <slot />
-  </section>
+  <template v-if=\\"max\\">
+    <template :key=\\"index\\" v-for=\\"(item, index) in items\\">
+      <section
+        :style=\\"{
+          maxWidth: item + max,
+        }\\"
+        v-bind=\\"attributes\\"
+      >
+        <slot />
+      </section>
+    </template>
+  </template>
 </template>
 
 <script lang=\\"ts\\">
@@ -5152,14 +6000,11 @@ exports[`Vue > jsx > Typescript Test > Select 1`] = `
     :name=\\"name\\"
     v-bind=\\"attributes\\"
   >
-    <option
-      v-for=\\"(option, index) in options\\"
-      :value=\\"option.value\\"
-      :data-index=\\"index\\"
-      :key=\\"index\\"
-    >
-      {{ option.name || option.value }}
-    </option>
+    <template :key=\\"index\\" v-for=\\"(option, index) in options\\">
+      <option :value=\\"option.value\\" :data-index=\\"index\\">
+        {{ option.name || option.value }}
+      </option>
+    </template>
   </select>
 </template>
 
@@ -5210,11 +6055,11 @@ export default defineComponent({
 exports[`Vue > jsx > Typescript Test > SlotHtml 1`] = `
 "<template>
   <div>
-    <content-slot-code>
+    <ContentSlotCode>
       <template #testing>
         <div>Hello</div>
       </template>
-    </content-slot-code>
+    </ContentSlotCode>
   </div>
 </template>
 
@@ -5229,16 +6074,14 @@ type Props = {
 
 export default defineComponent({
   name: \\"slot-code\\",
-  components: { \\"content-slot-code\\": ContentSlotCode },
+  components: { ContentSlotCode: ContentSlotCode },
 });
 </script>"
 `;
 
 exports[`Vue > jsx > Typescript Test > SlotJsx 1`] = `
 "<template>
-  <div>
-    <content-slot-code :slotTesting=\\"<div>Hello</div>\\"></content-slot-code>
-  </div>
+  <div><ContentSlotCode :slotTesting=\\"<div>Hello</div>\\"></ContentSlotCode></div>
 </template>
 
 <script lang=\\"ts\\">
@@ -5252,7 +6095,7 @@ type Props = {
 
 export default defineComponent({
   name: \\"slot-code\\",
-  components: { \\"content-slot-code\\": ContentSlotCode },
+  components: { ContentSlotCode: ContentSlotCode },
 });
 </script>"
 `;
@@ -5260,8 +6103,8 @@ export default defineComponent({
 exports[`Vue > jsx > Typescript Test > SlotNamed 1`] = `
 "<template>
   <div>
-    <slot name=\\"top\\"></slot><slot name=\\"left\\">Default left</slot
-    ><slot>Default Child</slot>
+    <slot name=\\"my-awesome-slot\\"></slot><slot name=\\"top\\"></slot
+    ><slot name=\\"left\\">Default left</slot><slot>Default Child</slot>
   </div>
 </template>
 
@@ -5281,7 +6124,9 @@ export default defineComponent({
 exports[`Vue > jsx > Typescript Test > Stamped.io 1`] = `
 "<template>
   <div :data-user=\\"name\\">
-    <button @click=\\"showReviewPrompt = true\\">Write a review</button>
+    <button @click=\\"async (event) => (showReviewPrompt = true)\\">
+      Write a review
+    </button>
     <template v-if=\\"showReviewPrompt || 'asdf'\\">
       <input placeholder=\\"Email\\" />
       <input placeholder=\\"Title\\" class=\\"input\\" />
@@ -5292,22 +6137,26 @@ exports[`Vue > jsx > Typescript Test > Stamped.io 1`] = `
       <button
         class=\\"button\\"
         @click=\\"
-          $event.preventDefault();
-          showReviewPrompt = false;
+          async (ev) => {
+            ev.preventDefault();
+            showReviewPrompt = false;
+          }
         \\"
       >
         Submit
       </button>
     </template>
 
-    <div class=\\"review\\" v-for=\\"(review, index) in reviews\\" :key=\\"review.id\\">
-      <img class=\\"img\\" :src=\\"review.avatar\\" />
-      <div :class=\\"showReviewPrompt ? 'bg-primary' : 'bg-secondary'\\">
-        <div>N: {{ index }}</div>
-        <div>{{ review.author }}</div>
-        <div>{{ review.reviewMessage }}</div>
+    <template :key=\\"review.id\\" v-for=\\"(review, index) in reviews\\">
+      <div class=\\"review\\">
+        <img class=\\"img\\" :src=\\"review.avatar\\" />
+        <div :class=\\"showReviewPrompt ? 'bg-primary' : 'bg-secondary'\\">
+          <div>N: {{ index }}</div>
+          <div>{{ review.author }}</div>
+          <div>{{ review.reviewMessage }}</div>
+        </div>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 
@@ -5378,6 +6227,74 @@ export default defineComponent({
   margin-right: 10px;
 }
 </style>"
+`;
+
+exports[`Vue > jsx > Typescript Test > StoreComment 1`] = `
+"<template>
+  {{ foo }}
+</template>
+
+<script lang=\\"ts\\">
+import { defineComponent } from \\"vue\\";
+
+export default defineComponent({
+  name: \\"string-literal-store\\",
+
+  data() {
+    return { foo: true };
+  },
+
+  methods: { bar() {} },
+});
+</script>"
+`;
+
+exports[`Vue > jsx > Typescript Test > StoreShadowVars 1`] = `
+"<template>
+  {{ foo(errors) }}
+</template>
+
+<script lang=\\"ts\\">
+import { defineComponent } from \\"vue\\";
+
+export default defineComponent({
+  name: \\"my-component\\",
+
+  data() {
+    return { errors: {} };
+  },
+
+  methods: {
+    foo(errors) {
+      return errors;
+    },
+  },
+});
+</script>"
+`;
+
+exports[`Vue > jsx > Typescript Test > StoreWithState 1`] = `
+"<template>
+  {{ bar() }}
+</template>
+
+<script lang=\\"ts\\">
+import { defineComponent } from \\"vue\\";
+
+export default defineComponent({
+  name: \\"my-component\\",
+
+  data() {
+    return { foo: false };
+  },
+
+  methods: {
+    bar() {
+      return this.foo;
+    },
+  },
+});
+</script>"
 `;
 
 exports[`Vue > jsx > Typescript Test > Submit 1`] = `
@@ -5463,6 +6380,51 @@ export default defineComponent({
   name: \\"textarea\\",
 
   props: [\\"attributes\\", \\"placeholder\\", \\"name\\", \\"value\\", \\"defaultValue\\"],
+});
+</script>"
+`;
+
+exports[`Vue > jsx > Typescript Test > UseValueAndFnFromStore 1`] = `
+"<template>
+  <div>Test</div>
+</template>
+
+<script lang=\\"ts\\">
+import { defineComponent } from \\"vue\\";
+
+type MyProps = {
+  onChange?: (active: boolean) => void;
+};
+type MyStore = {
+  _id?: string;
+  _active?: boolean;
+  _do?: (id?: string) => void;
+};
+
+export default defineComponent({
+  name: \\"use-value-and-fn-from-store\\",
+
+  props: [\\"onChange\\"],
+
+  data() {
+    return { _id: \\"abc\\", _active: false };
+  },
+
+  updated() {
+    if (this._do) {
+      this._do(this._id);
+    }
+  },
+
+  methods: {
+    _do(id?: string) {
+      this._active = !!id;
+
+      if (this.onChange) {
+        this.onChange(this._active);
+      }
+    },
+  },
 });
 </script>"
 `;
@@ -5565,14 +6527,50 @@ export default defineComponent({
 </script>"
 `;
 
+exports[`Vue > jsx > Typescript Test > basicForFragment 1`] = `
+"<template>
+  <div>
+    <template :key=\\"\`key-\${option}\`\\" v-for=\\"(option, index) in ['a', 'b', 'c']\\">
+      <div>{{ option }}</div> </template
+    ><template
+      :key=\\"\`\${id}-\${option}\`\\"
+      v-for=\\"(option, index) in ['a', 'b', 'c']\\"
+    >
+      <div>{{ option }}</div> </template
+    ><select>
+      <template
+        :key=\\"\`\${id}-\${option}\`\\"
+        v-for=\\"(option, index) in ['d', 'e', 'f']\\"
+      >
+        <option :value=\\"option\\">{{ option }}</option>
+      </template>
+    </select>
+  </div>
+</template>
+
+<script lang=\\"ts\\">
+import { defineComponent } from \\"vue\\";
+
+export default defineComponent({
+  name: \\"basic-for-fragment\\",
+
+  data() {
+    return { id: \\"xyz\\" };
+  },
+});
+</script>"
+`;
+
 exports[`Vue > jsx > Typescript Test > basicForNoTagReference 1`] = `
 "<template>
   <component :is=\\"TagNameGetter\\">
     Hello <component :is=\\"tag\\">{{ name }}</component
-    ><component v-for=\\"(action, index) in actions\\" :is=\\"TagName\\" :key=\\"index\\"
-      ><component :is=\\"action.icon\\"></component
-      ><span>{{ action.text }}</span></component
-    ></component
+    ><template :key=\\"index\\" v-for=\\"(action, index) in actions\\">
+      <component :is=\\"TagName\\"
+        ><component :is=\\"action.icon\\"></component
+        ><span>{{ action.text }}</span></component
+      >
+    </template></component
   >
 </template>
 
@@ -5604,7 +6602,7 @@ exports[`Vue > jsx > Typescript Test > basicForwardRef 1`] = `
       class=\\"input\\"
       ref=\\"inputRef\\"
       :value=\\"name\\"
-      @change=\\"name = $event.target.value\\"
+      @change=\\"async (event) => (name = event.target.value)\\"
     />
   </div>
 </template>
@@ -5636,13 +6634,15 @@ export default defineComponent({
 `;
 
 exports[`Vue > jsx > Typescript Test > basicForwardRefMetadata 1`] = `
-"<template>
+"/** useMetadata: {\\"forwardRef\\":\\"inputRef\\"} */
+
+<template>
   <div>
     <input
       class=\\"input\\"
       ref=\\"inputRef\\"
       :value=\\"name\\"
-      @change=\\"name = $event.target.value\\"
+      @change=\\"async (event) => (name = event.target.value)\\"
     />
   </div>
 </template>
@@ -5721,18 +6721,59 @@ export default defineComponent({
 </script>"
 `;
 
-exports[`Vue > jsx > Typescript Test > class + ClassName + css 1`] = `
-"<template>
-  <div class=\\"test2 test div\\">
-    Hello! I can run in React, Vue, Solid, or Liquid!
-  </div>
+exports[`Vue > jsx > Typescript Test > basicRefAttributePassing 1`] = `
+"/** useMetadata: {\\"attributePassing\\":{\\"enabled\\":true}} */
+
+<template>
+  <button ref=\\"buttonRef\\">Attribute Passing</button>
 </template>
 
 <script lang=\\"ts\\">
 import { defineComponent } from \\"vue\\";
 
 export default defineComponent({
+  name: \\"basic-ref-attribute-passing-component\\",
+});
+</script>"
+`;
+
+exports[`Vue > jsx > Typescript Test > basicRefAttributePassingCustomRef 1`] = `
+"/** useMetadata: {\\"attributePassing\\":{\\"enabled\\":true,\\"customRef\\":\\"buttonRef\\"}}
+*/
+
+<template>
+  <div><button ref=\\"buttonRef\\">Attribute Passing</button></div>
+</template>
+
+<script lang=\\"ts\\">
+import { defineComponent } from \\"vue\\";
+
+export default defineComponent({
+  name: \\"basic-ref-attribute-passing-custom-ref-component\\",
+});
+</script>"
+`;
+
+exports[`Vue > jsx > Typescript Test > class + ClassName + css 1`] = `
+"<template>
+  <div>
+    <MyComp class=\\"test\\">
+      Hello! I can run in React, Vue, Solid, or Liquid!
+    </MyComp>
+    <div class=\\"test2 test div\\">
+      Hello! I can run in React, Vue, Solid, or Liquid!
+    </div>
+  </div>
+</template>
+
+<script lang=\\"ts\\">
+import { defineComponent } from \\"vue\\";
+
+import MyComp from \\"./my-component.vue\\";
+
+export default defineComponent({
   name: \\"my-basic-component\\",
+  components: { MyComp: MyComp },
 });
 </script>
 
@@ -5842,6 +6883,24 @@ export default defineComponent({
 </style>"
 `;
 
+exports[`Vue > jsx > Typescript Test > complexMeta 1`] = `
+"/** useMetadata:
+{\\"x\\":\\"y\\",\\"asdf\\":{\\"stringValue\\":\\"d\\",\\"booleanValue\\":true,\\"numberValue\\":1,\\"innerObject\\":{\\"stringValue\\":\\"inner\\",\\"numberValue\\":2,\\"booleanValue\\":false},\\"spreadStringValue\\":\\"f\\"}}
+*/
+
+<template>
+  <div></div>
+</template>
+
+<script lang=\\"ts\\">
+import { defineComponent } from \\"vue\\";
+
+export default defineComponent({
+  name: \\"complex-meta-raw\\",
+});
+</script>"
+`;
+
 exports[`Vue > jsx > Typescript Test > componentWithContext 1`] = `
 "<template>
   {{ foo.value }}
@@ -5883,10 +6942,8 @@ export default defineComponent({
 
 exports[`Vue > jsx > Typescript Test > componentWithContextMultiRoot 1`] = `
 "<template>
-  <div>
-    {{ foo.value }}
-    <div>other</div>
-  </div>
+  {{ foo.value }}
+  <div>other</div>
 </template>
 
 <script lang=\\"ts\\">
@@ -5964,7 +7021,11 @@ exports[`Vue > jsx > Typescript Test > defaultProps 1`] = `
     </template>
 
     <template v-if=\\"!link\\">
-      <button type=\\"button\\" @click=\\"onClick($event)\\" v-bind=\\"attributes\\">
+      <button
+        type=\\"button\\"
+        @click=\\"async (event) => onClick()\\"
+        v-bind=\\"attributes\\"
+      >
         {{ buttonText }}
       </button>
     </template>
@@ -6016,7 +7077,11 @@ exports[`Vue > jsx > Typescript Test > defaultPropsOutsideComponent 1`] = `
     </template>
 
     <template v-if=\\"!link\\">
-      <button type=\\"button\\" @click=\\"onClick($event)\\" v-bind=\\"attributes\\">
+      <button
+        type=\\"button\\"
+        @click=\\"async (event) => onClick(event)\\"
+        v-bind=\\"attributes\\"
+      >
         {{ text }}
       </button>
     </template>
@@ -6076,6 +7141,38 @@ export default defineComponent({
 </script>"
 `;
 
+exports[`Vue > jsx > Typescript Test > eventInputAndChange 1`] = `
+"<template>
+  <div>
+    <input
+      class=\\"input\\"
+      :value=\\"name\\"
+      @input=\\"async (event) => (name = event.target.value)\\"
+      @change=\\"async (event) => (name = event.target.value)\\"
+    />
+    Hello! I can run in React, Vue, Solid, or Liquid!
+  </div>
+</template>
+
+<script lang=\\"ts\\">
+import { defineComponent } from \\"vue\\";
+
+export default defineComponent({
+  name: \\"event-input-and-change\\",
+
+  data() {
+    return { name: \\"Steve\\" };
+  },
+});
+</script>
+
+<style scoped>
+.input {
+  color: red;
+}
+</style>"
+`;
+
 exports[`Vue > jsx > Typescript Test > expressionState 1`] = `
 "<template>
   <div>{{ refToUse }}</div>
@@ -6100,11 +7197,84 @@ export default defineComponent({
 </script>"
 `;
 
+exports[`Vue > jsx > Typescript Test > figmaMeta 1`] = `
+"/** useMetadata:
+{\\"figma\\":{\\"name\\":\\"def-button-beta-outlined\\",\\"url\\":\\"https://www.figma.com/xxx\\",\\"props\\":{\\"iconSmall\\":{\\"type\\":\\"instance\\",\\"key\\":\\"📍
+Icon Small\\"},\\"iconMedium\\":{\\"type\\":\\"instance\\",\\"key\\":\\"📍 Icon
+Medium\\"},\\"label\\":{\\"type\\":\\"string\\",\\"key\\":\\"✏️
+Label\\"},\\"icon\\":{\\"type\\":\\"boolean\\",\\"key\\":\\"👁️
+Icon\\",\\"value\\":{\\"false\\":false,\\"true\\":\\"placeholder\\"}},\\"interactiveState\\":{\\"type\\":\\"enum\\",\\"key\\":\\"Interactive
+State\\",\\"value\\":{\\"(Def)
+Enabled\\":false,\\"Hovered\\":false,\\"Pressed\\":false,\\"Focused\\":false,\\"Disabled\\":\\"true\\"}},\\"size\\":{\\"type\\":\\"enum\\",\\"key\\":\\"Size\\",\\"value\\":{\\"(Def)
+Medium\\":false,\\"Small\\":\\"small\\"}},\\"width\\":{\\"type\\":\\"enum\\",\\"key\\":\\"Width\\",\\"value\\":{\\"(Def)
+Auto Width\\":false,\\"Full Width\\":\\"full\\"}}}}} */
+
+<template>
+  <button
+    :data-icon=\\"icon\\"
+    :data-disabled=\\"interactiveState\\"
+    :data-width=\\"width\\"
+    :data-size=\\"size\\"
+  >
+    {{ label }}
+  </button>
+</template>
+
+<script lang=\\"ts\\">
+import { defineComponent } from \\"vue\\";
+
+export default defineComponent({
+  name: \\"figma-button\\",
+
+  props: [\\"icon\\", \\"interactiveState\\", \\"width\\", \\"size\\", \\"label\\"],
+});
+</script>"
+`;
+
+exports[`Vue > jsx > Typescript Test > getterState 1`] = `
+"<template>
+  <div>
+    <p>{{ foo2 }}</p>
+    <p>{{ bar }}</p>
+    <p>{{ baz(1) }}</p>
+  </div>
+</template>
+
+<script lang=\\"ts\\">
+import { defineComponent } from \\"vue\\";
+
+export interface ButtonProps {
+  foo: string;
+}
+
+export default defineComponent({
+  name: \\"button\\",
+
+  props: [\\"foo\\"],
+
+  computed: {
+    foo2() {
+      return this.foo + \\"foo\\";
+    },
+    bar() {
+      return \\"bar\\";
+    },
+  },
+
+  methods: {
+    baz(i: number) {
+      return i + this.foo2.length;
+    },
+  },
+});
+</script>"
+`;
+
 exports[`Vue > jsx > Typescript Test > import types 1`] = `
 "<template>
-  <render-block
+  <RenderBlock
     v-bind=\\"getRenderContentProps(renderContentProps.block, 0)\\"
-  ></render-block>
+  ></RenderBlock>
 </template>
 
 <script lang=\\"ts\\">
@@ -6121,7 +7291,7 @@ type RenderContentProps = {
 
 export default defineComponent({
   name: \\"render-content\\",
-  components: { \\"render-block\\": RenderBlock },
+  components: { RenderBlock: RenderBlock },
   props: [\\"renderContentProps\\"],
 
   methods: {
@@ -6235,11 +7405,19 @@ export default defineComponent({
 
 exports[`Vue > jsx > Typescript Test > nestedShow 1`] = `
 "<template>
-  <div v-if=\\"!Boolean(conditionA)\\">else-condition-A</div>
+  <template v-if=\\"conditionA\\">
+    <template v-if=\\"!conditionB\\">
+      <div>if condition A and condition B</div>
+    </template>
 
-  <div v-else-if=\\"!Boolean(!conditionB)\\">else-condition-B</div>
+    <template v-else>
+      <div>else-condition-B</div>
+    </template>
+  </template>
 
-  <div v-else>if condition A and condition B</div>
+  <template v-else>
+    <div>else-condition-A</div>
+  </template>
 </template>
 
 <script lang=\\"ts\\">
@@ -6305,7 +7483,7 @@ exports[`Vue > jsx > Typescript Test > onEvent 1`] = `
   <div
     class=\\"builder-embed\\"
     ref=\\"elem\\"
-    @initeditingbldr=\\"elem_onInitEditingBldr($event)\\"
+    @initeditingbldr=\\"async (event) => elem_onInitEditingBldr(event)\\"
   >
     <div>Test</div>
   </div>
@@ -6383,6 +7561,24 @@ export default defineComponent({
   created() {
     this.name = defaultValues.name || this.name;
     console.log(\\"set defaults with props\\");
+  },
+});
+</script>"
+`;
+
+exports[`Vue > jsx > Typescript Test > onInitPlain 1`] = `
+"<template>
+  <div></div>
+</template>
+
+<script lang=\\"ts\\">
+import { defineComponent } from \\"vue\\";
+
+export default defineComponent({
+  name: \\"on-init-plain\\",
+
+  created() {
+    console.log(\\"onInit\\");
   },
 });
 </script>"
@@ -6666,40 +7862,52 @@ export default defineComponent({
 
 exports[`Vue > jsx > Typescript Test > renderBlock 1`] = `
 "<template>
-  <component
-    v-if=\\"!Boolean(shouldWrap)\\"
-    :is=\\"renderComponentTag\\"
-    v-bind=\\"renderComponentProps\\"
-  ></component>
-  <component
-    v-else-if=\\"isEmptyHtmlElement(tag)\\"
-    :is=\\"tag\\"
-    v-bind=\\"{ ...attributes, ...actions }\\"
-  ></component>
-  <render-repeated-block
-    v-for=\\"(data, index) in repeatItemData\\"
-    :repeatContext=\\"data.context\\"
-    :block=\\"data.block\\"
-    :key=\\"index\\"
-  ></render-repeated-block>
-  <component v-else :is=\\"tag\\" v-bind=\\"{ ...attributes, ...actions }\\"
-    ><component
+  <template v-if=\\"shouldWrap\\">
+    <template v-if=\\"isEmptyHtmlElement(tag)\\">
+      <component :is=\\"tag\\" v-bind=\\"{ ...attributes, ...actions }\\"></component>
+    </template>
+
+    <template v-if=\\"!isEmptyHtmlElement(tag) && repeatItemData\\">
+      <template :key=\\"index\\" v-for=\\"(data, index) in repeatItemData\\">
+        <RenderRepeatedBlock
+          :repeatContext=\\"data.context\\"
+          :block=\\"data.block\\"
+        ></RenderRepeatedBlock>
+      </template>
+    </template>
+
+    <template v-if=\\"!isEmptyHtmlElement(tag) && !repeatItemData\\">
+      <component :is=\\"tag\\" v-bind=\\"{ ...attributes, ...actions }\\"
+        ><component
+          :is=\\"renderComponentTag\\"
+          v-bind=\\"renderComponentProps\\"
+        ></component
+        ><template
+          :key=\\"'render-block-' + child.id\\"
+          v-for=\\"(child, index) in childrenWithoutParentComponent\\"
+        >
+          <RenderBlock
+            :block=\\"child\\"
+            :context=\\"childrenContext\\"
+          ></RenderBlock> </template
+        ><template
+          :key=\\"'block-style-' + child.id\\"
+          v-for=\\"(child, index) in childrenWithoutParentComponent\\"
+        >
+          <BlockStyles
+            :block=\\"child\\"
+            :context=\\"childrenContext\\"
+          ></BlockStyles> </template
+      ></component>
+    </template>
+  </template>
+
+  <template v-else>
+    <component
       :is=\\"renderComponentTag\\"
       v-bind=\\"renderComponentProps\\"
-    ></component
-    ><render-block
-      v-for=\\"(child, index) in childrenWithoutParentComponent\\"
-      :block=\\"child\\"
-      :context=\\"childrenContext\\"
-      :key=\\"'render-block-' + child.id\\"
-    ></render-block
-    ><block-styles
-      v-for=\\"(child, index) in childrenWithoutParentComponent\\"
-      :block=\\"child\\"
-      :context=\\"childrenContext\\"
-      :key=\\"'block-style-' + child.id\\"
-    ></block-styles
-  ></component>
+    ></component>
+  </template>
 </template>
 
 <script lang=\\"ts\\">
@@ -6736,9 +7944,9 @@ export type RenderBlockProps = {
 export default defineComponent({
   name: \\"render-block\\",
   components: {
-    \\"render-repeated-block\\": RenderRepeatedBlock,
-    \\"block-styles\\": BlockStyles,
-    \\"render-component\\": RenderComponent,
+    RenderRepeatedBlock: RenderRepeatedBlock,
+    BlockStyles: BlockStyles,
+    RenderComponent: RenderComponent,
   },
   props: [\\"block\\", \\"context\\"],
 
@@ -6926,8 +8134,8 @@ export default defineComponent({
 
 exports[`Vue > jsx > Typescript Test > renderContentExample 1`] = `
 "<template>
-  <div class=\\"div\\" @click=\\"trackClick(content.id)\\">
-    <render-blocks :blocks=\\"content.blocks\\"></render-blocks>
+  <div class=\\"div\\" @click=\\"async (event) => trackClick(content.id)\\">
+    <RenderBlocks :blocks=\\"content.blocks\\"></RenderBlocks>
   </div>
 </template>
 
@@ -6952,8 +8160,8 @@ type Props = {
 
 export default defineComponent({
   name: \\"render-content\\",
-  components: { \\"render-blocks\\": RenderBlocks },
-  props: [\\"content\\", \\"customComponents\\"],
+  components: { RenderBlocks: RenderBlocks },
+  props: [\\"customComponents\\", \\"content\\"],
 
   data() {
     return { trackClick };
@@ -7006,20 +8214,18 @@ export default defineComponent({
 
 exports[`Vue > jsx > Typescript Test > rootFragmentMultiNode 1`] = `
 "<template>
-  <div>
-    <template v-if=\\"link\\">
-      <a
-        :href=\\"link\\"
-        :target=\\"openLinkInNewTab ? '_blank' : undefined\\"
-        v-bind=\\"attributes\\"
-        >{{ text }}</a
-      >
-    </template>
+  <template v-if=\\"link\\">
+    <a
+      :href=\\"link\\"
+      :target=\\"openLinkInNewTab ? '_blank' : undefined\\"
+      v-bind=\\"attributes\\"
+      >{{ text }}</a
+    >
+  </template>
 
-    <template v-if=\\"!link\\">
-      <button type=\\"button\\" v-bind=\\"attributes\\">{{ text }}</button>
-    </template>
-  </div>
+  <template v-if=\\"!link\\">
+    <button type=\\"button\\" v-bind=\\"attributes\\">{{ text }}</button>
+  </template>
 </template>
 
 <script lang=\\"ts\\">
@@ -7042,8 +8248,13 @@ export default defineComponent({
 
 exports[`Vue > jsx > Typescript Test > rootShow 1`] = `
 "<template>
-  <div v-if=\\"foo === 'bar'\\">Bar</div>
-  <div v-else>Foo</div>
+  <template v-if=\\"foo === 'bar'\\">
+    <div>Bar</div>
+  </template>
+
+  <template v-else>
+    <div>Foo</div>
+  </template>
 </template>
 
 <script lang=\\"ts\\">
@@ -7066,7 +8277,7 @@ exports[`Vue > jsx > Typescript Test > self-referencing component 1`] = `
   <div>
     {{ name }}
     <template v-if=\\"name === 'Batman'\\">
-      <my-component name=\\"Bruce Wayne\\"></my-component>
+      <MyComponent name=\\"Bruce Wayne\\"></MyComponent>
     </template>
   </div>
 </template>
@@ -7087,7 +8298,7 @@ exports[`Vue > jsx > Typescript Test > self-referencing component with children 
   <div>
     {{ name }}<slot />
     <template v-if=\\"name === 'Batman'\\">
-      <my-component name=\\"Bruce\\"><div>Wayne</div></my-component>
+      <MyComponent name=\\"Bruce\\"><div>Wayne</div></MyComponent>
     </template>
   </div>
 </template>
@@ -7103,12 +8314,144 @@ export default defineComponent({
 </script>"
 `;
 
+exports[`Vue > jsx > Typescript Test > setState 1`] = `
+"<template>
+  <div><button @click=\\"async (event) => someFn()\\">Click me</button></div>
+</template>
+
+<script lang=\\"ts\\">
+import { defineComponent } from \\"vue\\";
+
+export default defineComponent({
+  name: \\"set-state\\",
+
+  data() {
+    return { n: [\\"123\\"] };
+  },
+
+  methods: {
+    someFn() {
+      this.n[0] = \\"123\\";
+    },
+  },
+});
+</script>"
+`;
+
+exports[`Vue > jsx > Typescript Test > showExpressions 1`] = `
+"<template>
+  <div>
+    <template v-if=\\"conditionA\\"> Content0 </template>
+
+    <template v-else> ContentA </template>
+
+    <template v-if=\\"conditionA\\"> ContentA </template>
+
+    <template v-if=\\"conditionA\\"> </template>
+
+    <template v-else> ContentA </template>
+
+    <template v-if=\\"conditionA\\"> ContentB </template>
+
+    <template v-else>
+      {{ undefined }}
+    </template>
+
+    <template v-if=\\"conditionA\\">
+      {{ undefined }}
+    </template>
+
+    <template v-else> ContentB </template>
+
+    <template v-if=\\"conditionA\\"> ContentC </template>
+
+    <template v-if=\\"conditionA\\"> </template>
+
+    <template v-else> ContentC </template>
+
+    <template v-if=\\"conditionA\\"> ContentD </template>
+
+    <template v-if=\\"conditionA\\"> </template>
+
+    <template v-else> ContentD </template>
+
+    <template v-if=\\"conditionA\\"> ContentE </template>
+
+    <template v-else> hello </template>
+
+    <template v-if=\\"conditionA\\"> hello </template>
+
+    <template v-else> ContentE </template>
+
+    <template v-if=\\"conditionA\\"> ContentF </template>
+
+    <template v-else> 123 </template>
+
+    <template v-if=\\"conditionA\\"> 123 </template>
+
+    <template v-else> ContentF </template>
+
+    <template v-if=\\"conditionA === 'Default'\\"> 4mb </template>
+
+    <template v-else>
+      <template v-if=\\"conditionB === 'Complete'\\"> 20mb </template>
+
+      <template v-else> 9mb </template>
+    </template>
+
+    <template v-if=\\"conditionA === 'Default'\\">
+      <template v-if=\\"conditionB === 'Complete'\\"> 20mb </template>
+
+      <template v-else> 9mb </template>
+    </template>
+
+    <template v-else> 4mb </template>
+
+    <template v-if=\\"conditionA === 'Default'\\">
+      <template v-if=\\"conditionB === 'Complete'\\">
+        <div>complete</div>
+      </template>
+
+      <template v-else> 9mb </template>
+    </template>
+
+    <template v-else>
+      <template v-if=\\"conditionC === 'Complete'\\"> dff </template>
+
+      <template v-else>
+        <div>complete else</div>
+      </template>
+    </template>
+  </div>
+</template>
+
+<script lang=\\"ts\\">
+import { defineComponent } from \\"vue\\";
+
+interface Props {
+  conditionA: boolean;
+  conditionB: boolean;
+}
+
+export default defineComponent({
+  name: \\"show-with-other-values\\",
+
+  props: [\\"conditionA\\", \\"conditionB\\", \\"conditionC\\"],
+});
+</script>"
+`;
+
 exports[`Vue > jsx > Typescript Test > showWithFor 1`] = `
 "<template>
-  <div v-for=\\"(item, index) in items\\" v-if=\\"conditionA\\" :key=\\"idx\\">
-    {{ item }}
-  </div>
-  <div v-else>else-condition-A</div>
+  <template v-if=\\"conditionA\\">
+    <template :key=\\"idx\\" v-for=\\"(item, idx) in items\\">
+      <div>{{ item }}</div>
+    </template>
+  </template>
+
+  <template v-else>
+    <div>else-condition-A</div>
+  </template>
 </template>
 
 <script lang=\\"ts\\">
@@ -7127,11 +8470,53 @@ export default defineComponent({
 </script>"
 `;
 
+exports[`Vue > jsx > Typescript Test > showWithOtherValues 1`] = `
+"<template>
+  <div>
+    <template v-if=\\"conditionA\\"> ContentA </template>
+
+    <template v-if=\\"conditionA\\"> ContentB </template>
+
+    <template v-else>
+      {{ undefined }}
+    </template>
+
+    <template v-if=\\"conditionA\\"> ContentC </template>
+
+    <template v-if=\\"conditionA\\"> ContentD </template>
+
+    <template v-if=\\"conditionA\\"> ContentE </template>
+
+    <template v-else> hello </template>
+
+    <template v-if=\\"conditionA\\"> ContentF </template>
+
+    <template v-else> 123 </template>
+  </div>
+</template>
+
+<script lang=\\"ts\\">
+import { defineComponent } from \\"vue\\";
+
+interface Props {
+  conditionA: boolean;
+}
+
+export default defineComponent({
+  name: \\"show-with-other-values\\",
+
+  props: [\\"conditionA\\"],
+});
+</script>"
+`;
+
 exports[`Vue > jsx > Typescript Test > showWithRootText 1`] = `
 "<template>
-  ContentA
+  <template v-if=\\"conditionA\\"> ContentA </template>
 
-  <div v-else>else-condition-A</div>
+  <template v-else>
+    <div>else-condition-A</div>
+  </template>
 </template>
 
 <script lang=\\"ts\\">
@@ -7243,6 +8628,93 @@ export default defineComponent({
 </script>"
 `;
 
+exports[`Vue > jsx > Typescript Test > store-async-function 1`] = `
+"<template>
+  <div></div>
+</template>
+
+<script lang=\\"ts\\">
+import { defineComponent } from \\"vue\\";
+
+export default defineComponent({
+  name: \\"string-literal-store\\",
+
+  methods: {
+    arrowFunction: async function arrowFunction() {
+      return Promise.resolve();
+    },
+    namedFunction: async function namedFunction() {
+      return Promise.resolve();
+    },
+    fetchUsers: async function fetchUsers() {
+      return Promise.resolve();
+    },
+  },
+});
+</script>"
+`;
+
+exports[`Vue > jsx > Typescript Test > string-literal-store 1`] = `
+"<template>
+  <div>{{ foo }}</div>
+</template>
+
+<script lang=\\"ts\\">
+import { defineComponent } from \\"vue\\";
+
+export default defineComponent({
+  name: \\"string-literal-store\\",
+
+  data() {
+    return { foo: 123 };
+  },
+});
+</script>"
+`;
+
+exports[`Vue > jsx > Typescript Test > string-literal-store-kebab 1`] = `
+"<template>
+  <div>{{ \\"foo-bar\\" }}</div>
+</template>
+
+<script lang=\\"ts\\">
+import { defineComponent } from \\"vue\\"
+
+
+
+
+
+
+
+
+
+
+  export default defineComponent( {
+  name: 'string-literal-store',
+
+
+
+  data() {
+    return { foo-bar: 123,}
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+
+  }
+  )
+</script>"
+`;
+
 exports[`Vue > jsx > Typescript Test > styleClassAndCss 1`] = `
 "<template>
   <div
@@ -7296,7 +8768,7 @@ export default defineComponent({
 
 exports[`Vue > jsx > Typescript Test > subComponent 1`] = `
 "<template>
-  <foo></foo>
+  <Foo></Foo>
 </template>
 
 <script lang=\\"ts\\">
@@ -7306,7 +8778,7 @@ import Foo from \\"./foo-sub-component.vue\\";
 
 export default defineComponent({
   name: \\"sub-component\\",
-  components: { foo: Foo },
+  components: { Foo: Foo },
 });
 </script>"
 `;
@@ -7366,6 +8838,66 @@ export default defineComponent({
   name: \\"type-dependency\\",
 
   props: [\\"foo\\"],
+});
+</script>"
+`;
+
+exports[`Vue > jsx > Typescript Test > typeExternalStore 1`] = `
+"<template>
+  <div>Hello {{ _name }}!</div>
+</template>
+
+<script lang=\\"ts\\">
+import { defineComponent } from \\"vue\\";
+
+import { FooStore } from \\"./foo-store\\";
+
+export default defineComponent({
+  name: \\"type-external-store\\",
+
+  data() {
+    return { _name: \\"test\\" };
+  },
+});
+</script>"
+`;
+
+exports[`Vue > jsx > Typescript Test > typeGetterStore 1`] = `
+"<template>
+  <div>Hello {{ name }}!</div>
+</template>
+
+<script lang=\\"ts\\">
+import { defineComponent } from \\"vue\\";
+
+type GetterStore = {
+  getName: () => string;
+  name: string;
+  get test(): string;
+};
+
+export default defineComponent({
+  name: \\"type-getter-store\\",
+
+  data() {
+    return { name: \\"test\\" };
+  },
+
+  computed: {
+    test() {
+      return \\"test\\";
+    },
+  },
+
+  methods: {
+    getName() {
+      if (this.name === \\"a\\") {
+        return \\"b\\";
+      }
+
+      return this.name;
+    },
+  },
 });
 </script>"
 `;
@@ -7454,14 +8986,17 @@ export default defineComponent({
   name: \\"use-target-component\\",
 
   data() {
-    return { lastName: \\"bar\\" };
+    return { lastName: \\"bar\\", foo: \\"bar\\" };
   },
 
-  mounted() {},
+  mounted() {
+    console.log(this.foo);
+    this.foo = \\"bar\\";
+  },
 
   computed: {
     name() {
-      const prefix = \\"v2\\";
+      const prefix = \\"v\\";
       return prefix + \\"foo\\";
     },
   },
@@ -7495,7 +9030,10 @@ export default defineComponent({
 exports[`Vue > svelte > Javascript Test > basic 1`] = `
 "<template>
   <div>
-    <input @change=\\"name = $event.target.value\\" :value=\\"name\\" />
+    <input
+      @change=\\"async (event) => (name = event.target.value)\\"
+      :value=\\"name\\"
+    />
     Hello! I can run in React, Vue, Solid, or Liquid!
   </div>
 </template>
@@ -7520,37 +9058,37 @@ exports[`Vue > svelte > Javascript Test > bindGroup 1`] = `
       type=\\"radio\\"
       value=\\"Plain\\"
       :checked=\\"tortilla === 'Plain'\\"
-      @change=\\"tortilla = $event.target.value\\"
+      @change=\\"async (event) => (tortilla = event.target.value)\\"
     /><input
       type=\\"radio\\"
       value=\\"Whole wheat\\"
       :checked=\\"tortilla === 'Whole wheat'\\"
-      @change=\\"tortilla = $event.target.value\\"
+      @change=\\"async (event) => (tortilla = event.target.value)\\"
     /><input
       type=\\"radio\\"
       value=\\"Spinach\\"
       :checked=\\"tortilla === 'Spinach'\\"
-      @change=\\"tortilla = $event.target.value\\"
+      @change=\\"async (event) => (tortilla = event.target.value)\\"
     /><br /><br /><input
       type=\\"checkbox\\"
       value=\\"Rice\\"
       :checked=\\"fillings === 'Rice'\\"
-      @change=\\"fillings = $event.target.value\\"
+      @change=\\"async (event) => (fillings = event.target.value)\\"
     /><input
       type=\\"checkbox\\"
       value=\\"Beans\\"
       :checked=\\"fillings === 'Beans'\\"
-      @change=\\"fillings = $event.target.value\\"
+      @change=\\"async (event) => (fillings = event.target.value)\\"
     /><input
       type=\\"checkbox\\"
       value=\\"Cheese\\"
       :checked=\\"fillings === 'Cheese'\\"
-      @change=\\"fillings = $event.target.value\\"
+      @change=\\"async (event) => (fillings = event.target.value)\\"
     /><input
       type=\\"checkbox\\"
       value=\\"Guac (extra)\\"
       :checked=\\"fillings === 'Guac (extra)'\\"
-      @change=\\"fillings = $event.target.value\\"
+      @change=\\"async (event) => (fillings = event.target.value)\\"
     />
     <p>Tortilla: {{ tortilla }}</p>
     <p>Fillings: {{ fillings }}</p>
@@ -7641,7 +9179,9 @@ export default defineComponent({
 exports[`Vue > svelte > Javascript Test > each 1`] = `
 "<template>
   <ul>
-    <li v-for=\\"(num, index) in numbers\\" :key=\\"index\\">{{ num }}</li>
+    <template :key=\\"index\\" v-for=\\"(num, index) in numbers\\">
+      <li>{{ num }}</li>
+    </template>
   </ul>
 </template>
 
@@ -7661,9 +9201,9 @@ export default defineComponent({
 exports[`Vue > svelte > Javascript Test > eventHandlers 1`] = `
 "<template>
   <div>
-    <button @click=\\"log('hi')\\">Log</button
-    ><button @click=\\"log($event)\\">Log</button
-    ><button @click=\\"log($event)\\">Log</button>
+    <button @click=\\"async (a) => log('hi')\\">Log</button
+    ><button @click=\\"async (event) => log(event)\\">Log</button
+    ><button @click=\\"async (event) => log(event)\\">Log</button>
   </div>
 </template>
 
@@ -7702,8 +9242,13 @@ export default defineComponent({
 
 exports[`Vue > svelte > Javascript Test > ifElse 1`] = `
 "<template>
-  <button v-if=\\"show\\" @click=\\"toggle($event)\\">Hide</button>
-  <button v-else @click=\\"toggle($event)\\">Show</button>
+  <template v-if=\\"show\\">
+    <button @click=\\"async (event) => toggle(event)\\">Hide</button>
+  </template>
+
+  <template v-else>
+    <button @click=\\"async (event) => toggle(event)\\">Show</button>
+  </template>
 </template>
 
 <script>
@@ -7728,7 +9273,7 @@ export default defineComponent({
 exports[`Vue > svelte > Javascript Test > imports 1`] = `
 "<template>
   <div>
-    <button type=\\"button\\" :disabled=\\"disabled\\"><slot /></button>
+    <Button type=\\"button\\" :disabled=\\"disabled\\"><slot /></Button>
   </div>
 </template>
 
@@ -7739,7 +9284,7 @@ import Button from \\"./Button.vue\\";
 
 export default defineComponent({
   name: \\"my-component\\",
-  components: { button: Button },
+  components: { Button: Button },
 
   data() {
     return { disabled: false };
@@ -7800,9 +9345,13 @@ export default defineComponent({
 exports[`Vue > svelte > Javascript Test > reactiveWithFn 1`] = `
 "<template>
   <div>
-    <input type=\\"number\\" @change=\\"a = $event.target.value\\" :value=\\"a\\" /><input
+    <input
       type=\\"number\\"
-      @change=\\"b = $event.target.value\\"
+      @change=\\"async (event) => (a = event.target.value)\\"
+      :value=\\"a\\"
+    /><input
+      type=\\"number\\"
+      @change=\\"async (event) => (b = event.target.value)\\"
       :value=\\"b\\"
     />
     Result: {{ result }}
@@ -7913,7 +9462,10 @@ export default defineComponent({
 exports[`Vue > svelte > Typescript Test > basic 1`] = `
 "<template>
   <div>
-    <input @change=\\"name = $event.target.value\\" :value=\\"name\\" />
+    <input
+      @change=\\"async (event) => (name = event.target.value)\\"
+      :value=\\"name\\"
+    />
     Hello! I can run in React, Vue, Solid, or Liquid!
   </div>
 </template>
@@ -7938,37 +9490,37 @@ exports[`Vue > svelte > Typescript Test > bindGroup 1`] = `
       type=\\"radio\\"
       value=\\"Plain\\"
       :checked=\\"tortilla === 'Plain'\\"
-      @change=\\"tortilla = $event.target.value\\"
+      @change=\\"async (event) => (tortilla = event.target.value)\\"
     /><input
       type=\\"radio\\"
       value=\\"Whole wheat\\"
       :checked=\\"tortilla === 'Whole wheat'\\"
-      @change=\\"tortilla = $event.target.value\\"
+      @change=\\"async (event) => (tortilla = event.target.value)\\"
     /><input
       type=\\"radio\\"
       value=\\"Spinach\\"
       :checked=\\"tortilla === 'Spinach'\\"
-      @change=\\"tortilla = $event.target.value\\"
+      @change=\\"async (event) => (tortilla = event.target.value)\\"
     /><br /><br /><input
       type=\\"checkbox\\"
       value=\\"Rice\\"
       :checked=\\"fillings === 'Rice'\\"
-      @change=\\"fillings = $event.target.value\\"
+      @change=\\"async (event) => (fillings = event.target.value)\\"
     /><input
       type=\\"checkbox\\"
       value=\\"Beans\\"
       :checked=\\"fillings === 'Beans'\\"
-      @change=\\"fillings = $event.target.value\\"
+      @change=\\"async (event) => (fillings = event.target.value)\\"
     /><input
       type=\\"checkbox\\"
       value=\\"Cheese\\"
       :checked=\\"fillings === 'Cheese'\\"
-      @change=\\"fillings = $event.target.value\\"
+      @change=\\"async (event) => (fillings = event.target.value)\\"
     /><input
       type=\\"checkbox\\"
       value=\\"Guac (extra)\\"
       :checked=\\"fillings === 'Guac (extra)'\\"
-      @change=\\"fillings = $event.target.value\\"
+      @change=\\"async (event) => (fillings = event.target.value)\\"
     />
     <p>Tortilla: {{ tortilla }}</p>
     <p>Fillings: {{ fillings }}</p>
@@ -8059,7 +9611,9 @@ export default defineComponent({
 exports[`Vue > svelte > Typescript Test > each 1`] = `
 "<template>
   <ul>
-    <li v-for=\\"(num, index) in numbers\\" :key=\\"index\\">{{ num }}</li>
+    <template :key=\\"index\\" v-for=\\"(num, index) in numbers\\">
+      <li>{{ num }}</li>
+    </template>
   </ul>
 </template>
 
@@ -8079,9 +9633,9 @@ export default defineComponent({
 exports[`Vue > svelte > Typescript Test > eventHandlers 1`] = `
 "<template>
   <div>
-    <button @click=\\"log('hi')\\">Log</button
-    ><button @click=\\"log($event)\\">Log</button
-    ><button @click=\\"log($event)\\">Log</button>
+    <button @click=\\"async (a) => log('hi')\\">Log</button
+    ><button @click=\\"async (event) => log(event)\\">Log</button
+    ><button @click=\\"async (event) => log(event)\\">Log</button>
   </div>
 </template>
 
@@ -8120,8 +9674,13 @@ export default defineComponent({
 
 exports[`Vue > svelte > Typescript Test > ifElse 1`] = `
 "<template>
-  <button v-if=\\"show\\" @click=\\"toggle($event)\\">Hide</button>
-  <button v-else @click=\\"toggle($event)\\">Show</button>
+  <template v-if=\\"show\\">
+    <button @click=\\"async (event) => toggle(event)\\">Hide</button>
+  </template>
+
+  <template v-else>
+    <button @click=\\"async (event) => toggle(event)\\">Show</button>
+  </template>
 </template>
 
 <script lang=\\"ts\\">
@@ -8146,7 +9705,7 @@ export default defineComponent({
 exports[`Vue > svelte > Typescript Test > imports 1`] = `
 "<template>
   <div>
-    <button type=\\"button\\" :disabled=\\"disabled\\"><slot /></button>
+    <Button type=\\"button\\" :disabled=\\"disabled\\"><slot /></Button>
   </div>
 </template>
 
@@ -8157,7 +9716,7 @@ import Button from \\"./Button.vue\\";
 
 export default defineComponent({
   name: \\"my-component\\",
-  components: { button: Button },
+  components: { Button: Button },
 
   data() {
     return { disabled: false };
@@ -8218,9 +9777,13 @@ export default defineComponent({
 exports[`Vue > svelte > Typescript Test > reactiveWithFn 1`] = `
 "<template>
   <div>
-    <input type=\\"number\\" @change=\\"a = $event.target.value\\" :value=\\"a\\" /><input
+    <input
       type=\\"number\\"
-      @change=\\"b = $event.target.value\\"
+      @change=\\"async (event) => (a = event.target.value)\\"
+      :value=\\"a\\"
+    /><input
+      type=\\"number\\"
+      @change=\\"async (event) => (b = event.target.value)\\"
       :value=\\"b\\"
     />
     Result: {{ result }}

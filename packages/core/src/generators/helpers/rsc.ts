@@ -1,7 +1,8 @@
+import { checkIsEvent } from '@/helpers/event-handlers';
 import { isMitosisNode } from '@/helpers/is-mitosis-node';
 import type { MitosisComponent } from '@/types/mitosis-component';
 import type { MitosisNode } from '@/types/mitosis-node';
-import traverse from 'traverse';
+import traverse from 'neotraverse/legacy';
 
 const checkIsNodeAMitosisComponent = (node: MitosisNode) =>
   node.name[0] === node.name[0].toUpperCase();
@@ -18,7 +19,7 @@ export const checkIfIsClientComponent = (json: MitosisComponent) => {
   let foundEventListener = false;
   traverse(json).forEach(function (node) {
     if (isMitosisNode(node) && !checkIsNodeAMitosisComponent(node)) {
-      if (Object.keys(node.bindings).filter((item) => item.startsWith('on')).length) {
+      if (Object.keys(node.bindings).filter((item) => checkIsEvent(item)).length) {
         foundEventListener = true;
         this.stop();
       }

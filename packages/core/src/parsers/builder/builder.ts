@@ -1,10 +1,11 @@
+import { hashCodeAsString } from '@/symbols/symbol-processor';
+import { MitosisComponent, MitosisState } from '@/types/mitosis-component';
 import * as babel from '@babel/core';
 import generate from '@babel/generator';
 import { BuilderContent, BuilderElement } from '@builder.io/sdk';
 import json5 from 'json5';
 import { mapKeys, merge, omit, omitBy, sortBy, upperFirst } from 'lodash';
-import traverse from 'traverse';
-import { MitosisComponent, MitosisState, hashCodeAsString } from '../..';
+import traverse from 'neotraverse/legacy';
 import { Size, sizeNames, sizes } from '../../constants/media-sizes';
 import { createSingleBinding } from '../../helpers/bindings';
 import { capitalize } from '../../helpers/capitalize';
@@ -13,7 +14,7 @@ import { createMitosisNode } from '../../helpers/create-mitosis-node';
 import { fastClone } from '../../helpers/fast-clone';
 import { isExpression, parseCode } from '../../helpers/parsers';
 import { Dictionary } from '../../helpers/typescript';
-import { Binding, MitosisNode } from '../../types/mitosis-node';
+import { Binding, BuilderLocalizedValue, MitosisNode } from '../../types/mitosis-node';
 import { parseJsx } from '../jsx';
 import { parseStateObjectToMitosisState } from '../jsx/state';
 import { mapBuilderContentStateToMitosisState } from './helpers';
@@ -78,7 +79,7 @@ const getActionBindingsFromBlock = (
   const actionKeys = Object.keys(actions);
   if (actionKeys.length) {
     for (const key of actionKeys) {
-      const value = actions[key];
+      let value = actions[key];
       // Skip empty values
       if (!value.trim()) {
         continue;
@@ -89,7 +90,16 @@ const getActionBindingsFromBlock = (
         continue;
       }
       const useKey = `on${upperFirst(key)}`;
-      bindings[useKey] = createSingleBinding({ code: `${wrapBindingIfNeeded(value, options)}` });
+      const asyncPrefix = `(async () =>`;
+      const asyncSuffix = ')()';
+      const isAsync = value.startsWith(asyncPrefix) && value.endsWith(asyncSuffix);
+      if (isAsync) {
+        value = value.slice(asyncPrefix.length, -asyncSuffix.length);
+      }
+      bindings[useKey] = createSingleBinding({
+        code: `${wrapBindingIfNeeded(value, options)}`,
+        async: isAsync ? true : undefined,
+      });
     }
   }
 
@@ -98,16 +108,56 @@ const getActionBindingsFromBlock = (
 
 const getStyleStringFromBlock = (block: BuilderElement, options: BuilderToMitosisOptions) => {
   const styleBindings: any = {};
+  const responsiveStyles: Record<string, Record<string, string>> = {};
   let styleString = '';
 
   if (block.bindings) {
     for (const key in block.bindings) {
-      if (key.includes('style') && key.includes('.')) {
+      if (!key.includes('.')) {
+        continue;
+      }
+      if (key.includes('style')) {
         const styleProperty = key.split('.')[1];
         styleBindings[styleProperty] = convertExportDefaultToReturn(
           block.code?.bindings?.[key] || block.bindings[key],
         );
+        /**
+         * responsiveStyles that are bound need to be merged into media queries.
+         * Example:
+         * responsiveStyles.large.color: "state.color"
+         * responsiveStyles.large.background: "state.background"
+         * Should get mapped to:
+         * @media (max-width: 1200px): {
+         *   color: state.color,
+         *   background: state.background
+         * }
+         */
+      } else if (key.includes('responsiveStyles')) {
+        const [_, size, prop] = key.split('.');
+        const mediaKey = `@media (max-width: ${sizes[size as Size].max}px)`;
+
+        /**
+         * The media query key has spaces/special characters so we need to ensure
+         * that the key is always a string otherwise there will be runtime errors.
+         */
+        const objKey = `"${mediaKey}"`;
+        responsiveStyles[objKey] = {
+          ...responsiveStyles[objKey],
+          [prop]: block.bindings[key],
+        };
       }
+    }
+
+    /**
+     * All binding values are strings, but we don't want to stringify the values
+     * within the style object otherwise the bindings will be evaluated as strings.
+     * As a result, do not use JSON.stringify here.
+     */
+    for (const key in responsiveStyles) {
+      const styles = Object.keys(responsiveStyles[key]);
+      const keyValues = styles.map((prop) => `${prop}: ${responsiveStyles[key][prop]}`);
+      const stringifiedObject = `{ ${keyValues.join(', ')} }`;
+      styleBindings[key] = stringifiedObject;
     }
   }
 
@@ -277,6 +327,7 @@ const componentMappers: {
     return createMitosisNode({
       name: 'Symbol',
       bindings: bindings,
+      meta: getMetaFromBlock(block, options),
     });
   },
   ...(!symbolBlocksAsChildren
@@ -311,6 +362,7 @@ const componentMappers: {
                 css: createSingleBinding({ code: JSON.stringify(css) }),
               }),
             },
+            meta: getMetaFromBlock(block, options),
             children: !blocks
               ? []
               : [
@@ -335,18 +387,70 @@ const componentMappers: {
       block.component?.options.columns?.map((col: any, index: number) =>
         createMitosisNode({
           name: 'Column',
-          bindings: {
-            width: { code: col.width?.toString() },
-          },
+          /**
+           * If width if undefined, do not create a binding otherwise its JSX will
+           * be <Column width={} /> which is not valid due to the empty expression.
+           */
+          ...(col.width != null && {
+            bindings: {
+              width: { code: col.width.toString() },
+            },
+          }),
           ...(col.link && {
             properties: {
               link: col.link,
             },
           }),
+          meta: getMetaFromBlock(block, options),
           children: col.blocks.map((col: any) => builderElementToMitosisNode(col, options)),
         }),
       ) || [];
 
+    return node;
+  },
+  PersonalizationContainer(block, options) {
+    const node = builderElementToMitosisNode(block, options, {
+      skipMapper: true,
+    });
+
+    delete node.bindings.variants;
+    delete node.properties.variants;
+
+    const newChildren: MitosisNode[] =
+      block.component?.options.variants?.map((variant: any) => {
+        const variantNode = createMitosisNode({
+          name: 'Variant',
+          properties: {
+            name: variant.name,
+            startDate: variant.startDate,
+            endDate: variant.endDate,
+          },
+          meta: getMetaFromBlock(block, options),
+          children: variant.blocks.map((col: any) => builderElementToMitosisNode(col, options)),
+        });
+        const queryOptions = variant.query as any[];
+        if (Array.isArray(queryOptions)) {
+          variantNode.bindings.query = createSingleBinding({
+            code: JSON.stringify(queryOptions.map((q) => omit(q, '@type'))),
+          });
+        } else if (queryOptions) {
+          variantNode.bindings.query = createSingleBinding({
+            code: JSON.stringify(omit(queryOptions, '@type')),
+          });
+        }
+        return variantNode;
+      }) || [];
+
+    const defaultVariant = createMitosisNode({
+      name: 'Variant',
+      properties: {
+        default: '',
+      },
+      children: node.children,
+    });
+    newChildren.push(defaultVariant);
+
+    node.children = newChildren;
     return node;
   },
   'Shopify:For': (block, options) => {
@@ -359,19 +463,22 @@ const componentMappers: {
       },
       scope: {
         forName: block.component!.options!.repeat!.itemName,
-        indexName: '$index',
       },
-      children: (block.children || []).map((child) => builderElementToMitosisNode(child, options)),
+      meta: getMetaFromBlock(block, options),
+      children: (block.children || []).map((child) =>
+        builderElementToMitosisNode(updateBindings(child, 'state.$index', 'index'), options),
+      ),
     });
   },
   Text: (block, options) => {
     let css = getCssFromBlock(block);
     const styleString = getStyleStringFromBlock(block, options);
     const actionBindings = getActionBindingsFromBlock(block, options);
+    const localizedValues: MitosisNode['localizedValues'] = {};
 
     const blockBindings: MitosisNode['bindings'] = {
-      ...mapBuilderBindingsToMitosisBindingWithCode(block.code?.bindings),
       ...mapBuilderBindingsToMitosisBindingWithCode(block.bindings),
+      ...mapBuilderBindingsToMitosisBindingWithCode(block.code?.bindings),
     };
 
     const bindings: any = {
@@ -395,6 +502,17 @@ const componentMappers: {
       }),
     };
     const properties = { ...block.properties };
+    for (const key in properties) {
+      if (
+        typeof properties[key] === 'object' &&
+        properties[key] !== null &&
+        (properties[key] as any)['@type'] === '@builder.io/core:LocalizedValue'
+      ) {
+        const localizedValue = properties[key] as unknown as BuilderLocalizedValue;
+        localizedValues[`properties.${key}`] = localizedValue;
+        properties[key] = localizedValue.Default;
+      }
+    }
     if (options.includeBuilderExtras && block.id) properties['builder-id'] = block.id;
     if (block.class) properties['class'] = block.class;
 
@@ -409,16 +527,33 @@ const componentMappers: {
         code: wrapBindingIfNeeded(componentOptionsText.code, options),
       });
     }
-    const text = block.component!.options.text;
-    const innerProperties = {
-      [options.preserveTextBlocks ? 'innerHTML' : '_text']: text,
-    };
+    let text = block.component!.options?.text || '';
+    if (
+      typeof text === 'object' &&
+      text !== null &&
+      text['@type'] === '@builder.io/core:LocalizedValue'
+    ) {
+      localizedValues['component.options.text'] = block.component!.options?.text;
+      text = text.Default;
+    }
+
+    // Builder uses {{}} for bindings, but Mitosis expects {} so we need to convert
+    const innerProperties = innerBindings._text
+      ? {}
+      : {
+          [options.preserveTextBlocks ? 'innerHTML' : '_text']: text.replace(
+            /\{\{(.*?)\}\}/g,
+            '{$1}',
+          ),
+        };
 
     if (options.preserveTextBlocks) {
       return createMitosisNode({
         name: block.tagName || 'div',
         bindings,
         properties,
+        meta: getMetaFromBlock(block, options),
+        ...(Object.keys(localizedValues).length && { localizedValues }),
         children: [
           createMitosisNode({
             bindings: innerBindings,
@@ -426,6 +561,7 @@ const componentMappers: {
               ...innerProperties,
               class: 'builder-text',
             },
+            ...(Object.keys(localizedValues).length && { localizedValues }),
           }),
         ],
       });
@@ -455,10 +591,12 @@ const componentMappers: {
         name: finalTagname,
         bindings,
         properties: finalProperties,
+        meta: getMetaFromBlock(block, options),
         children: [
           createMitosisNode({
             bindings: innerBindings,
             properties: innerProperties,
+            ...(Object.keys(localizedValues).length && { localizedValues }),
           }),
         ],
       });
@@ -475,6 +613,8 @@ const componentMappers: {
         ...bindings,
         ...innerBindings,
       },
+      meta: getMetaFromBlock(block, options),
+      ...(Object.keys(localizedValues).length && { localizedValues }),
     });
   },
 };
@@ -483,6 +623,8 @@ type BuilderToMitosisOptions = {
   context?: { [key: string]: any };
   includeBuilderExtras?: boolean;
   preserveTextBlocks?: boolean;
+  includeSpecialBindings?: boolean;
+  includeMeta?: boolean;
 };
 
 export const builderElementToMitosisNode = (
@@ -490,6 +632,9 @@ export const builderElementToMitosisNode = (
   options: BuilderToMitosisOptions,
   _internalOptions: InternalOptions = {},
 ): MitosisNode => {
+  const { includeSpecialBindings = true } = options;
+  const localizedValues: MitosisNode['localizedValues'] = {};
+
   if (block.component?.name === 'Core:Fragment') {
     block.component.name = 'Fragment';
   }
@@ -507,9 +652,12 @@ export const builderElementToMitosisNode = (
         },
         scope: {
           forName: block.repeat?.itemName || 'item',
-          indexName: '$index',
         },
-        children: block.children?.map((child) => builderElementToMitosisNode(child, options)) || [],
+        meta: getMetaFromBlock(block, options),
+        children:
+          block.children?.map((child) =>
+            builderElementToMitosisNode(updateBindings(child, 'state.$index', 'index'), options),
+          ) || [],
       });
     } else {
       const useBlock =
@@ -527,6 +675,7 @@ export const builderElementToMitosisNode = (
           forName: block.repeat?.itemName || 'item',
           indexName: '$index',
         },
+        meta: getMetaFromBlock(block, options),
         children: [builderElementToMitosisNode(omit(useBlock, 'repeat'), options)],
       });
     }
@@ -547,12 +696,14 @@ export const builderElementToMitosisNode = (
       return createMitosisNode({
         name: 'Show',
         bindings: { when: createSingleBinding({ code }) },
+        meta: getMetaFromBlock(block, options),
         children: block.children?.map((child) => builderElementToMitosisNode(child, options)) || [],
       });
     } else {
       return createMitosisNode({
         name: 'Show',
         bindings: { when: createSingleBinding({ code }) },
+        meta: getMetaFromBlock(block, options),
         children: [
           builderElementToMitosisNode(
             {
@@ -576,8 +727,9 @@ export const builderElementToMitosisNode = (
     return mapper(block, options);
   }
 
-  const bindings: any = {};
+  const bindings: MitosisNode['bindings'] = {};
   const children: MitosisNode[] = [];
+  const slots: MitosisNode['slots'] = {};
 
   if (blockBindings) {
     for (const key in blockBindings) {
@@ -586,9 +738,9 @@ export const builderElementToMitosisNode = (
       }
       const useKey = key.replace(/^(component\.)?options\./, '');
       if (!useKey.includes('.')) {
-        bindings[useKey] = {
+        bindings[useKey] = createSingleBinding({
           code: (blockBindings[key] as any).code || blockBindings[key],
-        };
+        });
       } else if (useKey.includes('style') && useKey.includes('.')) {
         const styleProperty = useKey.split('.')[1];
         // TODO: add me in
@@ -606,13 +758,34 @@ export const builderElementToMitosisNode = (
     }),
     ...(options.includeBuilderExtras && getBuilderPropsForSymbol(block)),
   };
+  for (const key in properties) {
+    if (
+      typeof properties[key] === 'object' &&
+      properties[key] !== null &&
+      (properties[key] as any)['@type'] === '@builder.io/core:LocalizedValue'
+    ) {
+      const localizedValue = properties[key] as unknown as BuilderLocalizedValue;
+      localizedValues[`properties.${key}`] = localizedValue;
+      properties[key] = localizedValue.Default;
+    }
+  }
 
   if (block.layerName) {
     properties.$name = block.layerName;
   }
 
-  if ((block as any).linkUrl) {
-    properties.href = (block as any).linkUrl;
+  const linkUrl = (block as any).linkUrl;
+  if (linkUrl) {
+    if (
+      typeof linkUrl === 'object' &&
+      linkUrl !== null &&
+      linkUrl['@type'] === '@builder.io/core:LocalizedValue'
+    ) {
+      properties.href = linkUrl.Default;
+      localizedValues['linkUrl'] = linkUrl;
+    } else {
+      properties.href = linkUrl;
+    }
   }
 
   if (block.component?.options) {
@@ -620,8 +793,26 @@ export const builderElementToMitosisNode = (
       const value = block.component.options[key];
       const valueIsArrayOfBuilderElements = Array.isArray(value) && value.every(isBuilderElement);
 
-      if (typeof value === 'string') {
+      const transformBldrElementToMitosisNode = (item: BuilderElement) => {
+        const node = builderElementToMitosisNode(item, {
+          ...options,
+          includeSpecialBindings: false,
+        });
+
+        return node;
+      };
+
+      if (isBuilderElement(value)) {
+        slots[key] = [transformBldrElementToMitosisNode(value)];
+      } else if (typeof value === 'string') {
         properties[key] = value;
+      } else if (
+        typeof value === 'object' &&
+        value !== null &&
+        value['@type'] === '@builder.io/core:LocalizedValue'
+      ) {
+        properties[key] = value.Default;
+        localizedValues[`component.options.${key}`] = value;
       } else if (valueIsArrayOfBuilderElements) {
         const childrenElements = value
           .filter((item) => {
@@ -630,18 +821,11 @@ export const builderElementToMitosisNode = (
             }
             return true;
           })
-          .map((item) => builderElementToMitosisNode(item, options));
-        children.push({
-          '@type': '@builder.io/mitosis/node',
-          name: 'Slot',
-          meta: {},
-          scope: {},
-          bindings: {},
-          properties: { name: key },
-          children: childrenElements,
-        });
+          .map(transformBldrElementToMitosisNode);
+
+        slots[key] = childrenElements;
       } else {
-        bindings[key] = { code: json5.stringify(value) };
+        bindings[key] = createSingleBinding({ code: json5.stringify(value) });
       }
     }
   }
@@ -657,7 +841,7 @@ export const builderElementToMitosisNode = (
     if (binding.startsWith('component.options') || binding.startsWith('options')) {
       const value = blockBindings[binding];
       const useKey = binding.replace(/^(component\.options\.|options\.)/, '');
-      bindings[useKey] = { code: value };
+      bindings[useKey] = createSingleBinding({ code: value });
     }
   }
 
@@ -667,7 +851,7 @@ export const builderElementToMitosisNode = (
       block.tagName ||
       ((block as any).linkUrl ? 'a' : 'div'),
     properties: {
-      ...(block.component && { $tagName: block.tagName }),
+      ...(block.component && includeSpecialBindings && { $tagName: block.tagName }),
       ...(block.class && { class: block.class }),
       ...properties,
     },
@@ -675,13 +859,18 @@ export const builderElementToMitosisNode = (
       ...bindings,
       ...actionBindings,
       ...(styleString && {
-        style: { code: styleString },
+        style: createSingleBinding({ code: styleString }),
       }),
       ...(css &&
         Object.keys(css).length && {
-          css: { code: JSON.stringify(css) },
+          css: createSingleBinding({ code: JSON.stringify(css) }),
         }),
     },
+    slots: {
+      ...slots,
+    },
+    meta: getMetaFromBlock(block, options),
+    ...(Object.keys(localizedValues).length && { localizedValues }),
   });
 
   // Has single text node child
@@ -736,16 +925,26 @@ const getBuilderPropsForSymbol = (
   return undefined;
 };
 
+export const getMetaFromBlock = (block: BuilderElement, options: BuilderToMitosisOptions) => {
+  const { includeMeta = false } = options;
+  return includeMeta
+    ? {
+        'builder-id': block.id,
+        ...block.meta,
+      }
+    : {};
+};
+
 const getHooks = (content: BuilderContent) => {
   const code = convertExportDefaultToReturn(content.data?.tsCode || content.data?.jsCode || '');
   try {
     return parseJsx(`
     export default function TemporaryComponent() {
       ${
-        // Mitosis parser looks for useState to be a variable assignment,
+        // Mitosis parser looks for useStore to be a variable assignment,
         // but in Builder that's not how it works. For now do a replace to
         // easily resuse the same parsing code as this is the only difference
-        code.replace(`useState(`, `var state = useState(`)
+        code.replace(`useStore(`, `var state = useStore(`)
       }
     }`);
   } catch (err) {
@@ -755,7 +954,7 @@ const getHooks = (content: BuilderContent) => {
 };
 
 /**
- * Take Builder custom jsCode and extract the contents of the useState hook
+ * Take Builder custom jsCode and extract the contents of the useStore hook
  * and return it as a JS object along with the inputted code with the hook
  * code extracted
  */
@@ -771,9 +970,9 @@ export function extractStateHook(code: string): {
     const statement = body[i];
     if (types.isExpressionStatement(statement)) {
       const { expression } = statement;
-      // Check for useState
+      // Check for useStore
       if (types.isCallExpression(expression)) {
-        if (types.isIdentifier(expression.callee) && expression.callee.name === 'useState') {
+        if (types.isIdentifier(expression.callee) && expression.callee.name === 'useStore') {
           const arg = expression.arguments[0];
           if (types.isObjectExpression(arg)) {
             state = parseStateObjectToMitosisState(arg);
@@ -834,6 +1033,29 @@ export function convertExportDefaultToReturn(code: string) {
     }
   }
 }
+
+const updateBindings = (node: BuilderElement, from: string, to: string) => {
+  traverse(node).forEach(function (item) {
+    if (isBuilderElement(item)) {
+      if (item.bindings) {
+        for (const [key, value] of Object.entries(item.bindings)) {
+          if (value?.includes(from)) {
+            item.bindings[key] = value.replaceAll(from, to);
+          }
+        }
+      }
+      if (item.actions) {
+        for (const [key, value] of Object.entries(item.actions)) {
+          if (value?.includes(from)) {
+            item.actions[key] = value.replaceAll(from, to);
+          }
+        }
+      }
+    }
+  });
+
+  return node;
+};
 
 // TODO: maybe this should be part of the builder -> Mitosis part
 function extractSymbols(json: BuilderContent) {
@@ -950,8 +1172,10 @@ const builderContentPartToMitosisComponent = (
       useMetadata: {
         httpRequests: builderContent.data?.httpRequests,
       },
+      // cmp.meta.cssCode exists for backwards compatibility, prefer cmp.style
       ...(builderContent.data?.cssCode && { cssCode: builderContent.data.cssCode }),
     },
+    ...(builderContent.data?.cssCode && { style: builderContent.data?.cssCode }),
     inputs: builderContent.data?.inputs?.map((input) => ({
       name: input.name,
       defaultValue: input.defaultValue,

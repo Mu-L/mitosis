@@ -1,39 +1,22 @@
 import {
+  BaseTranspilerOptions,
+  MitosisComponent,
+  MitosisConfig,
+  MitosisPlugin,
+  OutputFiles,
+  ParseMitosisOptions,
+  Target,
+  TargetContext,
   checkIsMitosisComponentFilePath,
   checkIsSvelteComponentFilePath,
   checkShouldOutputTypeScript,
-  componentToAlpine,
-  componentToAngular,
-  componentToCustomElement,
-  componentToHtml,
-  componentToLiquid,
-  componentToLit,
-  componentToMarko,
-  componentToMitosis,
-  componentToPreact,
-  componentToQwik,
-  componentToReact,
-  componentToReactNative,
-  componentToRsc,
-  componentToSolid,
-  componentToStencil,
-  componentToSvelte,
-  componentToSwift,
-  componentToTaro,
-  componentToTemplate,
-  componentToVue2,
-  componentToVue3,
   createTypescriptProject,
   mapSignalTypeInTSFile,
-  MitosisComponent,
-  MitosisConfig,
   parseJsx,
-  ParseMitosisOptions,
   parseSvelte,
   removeMitosisImport,
   renameComponentFile,
-  Target,
-  TranspilerGenerator,
+  targets,
 } from '@builder.io/mitosis';
 import debug from 'debug';
 import { flow, pipe } from 'fp-ts/lib/function';
@@ -52,14 +35,15 @@ const cwd = process.cwd();
  */
 const getTargetPath = ({ target }: { target: Target }): string => {
   switch (target) {
-    case 'vue2':
-      return 'vue/vue2';
-    case 'vue':
-    case 'vue3':
-      return 'vue/vue3';
     default:
       return kebabCase(target);
   }
+};
+
+export const sortPlugins = (plugins?: MitosisPlugin[]): MitosisPlugin[] => {
+  if (!plugins) return [];
+
+  return plugins.sort((a: MitosisPlugin, b: MitosisPlugin) => (a().order || 0) - (b().order || 0));
 };
 
 const DEFAULT_CONFIG = {
@@ -79,13 +63,14 @@ const getOptions = (config?: MitosisConfig): MitosisConfig => {
       ...DEFAULT_CONFIG.options,
       ...config?.options,
     },
+    generators: Object.assign(targets, config?.generators),
   };
 
-  /**
-   * Apply common options to all targets
-   */
-  if (newConfig.commonOptions) {
-    for (const target of newConfig.targets || []) {
+  for (const target of newConfig.targets || []) {
+    /**
+     * Apply common options to all targets
+     */
+    if (newConfig.commonOptions) {
       newConfig.options[target] = {
         ...newConfig.commonOptions,
         ...newConfig.options[target],
@@ -95,6 +80,9 @@ const getOptions = (config?: MitosisConfig): MitosisConfig => {
         ],
       } as any;
     }
+    const targetConfig: any = newConfig.options[target];
+    const plugins: MitosisPlugin[] | undefined = targetConfig?.plugins;
+    newConfig.options[target] = { ...targetConfig, plugins: sortPlugins(plugins) };
   }
 
   return newConfig;
@@ -140,7 +128,9 @@ const getRequiredParsers = (
 ): { javascript: boolean; typescript: boolean } => {
   const targetsOptions = Object.values(options.options);
 
-  const targetsRequiringTypeScript = targetsOptions.filter((option) => option.typescript).length;
+  const targetsRequiringTypeScript = targetsOptions.filter(
+    (option: BaseTranspilerOptions) => option.typescript,
+  ).length;
   const needsTypeScript = targetsRequiringTypeScript > 0;
 
   /**
@@ -261,12 +251,6 @@ const getMitosisComponentJSONs = async (options: MitosisConfig): Promise<ParsedM
   );
 };
 
-interface TargetContext {
-  target: Target;
-  generator: TranspilerGenerator<Required<MitosisConfig['options']>[Target]>;
-  outputPath: string;
-}
-
 interface TargetContextWithConfig extends TargetContext {
   options: MitosisConfig;
 }
@@ -275,7 +259,7 @@ const getTargetContexts = (options: MitosisConfig) =>
   options.targets.map(
     (target): TargetContext => ({
       target,
-      generator: getGeneratorForTarget({ target }) as any,
+      generator: options.generators?.[target] as any,
       outputPath: options.getTargetPath({ target }),
     }),
   );
@@ -285,6 +269,26 @@ const buildAndOutputNonComponentFiles = async (targetContext: TargetContextWithC
   return await outputNonComponentFiles({ ...targetContext, files });
 };
 
+export function runBuildPlugins(type: 'pre' | 'post', plugins: MitosisPlugin[]) {
+  const debugTarget = debug(`mitosis:plugin:build:${type}`);
+
+  return async (
+    targetContext: TargetContext,
+    files?: {
+      componentFiles: OutputFiles[];
+      nonComponentFiles: OutputFiles[];
+    },
+  ) => {
+    for (let pluginFn of plugins) {
+      const plugin = pluginFn();
+      if (!plugin.build || !plugin.build[type]) continue;
+      debugTarget(`before run ${plugin.name ?? 'build'} ${type} plugin...`);
+      await plugin.build[type]?.(targetContext, files);
+      debugTarget(`run ${plugin.name ?? 'build'} ${type}  plugin done`);
+    }
+  };
+}
+
 export async function build(config?: MitosisConfig) {
   // merge default options
   const options = getOptions(config);
@@ -292,10 +296,12 @@ export async function build(config?: MitosisConfig) {
   // get all mitosis component JSONs
   const mitosisComponents = await getMitosisComponentJSONs(options);
 
-  const targetContexts = getTargetContexts(options);
+  const targetContexts: TargetContext[] = getTargetContexts(options);
 
   await Promise.all(
     targetContexts.map(async (targetContext) => {
+      const plugins: MitosisPlugin[] = options?.options[targetContext.target]?.plugins ?? [];
+      await runBuildPlugins('pre', plugins)(targetContext);
       // clean output directory
       await clean(options, targetContext.target);
       // clone mitosis JSONs for each target, so we can modify them in each generator without affecting future runs.
@@ -310,65 +316,15 @@ export async function build(config?: MitosisConfig) {
       console.info(
         `Mitosis: ${targetContext.target}: generated ${x[1].length} components, ${x[0].length} regular files.`,
       );
+      await runBuildPlugins('post', plugins)(targetContext, {
+        componentFiles: x[1],
+        nonComponentFiles: x[0],
+      });
     }),
   );
 
   console.info('Mitosis: generation completed.');
 }
-
-const getGeneratorForTarget = ({ target }: { target: Target }) => {
-  switch (target) {
-    case 'alpine':
-      return componentToAlpine;
-    case 'customElement':
-      return componentToCustomElement;
-    case 'html':
-      return componentToHtml;
-    case 'reactNative':
-      return componentToReactNative;
-    case 'vue2':
-      return componentToVue2;
-    case 'vue':
-      console.log('Targeting Vue: defaulting to vue v3');
-      return componentToVue3;
-    case 'vue3':
-      return componentToVue3;
-    case 'angular':
-      return componentToAngular;
-    case 'react':
-      return componentToReact;
-    case 'swift':
-      return componentToSwift;
-    case 'solid':
-      return componentToSolid;
-    case 'webcomponent':
-      return componentToCustomElement;
-    case 'svelte':
-      return componentToSvelte;
-    case 'qwik':
-      return componentToQwik;
-    case 'marko':
-      return componentToMarko;
-    case 'preact':
-      return componentToPreact;
-    case 'rsc':
-      return componentToRsc;
-    case 'lit':
-      return componentToLit;
-    case 'mitosis':
-      return componentToMitosis;
-    case 'stencil':
-      return componentToStencil;
-    case 'template':
-      return componentToTemplate;
-    case 'liquid':
-      return componentToLiquid;
-    case 'taro':
-      return componentToTaro;
-    default:
-      throw new Error('CLI does not yet support target: ' + target);
-  }
-};
 
 /**
  * Transpiles and outputs Mitosis component files.
@@ -379,7 +335,7 @@ async function buildAndOutputComponentFiles({
   options,
   generator,
   outputPath,
-}: TargetContextWithConfig & { files: ParsedMitosisJson[] }) {
+}: TargetContextWithConfig & { files: ParsedMitosisJson[] }): Promise<OutputFiles[]> {
   const debugTarget = debug(`mitosis:${target}`);
   const shouldOutputTypescript = checkShouldOutputTypeScript({ options, target });
 
@@ -398,6 +354,7 @@ async function buildAndOutputComponentFiles({
       path: overrideFilePath,
       target,
     });
+    const outputDir = `${options.dest}/${outputPath}`;
 
     debugTarget(`transpiling ${path}...`);
     let transpiled = '';
@@ -406,7 +363,14 @@ async function buildAndOutputComponentFiles({
       debugTarget(`override exists for ${path}: ${!!overrideFile}`);
     }
     try {
-      const component = shouldOutputTypescript ? typescriptMitosisJson : javascriptMitosisJson;
+      const component: MitosisComponent = shouldOutputTypescript
+        ? typescriptMitosisJson
+        : javascriptMitosisJson;
+
+      /**
+       * This will allow plugins to work additional data
+       */
+      component.pluginData = { outputFilePath, outputDir, path, target };
 
       transpiled = overrideFile ?? generator(options.options[target])({ path, component });
       debugTarget(`Success: transpiled ${path}. Output length: ${transpiled.length}`);
@@ -418,9 +382,8 @@ async function buildAndOutputComponentFiles({
 
     transpiled = transformImports({ target, options })(transpiled);
 
-    const outputDir = `${options.dest}/${outputPath}`;
-
     await outputFile(`${outputDir}/${outputFilePath}`, transpiled);
+    return { outputDir, outputFilePath };
   });
   return await Promise.all(output);
 }
@@ -450,15 +413,14 @@ const outputNonComponentFiles = async ({
 }: TargetContext & {
   files: { path: string; output: string }[];
   options: MitosisConfig;
-}) => {
-  const folderPath = `${options.dest}/${outputPath}`;
+}): Promise<OutputFiles[]> => {
+  const outputDir = `${options.dest}/${outputPath}`;
   return await Promise.all(
-    files.map(({ path, output }) =>
-      outputFile(
-        `${folderPath}/${getNonComponentOutputFileName({ options, path, target })}`,
-        output,
-      ),
-    ),
+    files.map(async ({ path, output }) => {
+      const outputFilePath = getNonComponentOutputFileName({ options, path, target });
+      await outputFile(`${outputDir}/${outputFilePath}`, output);
+      return { outputDir, outputFilePath };
+    }),
   );
 };
 

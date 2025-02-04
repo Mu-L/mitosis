@@ -88,7 +88,7 @@ function MyBasicComponent(props) {
           value={DEFAULT_VALUES.name || name}
           onChange={(myEvent) => setName(myEvent.target.value)}
         />
-        Hello! I can run in React, Vue, Solid, or Liquid!
+        Hello! I can run in React, Vue, Solid, or Liquid! &gt;
       </div>
       <style jsx>{\`
         .div {
@@ -106,7 +106,7 @@ export default MyBasicComponent;
 exports[`Preact > jsx > Javascript Test > Basic Context 1`] = `
 "/** @jsx h */
 import { h, Fragment } from \\"preact\\";
-import { useState, useContext, useEffect } from \\"preact/hooks\\";
+import { useState, useContext, useRef, useEffect } from \\"preact/hooks\\";
 import { Injector, MyService, createInjector } from \\"@dummy/injection-js\\";
 
 function MyBasicComponent(props) {
@@ -119,10 +119,12 @@ function MyBasicComponent(props) {
 
   const myService = useContext(MyService);
 
-  useEffect(() => {
+  const hasInitialized = useRef(false);
+  if (!hasInitialized.current) {
     const hi = myService.method(\\"hi\\");
     console.log(hi);
-  }, []);
+    hasInitialized.current = true;
+  }
 
   useEffect(() => {
     const bye = myService.method(\\"hi\\");
@@ -147,16 +149,18 @@ export default MyBasicComponent;
 exports[`Preact > jsx > Javascript Test > Basic OnMount Update 1`] = `
 "/** @jsx h */
 import { h, Fragment } from \\"preact\\";
-import { useState, useEffect } from \\"preact/hooks\\";
+import { useState, useRef, useEffect } from \\"preact/hooks\\";
 
 function MyBasicOnMountUpdateComponent(props) {
   const [name, setName] = useState(() => \\"PatrickJS\\");
 
   const [names, setNames] = useState(() => [\\"Steve\\", \\"PatrickJS\\"]);
 
-  useEffect(() => {
+  const hasInitialized = useRef(false);
+  if (!hasInitialized.current) {
     setName(\\"PatrickJS onInit\\" + props.hi);
-  }, []);
+    hasInitialized.current = true;
+  }
 
   useEffect(() => {
     setName(\\"PatrickJS onMount\\" + props.bye);
@@ -190,7 +194,12 @@ export default MyBasicOutputsComponent;
 `;
 
 exports[`Preact > jsx > Javascript Test > Basic Outputs Meta 1`] = `
-"/** @jsx h */
+"/**
+          useMetadata:
+          {\\"outputs\\":[\\"onMessage\\",\\"onEvent\\"],\\"baz\\":\\"metadata inside component\\"}
+          */
+
+/** @jsx h */
 import { h, Fragment } from \\"preact\\";
 import { useState, useEffect } from \\"preact/hooks\\";
 
@@ -214,7 +223,7 @@ exports[`Preact > jsx > Javascript Test > BasicAttribute 1`] = `
 import { h, Fragment } from \\"preact\\";
 
 function MyComponent(props) {
-  return <input autoCapitalize=\\"on\\" autoComplete=\\"on\\" spellCheck={true} />;
+  return <input autoCapitalize=\\"on\\" autoComplete=\\"on\\" spellCheck />;
 }
 
 export default MyComponent;
@@ -235,8 +244,8 @@ function MyBooleanAttribute(props) {
           {props.type}
         </Fragment>
       ) : null}
-      <MyBooleanAttributeComponent toggle={true} />
-      <MyBooleanAttributeComponent toggle={true} />
+      <MyBooleanAttributeComponent toggle />
+      <MyBooleanAttributeComponent toggle />
       <MyBooleanAttributeComponent list={null} />
     </div>
   );
@@ -321,7 +330,7 @@ function MyBasicRefComponent(props) {
 
   function onBlur() {
     // Maintain focus
-    inputRef.current.focus();
+    inputRef.current?.focus();
   }
 
   function lowerCaseName() {
@@ -381,7 +390,7 @@ function MyBasicRefAssignmentComponent(props) {
 
   return (
     <div>
-      <button onClick={(evt) => handlerClick(evt)}>Click</button>
+      <button onClick={async (evt) => await handlerClick(evt)}>Click</button>
     </div>
   );
 }
@@ -1207,6 +1216,28 @@ export default Stepper;
 "
 `;
 
+exports[`Preact > jsx > Javascript Test > NestedStore 1`] = `
+"/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+import { useState } from \\"preact/hooks\\";
+
+function NestedStore(props) {
+  const [_id, set_id] = useState(() => \\"abc\\");
+
+  const [_messageId, set_messageId] = useState(() => _id + \\"-message\\");
+
+  return (
+    <div id={_id}>
+      Test
+      <p id={_messageId}>Message</p>
+    </div>
+  );
+}
+
+export default NestedStore;
+"
+`;
+
 exports[`Preact > jsx > Javascript Test > RawText 1`] = `
 "/** @jsx h */
 import { h, Fragment } from \\"preact\\";
@@ -1339,6 +1370,7 @@ import { h, Fragment } from \\"preact\\";
 function SlotCode(props) {
   return (
     <div>
+      <>{props.myAwesomeSlot}</>
       <>{props.top}</>
       <>{props.left || \\"Default left\\"}</>
       <>{props.children || \\"Default Child\\"}</>
@@ -1399,8 +1431,8 @@ function SmileReviews(props) {
             />
             <button
               className=\\"button\\"
-              onClick={(event) => {
-                event.preventDefault();
+              onClick={(ev) => {
+                ev.preventDefault();
                 setShowReviewPrompt(false);
               }}
             >
@@ -1449,6 +1481,61 @@ function SmileReviews(props) {
 }
 
 export default SmileReviews;
+"
+`;
+
+exports[`Preact > jsx > Javascript Test > StoreComment 1`] = `
+"/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+import { useState } from \\"preact/hooks\\";
+
+function StringLiteralStore(props) {
+  const [foo, setFoo] = useState(() => true);
+
+  function bar() {}
+
+  return <Fragment>{foo}</Fragment>;
+}
+
+export default StringLiteralStore;
+"
+`;
+
+exports[`Preact > jsx > Javascript Test > StoreShadowVars 1`] = `
+"/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+import { useState } from \\"preact/hooks\\";
+
+function MyComponent(props) {
+  const [errors, setErrors] = useState(() => ({}));
+
+  function foo(errors) {
+    return errors;
+  }
+
+  return <Fragment>{foo(errors)}</Fragment>;
+}
+
+export default MyComponent;
+"
+`;
+
+exports[`Preact > jsx > Javascript Test > StoreWithState 1`] = `
+"/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+import { useState } from \\"preact/hooks\\";
+
+function MyComponent(props) {
+  const [foo, setFoo] = useState(() => false);
+
+  function bar() {
+    return foo;
+  }
+
+  return <Fragment>{bar()}</Fragment>;
+}
+
+export default MyComponent;
 "
 `;
 
@@ -1518,6 +1605,37 @@ export default Textarea;
 "
 `;
 
+exports[`Preact > jsx > Javascript Test > UseValueAndFnFromStore 1`] = `
+"/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+import { useState, useEffect } from \\"preact/hooks\\";
+
+function UseValueAndFnFromStore(props) {
+  const [_id, set_id] = useState(() => \\"abc\\");
+
+  const [_active, set_active] = useState(() => false);
+
+  function _do(id) {
+    set_active(!!id);
+
+    if (props.onChange) {
+      props.onChange(_active);
+    }
+  }
+
+  useEffect(() => {
+    if (_do) {
+      _do(_id);
+    }
+  });
+
+  return <div>Test</div>;
+}
+
+export default UseValueAndFnFromStore;
+"
+`;
+
 exports[`Preact > jsx > Javascript Test > Video 1`] = `
 "/** @jsx h */
 import { h, Fragment } from \\"preact\\";
@@ -1571,6 +1689,41 @@ function MyComponent(props) {
 }
 
 export default MyComponent;
+"
+`;
+
+exports[`Preact > jsx > Javascript Test > basicForFragment 1`] = `
+"/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+import { useState } from \\"preact/hooks\\";
+
+function BasicForFragment(props) {
+  const [id, setId] = useState(() => \\"xyz\\");
+
+  return (
+    <div>
+      {[\\"a\\", \\"b\\", \\"c\\"]?.map((option) => (
+        <Fragment key={\`key-\${option}\`}>
+          <div>{option}</div>
+        </Fragment>
+      ))}
+      {[\\"a\\", \\"b\\", \\"c\\"]?.map((option) => (
+        <Fragment key={\`\${id}-\${option}\`}>
+          <div>{option}</div>
+        </Fragment>
+      ))}
+      <select>
+        {[\\"d\\", \\"e\\", \\"f\\"]?.map((option) => (
+          <option key={\`\${id}-\${option}\`} value={option}>
+            {option}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+}
+
+export default BasicForFragment;
 "
 `;
 
@@ -1641,7 +1794,12 @@ export default MyBasicForwardRefComponent;
 `;
 
 exports[`Preact > jsx > Javascript Test > basicForwardRefMetadata 1`] = `
-"/** @jsx h */
+"/**
+          useMetadata:
+          {\\"forwardRef\\":\\"inputRef\\"}
+          */
+
+/** @jsx h */
 import { h, Fragment } from \\"preact\\";
 import { useState } from \\"preact/hooks\\";
 
@@ -1703,15 +1861,65 @@ export default MyBasicOnUpdateReturnComponent;
 "
 `;
 
+exports[`Preact > jsx > Javascript Test > basicRefAttributePassing 1`] = `
+"/**
+          useMetadata:
+          {\\"attributePassing\\":{\\"enabled\\":true}}
+          */
+
+/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+import { useRef } from \\"preact/hooks\\";
+
+function BasicRefAttributePassingComponent(props) {
+  const buttonRef = useRef(null);
+
+  return <button ref={buttonRef}>Attribute Passing</button>;
+}
+
+export default BasicRefAttributePassingComponent;
+"
+`;
+
+exports[`Preact > jsx > Javascript Test > basicRefAttributePassingCustomRef 1`] = `
+"/**
+          useMetadata:
+          {\\"attributePassing\\":{\\"enabled\\":true,\\"customRef\\":\\"buttonRef\\"}}
+          */
+
+/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+import { useRef } from \\"preact/hooks\\";
+
+function BasicRefAttributePassingCustomRefComponent(props) {
+  const buttonRef = useRef(null);
+
+  return (
+    <div>
+      <button ref={buttonRef}>Attribute Passing</button>
+    </div>
+  );
+}
+
+export default BasicRefAttributePassingCustomRefComponent;
+"
+`;
+
 exports[`Preact > jsx > Javascript Test > class + ClassName + css 1`] = `
 "/** @jsx h */
 import { h, Fragment } from \\"preact\\";
+import MyComp from \\"./my-component\\";
 
 function MyBasicComponent(props) {
   return (
     <Fragment>
-      <div className=\\"test2 test div\\">
-        Hello! I can run in React, Vue, Solid, or Liquid!
+      <div>
+        <MyComp className=\\"test\\" className=\\"test2\\">
+          Hello! I can run in React, Vue, Solid, or Liquid!
+        </MyComp>
+        <div className=\\"test2 test div\\">
+          Hello! I can run in React, Vue, Solid, or Liquid!
+        </div>
       </div>
       <style jsx>{\`
         .div {
@@ -1822,6 +2030,23 @@ export default MyBasicComponent;
 "
 `;
 
+exports[`Preact > jsx > Javascript Test > complexMeta 1`] = `
+"/**
+          useMetadata:
+          {\\"x\\":\\"y\\",\\"asdf\\":{\\"stringValue\\":\\"d\\",\\"booleanValue\\":true,\\"numberValue\\":1,\\"innerObject\\":{\\"stringValue\\":\\"inner\\",\\"numberValue\\":2,\\"booleanValue\\":false},\\"spreadStringValue\\":\\"f\\"}}
+          */
+
+/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+
+function ComplexMetaRaw(props) {
+  return <div />;
+}
+
+export default ComplexMetaRaw;
+"
+`;
+
 exports[`Preact > jsx > Javascript Test > componentWithContext 1`] = `
 "/** @jsx h */
 import { h, Fragment } from \\"preact\\";
@@ -1847,7 +2072,7 @@ function ComponentWithContext(props) {
           },
         }}
       >
-        {foo.value}
+        <Fragment>{foo.value}</Fragment>
       </Context1.Provider>
     </Context2.Provider>
   );
@@ -1883,7 +2108,7 @@ function ComponentWithContext(props) {
         }}
       >
         <Fragment>
-          {foo.value}
+          <Fragment>{foo.value}</Fragment>
           <div>other</div>
         </Fragment>
       </Context1.Provider>
@@ -1938,7 +2163,7 @@ function Button(props) {
         <button
           type=\\"button\\"
           {...props.attributes}
-          onClick={(event) => props.onClick(event)}
+          onClick={(event) => props.onClick()}
         >
           {props.buttonText}
         </button>
@@ -2016,6 +2241,38 @@ export default ComponentWithTypes;
 "
 `;
 
+exports[`Preact > jsx > Javascript Test > eventInputAndChange 1`] = `
+"/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+import { useState } from \\"preact/hooks\\";
+
+function EventInputAndChange(props) {
+  const [name, setName] = useState(() => \\"Steve\\");
+
+  return (
+    <Fragment>
+      <div>
+        <input
+          className=\\"input\\"
+          value={name}
+          onInput={(event) => setName(event.target.value)}
+          onChange={(event) => setName(event.target.value)}
+        />
+        Hello! I can run in React, Vue, Solid, or Liquid!
+      </div>
+      <style jsx>{\`
+        .input {
+          color: red;
+        }
+      \`}</style>
+    </Fragment>
+  );
+}
+
+export default EventInputAndChange;
+"
+`;
+
 exports[`Preact > jsx > Javascript Test > expressionState 1`] = `
 "/** @jsx h */
 import { h, Fragment } from \\"preact\\";
@@ -2030,6 +2287,62 @@ function MyComponent(props) {
 }
 
 export default MyComponent;
+"
+`;
+
+exports[`Preact > jsx > Javascript Test > figmaMeta 1`] = `
+"/**
+          useMetadata:
+          {\\"figma\\":{\\"name\\":\\"def-button-beta-outlined\\",\\"url\\":\\"https://www.figma.com/xxx\\",\\"props\\":{\\"iconSmall\\":{\\"type\\":\\"instance\\",\\"key\\":\\"📍 Icon Small\\"},\\"iconMedium\\":{\\"type\\":\\"instance\\",\\"key\\":\\"📍 Icon Medium\\"},\\"label\\":{\\"type\\":\\"string\\",\\"key\\":\\"✏️ Label\\"},\\"icon\\":{\\"type\\":\\"boolean\\",\\"key\\":\\"👁️ Icon\\",\\"value\\":{\\"false\\":false,\\"true\\":\\"placeholder\\"}},\\"interactiveState\\":{\\"type\\":\\"enum\\",\\"key\\":\\"Interactive State\\",\\"value\\":{\\"(Def) Enabled\\":false,\\"Hovered\\":false,\\"Pressed\\":false,\\"Focused\\":false,\\"Disabled\\":\\"true\\"}},\\"size\\":{\\"type\\":\\"enum\\",\\"key\\":\\"Size\\",\\"value\\":{\\"(Def) Medium\\":false,\\"Small\\":\\"small\\"}},\\"width\\":{\\"type\\":\\"enum\\",\\"key\\":\\"Width\\",\\"value\\":{\\"(Def) Auto Width\\":false,\\"Full Width\\":\\"full\\"}}}}}
+          */
+
+/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+
+function FigmaButton(props) {
+  return (
+    <button
+      data-icon={props.icon}
+      data-disabled={props.interactiveState}
+      data-width={props.width}
+      data-size={props.size}
+    >
+      {props.label}
+    </button>
+  );
+}
+
+export default FigmaButton;
+"
+`;
+
+exports[`Preact > jsx > Javascript Test > getterState 1`] = `
+"/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+
+function Button(props) {
+  function foo2() {
+    return props.foo + \\"foo\\";
+  }
+
+  function bar() {
+    return \\"bar\\";
+  }
+
+  function baz(i) {
+    return i + foo2().length;
+  }
+
+  return (
+    <div>
+      <p>{foo2()}</p>
+      <p>{bar()}</p>
+      <p>{baz(1)}</p>
+    </div>
+  );
+}
+
+export default Button;
 "
 `;
 
@@ -2242,12 +2555,14 @@ export default Embed;
 exports[`Preact > jsx > Javascript Test > onInit & onMount 1`] = `
 "/** @jsx h */
 import { h, Fragment } from \\"preact\\";
-import { useEffect } from \\"preact/hooks\\";
+import { useRef, useEffect } from \\"preact/hooks\\";
 
 function OnInit(props) {
-  useEffect(() => {
+  const hasInitialized = useRef(false);
+  if (!hasInitialized.current) {
     console.log(\\"onInit\\");
-  }, []);
+    hasInitialized.current = true;
+  }
 
   useEffect(() => {
     console.log(\\"onMount\\");
@@ -2263,7 +2578,7 @@ export default OnInit;
 exports[`Preact > jsx > Javascript Test > onInit 1`] = `
 "/** @jsx h */
 import { h, Fragment } from \\"preact\\";
-import { useState, useEffect } from \\"preact/hooks\\";
+import { useState, useRef } from \\"preact/hooks\\";
 
 export const defaultValues = {
   name: \\"PatrickJS\\",
@@ -2272,15 +2587,36 @@ export const defaultValues = {
 function OnInit(props) {
   const [name, setName] = useState(() => \\"\\");
 
-  useEffect(() => {
+  const hasInitialized = useRef(false);
+  if (!hasInitialized.current) {
     setName(defaultValues.name || props.name);
     console.log(\\"set defaults with props\\");
-  }, []);
+    hasInitialized.current = true;
+  }
 
   return <div>Default name defined by parent {name}</div>;
 }
 
 export default OnInit;
+"
+`;
+
+exports[`Preact > jsx > Javascript Test > onInitPlain 1`] = `
+"/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+import { useRef } from \\"preact/hooks\\";
+
+function OnInitPlain(props) {
+  const hasInitialized = useRef(false);
+  if (!hasInitialized.current) {
+    console.log(\\"onInit\\");
+    hasInitialized.current = true;
+  }
+
+  return <div />;
+}
+
+export default OnInitPlain;
 "
 `;
 
@@ -2881,6 +3217,116 @@ export default MyComponent;
 "
 `;
 
+exports[`Preact > jsx > Javascript Test > setState 1`] = `
+"/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+import { useState } from \\"preact/hooks\\";
+
+function SetState(props) {
+  const [n, setN] = useState(() => [\\"123\\"]);
+
+  function someFn() {
+    n[0] = \\"123\\";
+  }
+
+  return (
+    <div>
+      <button onClick={(event) => someFn()}>Click me</button>
+    </div>
+  );
+}
+
+export default SetState;
+"
+`;
+
+exports[`Preact > jsx > Javascript Test > showExpressions 1`] = `
+"/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+
+function ShowWithOtherValues(props) {
+  return (
+    <div>
+      {props.conditionA ? (
+        <Fragment>Content0</Fragment>
+      ) : (
+        <Fragment>ContentA</Fragment>
+      )}
+      {props.conditionA ? <Fragment>ContentA</Fragment> : null}
+      {props.conditionA ? <Fragment></Fragment> : <Fragment>ContentA</Fragment>}
+      {props.conditionA ? (
+        <Fragment>ContentB</Fragment>
+      ) : (
+        <Fragment>{undefined}</Fragment>
+      )}
+      {props.conditionA ? (
+        <Fragment>{undefined}</Fragment>
+      ) : (
+        <Fragment>ContentB</Fragment>
+      )}
+      {props.conditionA ? <Fragment>ContentC</Fragment> : null}
+      {props.conditionA ? <Fragment></Fragment> : <Fragment>ContentC</Fragment>}
+      {props.conditionA ? <Fragment>ContentD</Fragment> : null}
+      {props.conditionA ? <Fragment></Fragment> : <Fragment>ContentD</Fragment>}
+      {props.conditionA ? (
+        <Fragment>ContentE</Fragment>
+      ) : (
+        <Fragment>hello</Fragment>
+      )}
+      {props.conditionA ? (
+        <Fragment>hello</Fragment>
+      ) : (
+        <Fragment>ContentE</Fragment>
+      )}
+      {props.conditionA ? (
+        <Fragment>ContentF</Fragment>
+      ) : (
+        <Fragment>123</Fragment>
+      )}
+      {props.conditionA ? (
+        <Fragment>123</Fragment>
+      ) : (
+        <Fragment>ContentF</Fragment>
+      )}
+      {props.conditionA === \\"Default\\" ? (
+        <Fragment>4mb</Fragment>
+      ) : props.conditionB === \\"Complete\\" ? (
+        <Fragment>20mb</Fragment>
+      ) : (
+        <Fragment>9mb</Fragment>
+      )}
+      {props.conditionA === \\"Default\\" ? (
+        <Fragment>
+          {props.conditionB === \\"Complete\\" ? (
+            <Fragment>20mb</Fragment>
+          ) : (
+            <Fragment>9mb</Fragment>
+          )}
+        </Fragment>
+      ) : (
+        <Fragment>4mb</Fragment>
+      )}
+      {props.conditionA === \\"Default\\" ? (
+        <Fragment>
+          {props.conditionB === \\"Complete\\" ? (
+            <div>complete</div>
+          ) : (
+            <Fragment>9mb</Fragment>
+          )}
+        </Fragment>
+      ) : props.conditionC === \\"Complete\\" ? (
+        <Fragment>dff</Fragment>
+      ) : (
+        <div>complete else</div>
+      )}
+    </div>
+  );
+}
+
+export default ShowWithOtherValues;
+"
+`;
+
 exports[`Preact > jsx > Javascript Test > showWithFor 1`] = `
 "/** @jsx h */
 import { h, Fragment } from \\"preact\\";
@@ -2902,6 +3348,39 @@ function NestedShow(props) {
 }
 
 export default NestedShow;
+"
+`;
+
+exports[`Preact > jsx > Javascript Test > showWithOtherValues 1`] = `
+"/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+
+function ShowWithOtherValues(props) {
+  return (
+    <div>
+      {props.conditionA ? <Fragment>ContentA</Fragment> : null}
+      {props.conditionA ? (
+        <Fragment>ContentB</Fragment>
+      ) : (
+        <Fragment>{undefined}</Fragment>
+      )}
+      {props.conditionA ? <Fragment>ContentC</Fragment> : null}
+      {props.conditionA ? <Fragment>ContentD</Fragment> : null}
+      {props.conditionA ? (
+        <Fragment>ContentE</Fragment>
+      ) : (
+        <Fragment>hello</Fragment>
+      )}
+      {props.conditionA ? (
+        <Fragment>ContentF</Fragment>
+      ) : (
+        <Fragment>123</Fragment>
+      )}
+    </div>
+  );
+}
+
+export default ShowWithOtherValues;
 "
 `;
 
@@ -2988,6 +3467,45 @@ function MyBasicComponent(props) {
 }
 
 export default MyBasicComponent;
+"
+`;
+
+exports[`Preact > jsx > Javascript Test > store-async-function 1`] = `
+"/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+
+function StringLiteralStore(props) {
+  async function arrowFunction() {
+    return Promise.resolve();
+  }
+
+  async function namedFunction() {
+    return Promise.resolve();
+  }
+
+  async function fetchUsers() {
+    return Promise.resolve();
+  }
+
+  return <div />;
+}
+
+export default StringLiteralStore;
+"
+`;
+
+exports[`Preact > jsx > Javascript Test > string-literal-store 1`] = `
+"/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+import { useState } from \\"preact/hooks\\";
+
+function StringLiteralStore(props) {
+  const [foo, setFoo] = useState(() => 123);
+
+  return <div>{foo}</div>;
+}
+
+export default StringLiteralStore;
 "
 `;
 
@@ -3098,6 +3616,48 @@ export default TypeDependency;
 "
 `;
 
+exports[`Preact > jsx > Javascript Test > typeExternalStore 1`] = `
+"/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+import { useState } from \\"preact/hooks\\";
+
+function TypeExternalStore(props) {
+  const [_name, set_name] = useState(() => \\"test\\");
+
+  return <div>Hello {_name}! </div>;
+}
+
+export default TypeExternalStore;
+"
+`;
+
+exports[`Preact > jsx > Javascript Test > typeGetterStore 1`] = `
+"/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+import { useState } from \\"preact/hooks\\";
+
+function TypeGetterStore(props) {
+  const [name, setName] = useState(() => \\"test\\");
+
+  function getName() {
+    if (name === \\"a\\") {
+      return \\"b\\";
+    }
+
+    return name;
+  }
+
+  function test() {
+    return \\"test\\";
+  }
+
+  return <div>Hello {name}! </div>;
+}
+
+export default TypeGetterStore;
+"
+`;
+
 exports[`Preact > jsx > Javascript Test > use-style 1`] = `
 "/** @jsx h */
 import { h, Fragment } from \\"preact\\";
@@ -3188,7 +3748,12 @@ function UseTargetComponent(props) {
 
   const [lastName, setLastName] = useState(() => \\"bar\\");
 
-  useEffect(() => {}, []);
+  const [foo, setFoo] = useState(() => \\"bar\\");
+
+  useEffect(() => {
+    console.log(foo);
+    setFoo(\\"bar\\");
+  }, []);
 
   return <div>{name()}</div>;
 }
@@ -3200,13 +3765,15 @@ export default UseTargetComponent;
 exports[`Preact > jsx > Javascript Test > webComponent 1`] = `
 "/** @jsx h */
 import { h, Fragment } from \\"preact\\";
-import { useEffect } from \\"preact/hooks\\";
+import { useRef } from \\"preact/hooks\\";
 import { register } from \\"swiper/element/bundle\\";
 
 function MyBasicWebComponent(props) {
-  useEffect(() => {
+  const hasInitialized = useRef(false);
+  if (!hasInitialized.current) {
     register();
-  }, []);
+    hasInitialized.current = true;
+  }
 
   return (
     <swiper-container slides-per-view=\\"3\\" navigation=\\"true\\" pagination=\\"true\\">
@@ -3323,9 +3890,9 @@ function MyBasicComponent(props: MyBasicComponentProps) {
     return \\"bar\\";
   }
 
-  const [age, setAge] = useState(() => 1);
+  const [age, setAge] = useState<number>(() => 1);
 
-  const [sports, setSports] = useState(() => [\\"\\"]);
+  const [sports, setSports] = useState<Array<string>>(() => [\\"\\"]);
 
   return (
     <Fragment>
@@ -3334,7 +3901,7 @@ function MyBasicComponent(props: MyBasicComponentProps) {
           value={DEFAULT_VALUES.name || name}
           onChange={(myEvent) => setName(myEvent.target.value)}
         />
-        Hello! I can run in React, Vue, Solid, or Liquid!
+        Hello! I can run in React, Vue, Solid, or Liquid! &gt;
       </div>
       <style jsx>{\`
         .div {
@@ -3352,7 +3919,7 @@ export default MyBasicComponent;
 exports[`Preact > jsx > Typescript Test > Basic Context 1`] = `
 "/** @jsx h */
 import { h, Fragment } from \\"preact\\";
-import { useState, useContext, useEffect } from \\"preact/hooks\\";
+import { useState, useContext, useRef, useEffect } from \\"preact/hooks\\";
 import { Injector, MyService, createInjector } from \\"@dummy/injection-js\\";
 
 function MyBasicComponent(props: any) {
@@ -3365,10 +3932,12 @@ function MyBasicComponent(props: any) {
 
   const myService = useContext(MyService);
 
-  useEffect(() => {
+  const hasInitialized = useRef(false);
+  if (!hasInitialized.current) {
     const hi = myService.method(\\"hi\\");
     console.log(hi);
-  }, []);
+    hasInitialized.current = true;
+  }
 
   useEffect(() => {
     const bye = myService.method(\\"hi\\");
@@ -3393,7 +3962,7 @@ export default MyBasicComponent;
 exports[`Preact > jsx > Typescript Test > Basic OnMount Update 1`] = `
 "/** @jsx h */
 import { h, Fragment } from \\"preact\\";
-import { useState, useEffect } from \\"preact/hooks\\";
+import { useState, useRef, useEffect } from \\"preact/hooks\\";
 
 export interface Props {
   hi: string;
@@ -3405,9 +3974,11 @@ function MyBasicOnMountUpdateComponent(props: Props) {
 
   const [names, setNames] = useState(() => [\\"Steve\\", \\"PatrickJS\\"]);
 
-  useEffect(() => {
+  const hasInitialized = useRef(false);
+  if (!hasInitialized.current) {
     setName(\\"PatrickJS onInit\\" + props.hi);
-  }, []);
+    hasInitialized.current = true;
+  }
 
   useEffect(() => {
     setName(\\"PatrickJS onMount\\" + props.bye);
@@ -3441,7 +4012,12 @@ export default MyBasicOutputsComponent;
 `;
 
 exports[`Preact > jsx > Typescript Test > Basic Outputs Meta 1`] = `
-"/** @jsx h */
+"/**
+          useMetadata:
+          {\\"outputs\\":[\\"onMessage\\",\\"onEvent\\"],\\"baz\\":\\"metadata inside component\\"}
+          */
+
+/** @jsx h */
 import { h, Fragment } from \\"preact\\";
 import { useState, useEffect } from \\"preact/hooks\\";
 
@@ -3465,7 +4041,7 @@ exports[`Preact > jsx > Typescript Test > BasicAttribute 1`] = `
 import { h, Fragment } from \\"preact\\";
 
 function MyComponent(props: any) {
-  return <input autoCapitalize=\\"on\\" autoComplete=\\"on\\" spellCheck={true} />;
+  return <input autoCapitalize=\\"on\\" autoComplete=\\"on\\" spellCheck />;
 }
 
 export default MyComponent;
@@ -3491,8 +4067,8 @@ function MyBooleanAttribute(props: Props) {
           {props.type}
         </Fragment>
       ) : null}
-      <MyBooleanAttributeComponent toggle={true} />
-      <MyBooleanAttributeComponent toggle={true} />
+      <MyBooleanAttributeComponent toggle />
+      <MyBooleanAttributeComponent toggle />
       <MyBooleanAttributeComponent list={null} />
     </div>
   );
@@ -3575,13 +4151,13 @@ export interface Props {
 }
 
 function MyBasicRefComponent(props: Props) {
-  const inputRef = useRef<HTMLInputElement>(null);
-  const inputNoArgRef = useRef<HTMLLabelElement>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const inputNoArgRef = useRef<HTMLLabelElement | null>(null);
   const [name, setName] = useState(() => \\"PatrickJS\\");
 
   function onBlur() {
     // Maintain focus
-    inputRef.current.focus();
+    inputRef.current?.focus();
   }
 
   function lowerCaseName() {
@@ -3645,7 +4221,7 @@ function MyBasicRefAssignmentComponent(props: Props) {
 
   return (
     <div>
-      <button onClick={(evt) => handlerClick(evt)}>Click</button>
+      <button onClick={async (evt) => await handlerClick(evt)}>Click</button>
     </div>
   );
 }
@@ -4598,6 +5174,35 @@ export default Stepper;
 "
 `;
 
+exports[`Preact > jsx > Typescript Test > NestedStore 1`] = `
+"/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+import { useState } from \\"preact/hooks\\";
+
+type MyStore = {
+  _id?: string;
+  _messageId?: string;
+};
+
+function NestedStore(props: any) {
+  const [_id, set_id] = useState<MyStore[\\"_id\\"]>(() => \\"abc\\");
+
+  const [_messageId, set_messageId] = useState<MyStore[\\"_messageId\\"]>(
+    () => _id + \\"-message\\"
+  );
+
+  return (
+    <div id={_id}>
+      Test
+      <p id={_messageId}>Message</p>
+    </div>
+  );
+}
+
+export default NestedStore;
+"
+`;
+
 exports[`Preact > jsx > Typescript Test > RawText 1`] = `
 "/** @jsx h */
 import { h, Fragment } from \\"preact\\";
@@ -4769,6 +5374,7 @@ type Props = {
 function SlotCode(props: Props) {
   return (
     <div>
+      <>{props.myAwesomeSlot}</>
       <>{props.top}</>
       <>{props.left || \\"Default left\\"}</>
       <>{props.children || \\"Default Child\\"}</>
@@ -4834,8 +5440,8 @@ function SmileReviews(props: SmileReviewsProps) {
             />
             <button
               className=\\"button\\"
-              onClick={(event) => {
-                event.preventDefault();
+              onClick={(ev) => {
+                ev.preventDefault();
                 setShowReviewPrompt(false);
               }}
             >
@@ -4884,6 +5490,61 @@ function SmileReviews(props: SmileReviewsProps) {
 }
 
 export default SmileReviews;
+"
+`;
+
+exports[`Preact > jsx > Typescript Test > StoreComment 1`] = `
+"/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+import { useState } from \\"preact/hooks\\";
+
+function StringLiteralStore(props: any) {
+  const [foo, setFoo] = useState(() => true);
+
+  function bar() {}
+
+  return <Fragment>{foo}</Fragment>;
+}
+
+export default StringLiteralStore;
+"
+`;
+
+exports[`Preact > jsx > Typescript Test > StoreShadowVars 1`] = `
+"/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+import { useState } from \\"preact/hooks\\";
+
+function MyComponent(props: any) {
+  const [errors, setErrors] = useState(() => ({}));
+
+  function foo(errors) {
+    return errors;
+  }
+
+  return <Fragment>{foo(errors)}</Fragment>;
+}
+
+export default MyComponent;
+"
+`;
+
+exports[`Preact > jsx > Typescript Test > StoreWithState 1`] = `
+"/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+import { useState } from \\"preact/hooks\\";
+
+function MyComponent(props: any) {
+  const [foo, setFoo] = useState(() => false);
+
+  function bar() {
+    return foo;
+  }
+
+  return <Fragment>{bar()}</Fragment>;
+}
+
+export default MyComponent;
 "
 `;
 
@@ -4975,6 +5636,46 @@ export default Textarea;
 "
 `;
 
+exports[`Preact > jsx > Typescript Test > UseValueAndFnFromStore 1`] = `
+"/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+import { useState, useEffect } from \\"preact/hooks\\";
+
+type MyProps = {
+  onChange?: (active: boolean) => void;
+};
+type MyStore = {
+  _id?: string;
+  _active?: boolean;
+  _do?: (id?: string) => void;
+};
+
+function UseValueAndFnFromStore(props: MyProps) {
+  const [_id, set_id] = useState<MyStore[\\"_id\\"]>(() => \\"abc\\");
+
+  const [_active, set_active] = useState<MyStore[\\"_active\\"]>(() => false);
+
+  function _do(id?: string): ReturnType<MyStore[\\"_do\\"]> {
+    set_active(!!id);
+
+    if (props.onChange) {
+      props.onChange(_active);
+    }
+  }
+
+  useEffect(() => {
+    if (_do) {
+      _do(_id);
+    }
+  });
+
+  return <div>Test</div>;
+}
+
+export default UseValueAndFnFromStore;
+"
+`;
+
 exports[`Preact > jsx > Typescript Test > Video 1`] = `
 "/** @jsx h */
 import { h, Fragment } from \\"preact\\";
@@ -5057,6 +5758,41 @@ export default MyComponent;
 "
 `;
 
+exports[`Preact > jsx > Typescript Test > basicForFragment 1`] = `
+"/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+import { useState } from \\"preact/hooks\\";
+
+function BasicForFragment(props: any) {
+  const [id, setId] = useState(() => \\"xyz\\");
+
+  return (
+    <div>
+      {[\\"a\\", \\"b\\", \\"c\\"]?.map((option) => (
+        <Fragment key={\`key-\${option}\`}>
+          <div>{option}</div>
+        </Fragment>
+      ))}
+      {[\\"a\\", \\"b\\", \\"c\\"]?.map((option) => (
+        <Fragment key={\`\${id}-\${option}\`}>
+          <div>{option}</div>
+        </Fragment>
+      ))}
+      <select>
+        {[\\"d\\", \\"e\\", \\"f\\"]?.map((option) => (
+          <option key={\`\${id}-\${option}\`} value={option}>
+            {option}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+}
+
+export default BasicForFragment;
+"
+`;
+
 exports[`Preact > jsx > Typescript Test > basicForNoTagReference 1`] = `
 "/** @jsx h */
 import { h, Fragment } from \\"preact\\";
@@ -5129,7 +5865,12 @@ export default MyBasicForwardRefComponent;
 `;
 
 exports[`Preact > jsx > Typescript Test > basicForwardRefMetadata 1`] = `
-"/** @jsx h */
+"/**
+          useMetadata:
+          {\\"forwardRef\\":\\"inputRef\\"}
+          */
+
+/** @jsx h */
 import { h, Fragment } from \\"preact\\";
 import { useState } from \\"preact/hooks\\";
 
@@ -5196,15 +5937,65 @@ export default MyBasicOnUpdateReturnComponent;
 "
 `;
 
+exports[`Preact > jsx > Typescript Test > basicRefAttributePassing 1`] = `
+"/**
+          useMetadata:
+          {\\"attributePassing\\":{\\"enabled\\":true}}
+          */
+
+/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+import { useRef } from \\"preact/hooks\\";
+
+function BasicRefAttributePassingComponent(props: any) {
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
+
+  return <button ref={buttonRef}>Attribute Passing</button>;
+}
+
+export default BasicRefAttributePassingComponent;
+"
+`;
+
+exports[`Preact > jsx > Typescript Test > basicRefAttributePassingCustomRef 1`] = `
+"/**
+          useMetadata:
+          {\\"attributePassing\\":{\\"enabled\\":true,\\"customRef\\":\\"buttonRef\\"}}
+          */
+
+/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+import { useRef } from \\"preact/hooks\\";
+
+function BasicRefAttributePassingCustomRefComponent(props: any) {
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
+
+  return (
+    <div>
+      <button ref={buttonRef}>Attribute Passing</button>
+    </div>
+  );
+}
+
+export default BasicRefAttributePassingCustomRefComponent;
+"
+`;
+
 exports[`Preact > jsx > Typescript Test > class + ClassName + css 1`] = `
 "/** @jsx h */
 import { h, Fragment } from \\"preact\\";
+import MyComp from \\"./my-component\\";
 
 function MyBasicComponent(props: any) {
   return (
     <Fragment>
-      <div className=\\"test2 test div\\">
-        Hello! I can run in React, Vue, Solid, or Liquid!
+      <div>
+        <MyComp className=\\"test\\" className=\\"test2\\">
+          Hello! I can run in React, Vue, Solid, or Liquid!
+        </MyComp>
+        <div className=\\"test2 test div\\">
+          Hello! I can run in React, Vue, Solid, or Liquid!
+        </div>
       </div>
       <style jsx>{\`
         .div {
@@ -5321,6 +6112,23 @@ export default MyBasicComponent;
 "
 `;
 
+exports[`Preact > jsx > Typescript Test > complexMeta 1`] = `
+"/**
+          useMetadata:
+          {\\"x\\":\\"y\\",\\"asdf\\":{\\"stringValue\\":\\"d\\",\\"booleanValue\\":true,\\"numberValue\\":1,\\"innerObject\\":{\\"stringValue\\":\\"inner\\",\\"numberValue\\":2,\\"booleanValue\\":false},\\"spreadStringValue\\":\\"f\\"}}
+          */
+
+/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+
+function ComplexMetaRaw(props: any) {
+  return <div />;
+}
+
+export default ComplexMetaRaw;
+"
+`;
+
 exports[`Preact > jsx > Typescript Test > componentWithContext 1`] = `
 "/** @jsx h */
 import { h, Fragment } from \\"preact\\";
@@ -5351,7 +6159,7 @@ function ComponentWithContext(props: ComponentWithContextProps) {
           },
         }}
       >
-        {foo.value}
+        <Fragment>{foo.value}</Fragment>
       </Context1.Provider>
     </Context2.Provider>
   );
@@ -5392,7 +6200,7 @@ function ComponentWithContext(props: ComponentWithContextProps) {
         }}
       >
         <Fragment>
-          {foo.value}
+          <Fragment>{foo.value}</Fragment>
           <div>other</div>
         </Fragment>
       </Context1.Provider>
@@ -5457,7 +6265,7 @@ function Button(props: ButtonProps) {
         <button
           type=\\"button\\"
           {...props.attributes}
-          onClick={(event) => props.onClick(event)}
+          onClick={(event) => props.onClick()}
         >
           {props.buttonText}
         </button>
@@ -5547,6 +6355,38 @@ export default ComponentWithTypes;
 "
 `;
 
+exports[`Preact > jsx > Typescript Test > eventInputAndChange 1`] = `
+"/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+import { useState } from \\"preact/hooks\\";
+
+function EventInputAndChange(props: any) {
+  const [name, setName] = useState(() => \\"Steve\\");
+
+  return (
+    <Fragment>
+      <div>
+        <input
+          className=\\"input\\"
+          value={name}
+          onInput={(event) => setName(event.target.value)}
+          onChange={(event) => setName(event.target.value)}
+        />
+        Hello! I can run in React, Vue, Solid, or Liquid!
+      </div>
+      <style jsx>{\`
+        .input {
+          color: red;
+        }
+      \`}</style>
+    </Fragment>
+  );
+}
+
+export default EventInputAndChange;
+"
+`;
+
 exports[`Preact > jsx > Typescript Test > expressionState 1`] = `
 "/** @jsx h */
 import { h, Fragment } from \\"preact\\";
@@ -5561,6 +6401,66 @@ function MyComponent(props: any) {
 }
 
 export default MyComponent;
+"
+`;
+
+exports[`Preact > jsx > Typescript Test > figmaMeta 1`] = `
+"/**
+          useMetadata:
+          {\\"figma\\":{\\"name\\":\\"def-button-beta-outlined\\",\\"url\\":\\"https://www.figma.com/xxx\\",\\"props\\":{\\"iconSmall\\":{\\"type\\":\\"instance\\",\\"key\\":\\"📍 Icon Small\\"},\\"iconMedium\\":{\\"type\\":\\"instance\\",\\"key\\":\\"📍 Icon Medium\\"},\\"label\\":{\\"type\\":\\"string\\",\\"key\\":\\"✏️ Label\\"},\\"icon\\":{\\"type\\":\\"boolean\\",\\"key\\":\\"👁️ Icon\\",\\"value\\":{\\"false\\":false,\\"true\\":\\"placeholder\\"}},\\"interactiveState\\":{\\"type\\":\\"enum\\",\\"key\\":\\"Interactive State\\",\\"value\\":{\\"(Def) Enabled\\":false,\\"Hovered\\":false,\\"Pressed\\":false,\\"Focused\\":false,\\"Disabled\\":\\"true\\"}},\\"size\\":{\\"type\\":\\"enum\\",\\"key\\":\\"Size\\",\\"value\\":{\\"(Def) Medium\\":false,\\"Small\\":\\"small\\"}},\\"width\\":{\\"type\\":\\"enum\\",\\"key\\":\\"Width\\",\\"value\\":{\\"(Def) Auto Width\\":false,\\"Full Width\\":\\"full\\"}}}}}
+          */
+
+/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+
+function FigmaButton(props: any) {
+  return (
+    <button
+      data-icon={props.icon}
+      data-disabled={props.interactiveState}
+      data-width={props.width}
+      data-size={props.size}
+    >
+      {props.label}
+    </button>
+  );
+}
+
+export default FigmaButton;
+"
+`;
+
+exports[`Preact > jsx > Typescript Test > getterState 1`] = `
+"/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+
+export interface ButtonProps {
+  foo: string;
+}
+
+function Button(props: ButtonProps) {
+  function foo2() {
+    return props.foo + \\"foo\\";
+  }
+
+  function bar() {
+    return \\"bar\\";
+  }
+
+  function baz(i: number) {
+    return i + foo2().length;
+  }
+
+  return (
+    <div>
+      <p>{foo2()}</p>
+      <p>{bar()}</p>
+      <p>{baz(1)}</p>
+    </div>
+  );
+}
+
+export default Button;
 "
 `;
 
@@ -5785,12 +6685,14 @@ export default Embed;
 exports[`Preact > jsx > Typescript Test > onInit & onMount 1`] = `
 "/** @jsx h */
 import { h, Fragment } from \\"preact\\";
-import { useEffect } from \\"preact/hooks\\";
+import { useRef, useEffect } from \\"preact/hooks\\";
 
 function OnInit(props: any) {
-  useEffect(() => {
+  const hasInitialized = useRef(false);
+  if (!hasInitialized.current) {
     console.log(\\"onInit\\");
-  }, []);
+    hasInitialized.current = true;
+  }
 
   useEffect(() => {
     console.log(\\"onMount\\");
@@ -5806,7 +6708,7 @@ export default OnInit;
 exports[`Preact > jsx > Typescript Test > onInit 1`] = `
 "/** @jsx h */
 import { h, Fragment } from \\"preact\\";
-import { useState, useEffect } from \\"preact/hooks\\";
+import { useState, useRef } from \\"preact/hooks\\";
 
 type Props = {
   name: string;
@@ -5819,15 +6721,36 @@ export const defaultValues = {
 function OnInit(props: Props) {
   const [name, setName] = useState(() => \\"\\");
 
-  useEffect(() => {
+  const hasInitialized = useRef(false);
+  if (!hasInitialized.current) {
     setName(defaultValues.name || props.name);
     console.log(\\"set defaults with props\\");
-  }, []);
+    hasInitialized.current = true;
+  }
 
   return <div>Default name defined by parent {name}</div>;
 }
 
 export default OnInit;
+"
+`;
+
+exports[`Preact > jsx > Typescript Test > onInitPlain 1`] = `
+"/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+import { useRef } from \\"preact/hooks\\";
+
+function OnInitPlain(props: any) {
+  const hasInitialized = useRef(false);
+  if (!hasInitialized.current) {
+    console.log(\\"onInit\\");
+    hasInitialized.current = true;
+  }
+
+  return <div />;
+}
+
+export default OnInitPlain;
 "
 `;
 
@@ -6502,6 +7425,121 @@ export default MyComponent;
 "
 `;
 
+exports[`Preact > jsx > Typescript Test > setState 1`] = `
+"/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+import { useState } from \\"preact/hooks\\";
+
+function SetState(props: any) {
+  const [n, setN] = useState(() => [\\"123\\"]);
+
+  function someFn() {
+    n[0] = \\"123\\";
+  }
+
+  return (
+    <div>
+      <button onClick={(event) => someFn()}>Click me</button>
+    </div>
+  );
+}
+
+export default SetState;
+"
+`;
+
+exports[`Preact > jsx > Typescript Test > showExpressions 1`] = `
+"/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+
+interface Props {
+  conditionA: boolean;
+  conditionB: boolean;
+}
+
+function ShowWithOtherValues(props: Props) {
+  return (
+    <div>
+      {props.conditionA ? (
+        <Fragment>Content0</Fragment>
+      ) : (
+        <Fragment>ContentA</Fragment>
+      )}
+      {props.conditionA ? <Fragment>ContentA</Fragment> : null}
+      {props.conditionA ? <Fragment></Fragment> : <Fragment>ContentA</Fragment>}
+      {props.conditionA ? (
+        <Fragment>ContentB</Fragment>
+      ) : (
+        <Fragment>{undefined}</Fragment>
+      )}
+      {props.conditionA ? (
+        <Fragment>{undefined}</Fragment>
+      ) : (
+        <Fragment>ContentB</Fragment>
+      )}
+      {props.conditionA ? <Fragment>ContentC</Fragment> : null}
+      {props.conditionA ? <Fragment></Fragment> : <Fragment>ContentC</Fragment>}
+      {props.conditionA ? <Fragment>ContentD</Fragment> : null}
+      {props.conditionA ? <Fragment></Fragment> : <Fragment>ContentD</Fragment>}
+      {props.conditionA ? (
+        <Fragment>ContentE</Fragment>
+      ) : (
+        <Fragment>hello</Fragment>
+      )}
+      {props.conditionA ? (
+        <Fragment>hello</Fragment>
+      ) : (
+        <Fragment>ContentE</Fragment>
+      )}
+      {props.conditionA ? (
+        <Fragment>ContentF</Fragment>
+      ) : (
+        <Fragment>123</Fragment>
+      )}
+      {props.conditionA ? (
+        <Fragment>123</Fragment>
+      ) : (
+        <Fragment>ContentF</Fragment>
+      )}
+      {props.conditionA === \\"Default\\" ? (
+        <Fragment>4mb</Fragment>
+      ) : props.conditionB === \\"Complete\\" ? (
+        <Fragment>20mb</Fragment>
+      ) : (
+        <Fragment>9mb</Fragment>
+      )}
+      {props.conditionA === \\"Default\\" ? (
+        <Fragment>
+          {props.conditionB === \\"Complete\\" ? (
+            <Fragment>20mb</Fragment>
+          ) : (
+            <Fragment>9mb</Fragment>
+          )}
+        </Fragment>
+      ) : (
+        <Fragment>4mb</Fragment>
+      )}
+      {props.conditionA === \\"Default\\" ? (
+        <Fragment>
+          {props.conditionB === \\"Complete\\" ? (
+            <div>complete</div>
+          ) : (
+            <Fragment>9mb</Fragment>
+          )}
+        </Fragment>
+      ) : props.conditionC === \\"Complete\\" ? (
+        <Fragment>dff</Fragment>
+      ) : (
+        <div>complete else</div>
+      )}
+    </div>
+  );
+}
+
+export default ShowWithOtherValues;
+"
+`;
+
 exports[`Preact > jsx > Typescript Test > showWithFor 1`] = `
 "/** @jsx h */
 import { h, Fragment } from \\"preact\\";
@@ -6528,6 +7566,43 @@ function NestedShow(props: Props) {
 }
 
 export default NestedShow;
+"
+`;
+
+exports[`Preact > jsx > Typescript Test > showWithOtherValues 1`] = `
+"/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+
+interface Props {
+  conditionA: boolean;
+}
+
+function ShowWithOtherValues(props: Props) {
+  return (
+    <div>
+      {props.conditionA ? <Fragment>ContentA</Fragment> : null}
+      {props.conditionA ? (
+        <Fragment>ContentB</Fragment>
+      ) : (
+        <Fragment>{undefined}</Fragment>
+      )}
+      {props.conditionA ? <Fragment>ContentC</Fragment> : null}
+      {props.conditionA ? <Fragment>ContentD</Fragment> : null}
+      {props.conditionA ? (
+        <Fragment>ContentE</Fragment>
+      ) : (
+        <Fragment>hello</Fragment>
+      )}
+      {props.conditionA ? (
+        <Fragment>ContentF</Fragment>
+      ) : (
+        <Fragment>123</Fragment>
+      )}
+    </div>
+  );
+}
+
+export default ShowWithOtherValues;
 "
 `;
 
@@ -6627,6 +7702,45 @@ function MyBasicComponent(props: any) {
 }
 
 export default MyBasicComponent;
+"
+`;
+
+exports[`Preact > jsx > Typescript Test > store-async-function 1`] = `
+"/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+
+function StringLiteralStore(props: any) {
+  async function arrowFunction() {
+    return Promise.resolve();
+  }
+
+  async function namedFunction() {
+    return Promise.resolve();
+  }
+
+  async function fetchUsers() {
+    return Promise.resolve();
+  }
+
+  return <div />;
+}
+
+export default StringLiteralStore;
+"
+`;
+
+exports[`Preact > jsx > Typescript Test > string-literal-store 1`] = `
+"/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+import { useState } from \\"preact/hooks\\";
+
+function StringLiteralStore(props: any) {
+  const [foo, setFoo] = useState(() => 123);
+
+  return <div>{foo}</div>;
+}
+
+export default StringLiteralStore;
 "
 `;
 
@@ -6744,6 +7858,55 @@ export default TypeDependency;
 "
 `;
 
+exports[`Preact > jsx > Typescript Test > typeExternalStore 1`] = `
+"/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+import { useState } from \\"preact/hooks\\";
+import { FooStore } from \\"./foo-store\\";
+
+function TypeExternalStore(props: any) {
+  const [_name, set_name] = useState<FooStore[\\"_name\\"]>(() => \\"test\\");
+
+  return <div>Hello {_name}! </div>;
+}
+
+export default TypeExternalStore;
+"
+`;
+
+exports[`Preact > jsx > Typescript Test > typeGetterStore 1`] = `
+"/** @jsx h */
+import { h, Fragment } from \\"preact\\";
+import { useState } from \\"preact/hooks\\";
+
+type GetterStore = {
+  getName: () => string;
+  name: string;
+  get test(): string;
+};
+
+function TypeGetterStore(props: any) {
+  const [name, setName] = useState<GetterStore[\\"name\\"]>(() => \\"test\\");
+
+  function getName(): ReturnType<GetterStore[\\"getName\\"]> {
+    if (name === \\"a\\") {
+      return \\"b\\";
+    }
+
+    return name;
+  }
+
+  function test(): ReturnType<GetterStore[\\"test\\"]> {
+    return \\"test\\";
+  }
+
+  return <div>Hello {name}! </div>;
+}
+
+export default TypeGetterStore;
+"
+`;
+
 exports[`Preact > jsx > Typescript Test > use-style 1`] = `
 "/** @jsx h */
 import { h, Fragment } from \\"preact\\";
@@ -6834,7 +7997,12 @@ function UseTargetComponent(props: any) {
 
   const [lastName, setLastName] = useState(() => \\"bar\\");
 
-  useEffect(() => {}, []);
+  const [foo, setFoo] = useState(() => \\"bar\\");
+
+  useEffect(() => {
+    console.log(foo);
+    setFoo(\\"bar\\");
+  }, []);
 
   return <div>{name()}</div>;
 }
@@ -6846,13 +8014,15 @@ export default UseTargetComponent;
 exports[`Preact > jsx > Typescript Test > webComponent 1`] = `
 "/** @jsx h */
 import { h, Fragment } from \\"preact\\";
-import { useEffect } from \\"preact/hooks\\";
+import { useRef } from \\"preact/hooks\\";
 import { register } from \\"swiper/element/bundle\\";
 
 function MyBasicWebComponent(props: any) {
-  useEffect(() => {
+  const hasInitialized = useRef(false);
+  if (!hasInitialized.current) {
     register();
-  }, []);
+    hasInitialized.current = true;
+  }
 
   return (
     <swiper-container slides-per-view=\\"3\\" navigation=\\"true\\" pagination=\\"true\\">
@@ -6992,14 +8162,14 @@ export default MyComponent;
 `;
 
 exports[`Preact > svelte > Javascript Test > context 1`] = `
-"'>' expected. (35:13)
-  33 | return (
-  34 |
-> 35 | <'activeTab'.Provider  value={activeTab}><div>{activeTab}</div></'activeTab'.Provider>
+"'>' expected. (36:13)
+  34 | return (
+  35 |
+> 36 | <'activeTab'.Provider  value={activeTab}><div>{activeTab}</div></'activeTab'.Provider>
      |             ^
-  36 |
   37 |
-  38 |"
+  38 |
+  39 |"
 `;
 
 exports[`Preact > svelte > Javascript Test > each 1`] = `
@@ -7396,14 +8566,14 @@ export default MyComponent;
 `;
 
 exports[`Preact > svelte > Typescript Test > context 1`] = `
-"'>' expected. (35:13)
-  33 | return (
-  34 |
-> 35 | <'activeTab'.Provider  value={activeTab}><div>{activeTab}</div></'activeTab'.Provider>
+"'>' expected. (36:13)
+  34 | return (
+  35 |
+> 36 | <'activeTab'.Provider  value={activeTab}><div>{activeTab}</div></'activeTab'.Provider>
      |             ^
-  36 |
   37 |
-  38 |"
+  38 |
+  39 |"
 `;
 
 exports[`Preact > svelte > Typescript Test > each 1`] = `

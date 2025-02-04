@@ -25,7 +25,7 @@ exports[`Liquid > jsx > Javascript Test > Basic 1`] = `
 "<div class=\\"test div\\">
   <input />
 
-  Hello! I can run in React, Vue, Solid, or Liquid!
+  Hello! I can run in React, Vue, Solid, or Liquid! &gt;
 </div>
 <style>
   .div {
@@ -55,7 +55,10 @@ exports[`Liquid > jsx > Javascript Test > Basic Outputs 1`] = `
 `;
 
 exports[`Liquid > jsx > Javascript Test > Basic Outputs Meta 1`] = `
-"<div></div>
+"/** useMetadata: {\\"outputs\\":[\\"onMessage\\",\\"onEvent\\"],\\"baz\\":\\"metadata inside
+component\\"} */
+
+<div></div>
 "
 `;
 
@@ -270,6 +273,15 @@ exports[`Liquid > jsx > Javascript Test > InputParent 1`] = `
 "
 `;
 
+exports[`Liquid > jsx > Javascript Test > NestedStore 1`] = `
+"<div id=\\"{{_id}}\\">
+  Test
+
+  <p id=\\"{{_messageId}}\\">Message</p>
+</div>
+"
+`;
+
 exports[`Liquid > jsx > Javascript Test > RawText 1`] = `
 "<span></span>
 "
@@ -315,6 +327,7 @@ exports[`Liquid > jsx > Javascript Test > SlotJsx 1`] = `
 
 exports[`Liquid > jsx > Javascript Test > SlotNamed 1`] = `
 "<div>
+  <slot name=\\"myAwesomeSlot\\"></slot>
   <slot name=\\"top\\"></slot>
   <slot name=\\"left\\">Default left</slot>
   <slot>Default Child</slot>
@@ -365,6 +378,21 @@ exports[`Liquid > jsx > Javascript Test > Stamped.io 1`] = `
 "
 `;
 
+exports[`Liquid > jsx > Javascript Test > StoreComment 1`] = `
+"<div>{{foo}}</div>
+"
+`;
+
+exports[`Liquid > jsx > Javascript Test > StoreShadowVars 1`] = `
+"<div></div>
+"
+`;
+
+exports[`Liquid > jsx > Javascript Test > StoreWithState 1`] = `
+"<div></div>
+"
+`;
+
 exports[`Liquid > jsx > Javascript Test > Submit 1`] = `
 "<button type=\\"submit\\" props.attributes=\\"{{attributes}}\\">{{text}}</button>
 "
@@ -386,6 +414,11 @@ exports[`Liquid > jsx > Javascript Test > Textarea 1`] = `
 "
 `;
 
+exports[`Liquid > jsx > Javascript Test > UseValueAndFnFromStore 1`] = `
+"<div>Test</div>
+"
+`;
+
 exports[`Liquid > jsx > Javascript Test > Video 1`] = `
 "<video
   preload=\\"none\\"
@@ -401,6 +434,13 @@ exports[`Liquid > jsx > Javascript Test > Video 1`] = `
 
 exports[`Liquid > jsx > Javascript Test > arrowFunctionInUseStore 1`] = `
 "<div>Hello {{name}}</div>
+"
+`;
+
+exports[`Liquid > jsx > Javascript Test > basicForFragment 1`] = `
+"<div>
+  <select></select>
+</div>
 "
 `;
 
@@ -429,7 +469,9 @@ exports[`Liquid > jsx > Javascript Test > basicForwardRef 1`] = `
 `;
 
 exports[`Liquid > jsx > Javascript Test > basicForwardRefMetadata 1`] = `
-"<div><input class=\\"input\\" value=\\"{{name}}\\" /></div>
+"/** useMetadata: {\\"forwardRef\\":\\"inputRef\\"} */
+
+<div><input class=\\"input\\" value=\\"{{name}}\\" /></div>
 <style>
   .input {
     color: red;
@@ -443,9 +485,29 @@ exports[`Liquid > jsx > Javascript Test > basicOnUpdateReturn 1`] = `
 "
 `;
 
+exports[`Liquid > jsx > Javascript Test > basicRefAttributePassing 1`] = `
+"/** useMetadata: {\\"attributePassing\\":{\\"enabled\\":true}} */
+
+<button>Attribute Passing</button>
+"
+`;
+
+exports[`Liquid > jsx > Javascript Test > basicRefAttributePassingCustomRef 1`] = `
+"/** useMetadata: {\\"attributePassing\\":{\\"enabled\\":true,\\"customRef\\":\\"buttonRef\\"}}
+*/
+
+<div><button>Attribute Passing</button></div>
+"
+`;
+
 exports[`Liquid > jsx > Javascript Test > class + ClassName + css 1`] = `
-"<div class=\\"test2 test div\\">
-  Hello! I can run in React, Vue, Solid, or Liquid!
+"<div>
+  <MyComp class=\\"test\\" className=\\"test2\\">
+    Hello! I can run in React, Vue, Solid, or Liquid!
+  </MyComp>
+  <div class=\\"test2 test div\\">
+    Hello! I can run in React, Vue, Solid, or Liquid!
+  </div>
 </div>
 <style>
   .div {
@@ -495,6 +557,15 @@ exports[`Liquid > jsx > Javascript Test > classState 1`] = `
 "
 `;
 
+exports[`Liquid > jsx > Javascript Test > complexMeta 1`] = `
+"/** useMetadata:
+{\\"x\\":\\"y\\",\\"asdf\\":{\\"stringValue\\":\\"d\\",\\"booleanValue\\":true,\\"numberValue\\":1,\\"innerObject\\":{\\"stringValue\\":\\"inner\\",\\"numberValue\\":2,\\"booleanValue\\":false},\\"spreadStringValue\\":\\"f\\"}}
+*/
+
+<div></div>
+"
+`;
+
 exports[`Liquid > jsx > Javascript Test > componentWithContext 1`] = `
 "<div><div>{{foo.value}}</div></div>
 "
@@ -536,8 +607,54 @@ exports[`Liquid > jsx > Javascript Test > defaultValsWithTypes 1`] = `
 "
 `;
 
+exports[`Liquid > jsx > Javascript Test > eventInputAndChange 1`] = `
+"<div>
+  <input class=\\"input\\" value=\\"{{name}}\\" />
+
+  Hello! I can run in React, Vue, Solid, or Liquid!
+</div>
+<style>
+  .input {
+    color: red;
+  }
+</style>
+"
+`;
+
 exports[`Liquid > jsx > Javascript Test > expressionState 1`] = `
 "<div>{{refToUse}}</div>
+"
+`;
+
+exports[`Liquid > jsx > Javascript Test > figmaMeta 1`] = `
+"/** useMetadata:
+{\\"figma\\":{\\"name\\":\\"def-button-beta-outlined\\",\\"url\\":\\"https://www.figma.com/xxx\\",\\"props\\":{\\"iconSmall\\":{\\"type\\":\\"instance\\",\\"key\\":\\"📍
+Icon Small\\"},\\"iconMedium\\":{\\"type\\":\\"instance\\",\\"key\\":\\"📍 Icon
+Medium\\"},\\"label\\":{\\"type\\":\\"string\\",\\"key\\":\\"✏️
+Label\\"},\\"icon\\":{\\"type\\":\\"boolean\\",\\"key\\":\\"👁️
+Icon\\",\\"value\\":{\\"false\\":false,\\"true\\":\\"placeholder\\"}},\\"interactiveState\\":{\\"type\\":\\"enum\\",\\"key\\":\\"Interactive
+State\\",\\"value\\":{\\"(Def)
+Enabled\\":false,\\"Hovered\\":false,\\"Pressed\\":false,\\"Focused\\":false,\\"Disabled\\":\\"true\\"}},\\"size\\":{\\"type\\":\\"enum\\",\\"key\\":\\"Size\\",\\"value\\":{\\"(Def)
+Medium\\":false,\\"Small\\":\\"small\\"}},\\"width\\":{\\"type\\":\\"enum\\",\\"key\\":\\"Width\\",\\"value\\":{\\"(Def)
+Auto Width\\":false,\\"Full Width\\":\\"full\\"}}}}} */
+
+<button
+  data-icon=\\"{{icon}}\\"
+  data-disabled=\\"{{interactiveState}}\\"
+  data-width=\\"{{width}}\\"
+  data-size=\\"{{size}}\\"
+>
+  {{label}}
+</button>
+"
+`;
+
+exports[`Liquid > jsx > Javascript Test > getterState 1`] = `
+"<div>
+  <p>{{foo2}}</p>
+  <p>{{bar}}</p>
+  <p></p>
+</div>
 "
 `;
 
@@ -610,6 +727,11 @@ exports[`Liquid > jsx > Javascript Test > onInit & onMount 1`] = `
 
 exports[`Liquid > jsx > Javascript Test > onInit 1`] = `
 "<div>Default name defined by parent {{name}}</div>
+"
+`;
+
+exports[`Liquid > jsx > Javascript Test > onInitPlain 1`] = `
+"<div></div>
 "
 `;
 
@@ -702,10 +824,38 @@ exports[`Liquid > jsx > Javascript Test > self-referencing component with childr
 "
 `;
 
+exports[`Liquid > jsx > Javascript Test > setState 1`] = `
+"<div><button>Click me</button></div>
+"
+`;
+
+exports[`Liquid > jsx > Javascript Test > showExpressions 1`] = `
+"<div>
+  {% if conditionA %}Content0{% endif %} {% if conditionA %}ContentA{% endif %}
+  {% if conditionA %}{% endif %} {% if conditionA %}ContentB{% endif %} {% if
+  conditionA %}{{undefined}}{% endif %} {% if conditionA %}ContentC{% endif %}
+  {% if conditionA %}{% endif %} {% if conditionA %}ContentD{% endif %} {% if
+  conditionA %}{% endif %} {% if conditionA %}ContentE{% endif %} {% if
+  conditionA %}hello{% endif %} {% if conditionA %}ContentF{% endif %} {% if
+  conditionA %}123{% endif %}
+</div>
+"
+`;
+
 exports[`Liquid > jsx > Javascript Test > showWithFor 1`] = `
 "{% if conditionA %}{% for item in items %}
 <div key=\\"{{idx}}\\">{{item}}</div>
 {% endfor %}{% endif %}
+"
+`;
+
+exports[`Liquid > jsx > Javascript Test > showWithOtherValues 1`] = `
+"<div>
+  {% if conditionA %} ContentA {% endif %} {% if conditionA %} ContentB {% endif
+  %} {% if conditionA %} ContentC {% endif %} {% if conditionA %} ContentD {%
+  endif %} {% if conditionA %} ContentE {% endif %} {% if conditionA %} ContentF
+  {% endif %}
+</div>
 "
 `;
 
@@ -736,6 +886,21 @@ exports[`Liquid > jsx > Javascript Test > spreadNestedProps 1`] = `
 
 exports[`Liquid > jsx > Javascript Test > spreadProps 1`] = `
 "<input props=\\"{{props}}\\" />
+"
+`;
+
+exports[`Liquid > jsx > Javascript Test > store-async-function 1`] = `
+"<div></div>
+"
+`;
+
+exports[`Liquid > jsx > Javascript Test > string-literal-store 1`] = `
+"<div>{{foo}}</div>
+"
+`;
+
+exports[`Liquid > jsx > Javascript Test > string-literal-store-kebab 1`] = `
+"<div></div>
 "
 `;
 
@@ -790,6 +955,16 @@ exports[`Liquid > jsx > Javascript Test > svgComponent 1`] = `
 
 exports[`Liquid > jsx > Javascript Test > typeDependency 1`] = `
 "<div>{{foo}}</div>
+"
+`;
+
+exports[`Liquid > jsx > Javascript Test > typeExternalStore 1`] = `
+"<div>Hello {{_name}} !</div>
+"
+`;
+
+exports[`Liquid > jsx > Javascript Test > typeGetterStore 1`] = `
+"<div>Hello {{name}} !</div>
 "
 `;
 
@@ -879,7 +1054,7 @@ exports[`Liquid > jsx > Typescript Test > Basic 1`] = `
 "<div class=\\"test div\\">
   <input />
 
-  Hello! I can run in React, Vue, Solid, or Liquid!
+  Hello! I can run in React, Vue, Solid, or Liquid! &gt;
 </div>
 <style>
   .div {
@@ -909,7 +1084,10 @@ exports[`Liquid > jsx > Typescript Test > Basic Outputs 1`] = `
 `;
 
 exports[`Liquid > jsx > Typescript Test > Basic Outputs Meta 1`] = `
-"<div></div>
+"/** useMetadata: {\\"outputs\\":[\\"onMessage\\",\\"onEvent\\"],\\"baz\\":\\"metadata inside
+component\\"} */
+
+<div></div>
 "
 `;
 
@@ -1124,6 +1302,15 @@ exports[`Liquid > jsx > Typescript Test > InputParent 1`] = `
 "
 `;
 
+exports[`Liquid > jsx > Typescript Test > NestedStore 1`] = `
+"<div id=\\"{{_id}}\\">
+  Test
+
+  <p id=\\"{{_messageId}}\\">Message</p>
+</div>
+"
+`;
+
 exports[`Liquid > jsx > Typescript Test > RawText 1`] = `
 "<span></span>
 "
@@ -1169,6 +1356,7 @@ exports[`Liquid > jsx > Typescript Test > SlotJsx 1`] = `
 
 exports[`Liquid > jsx > Typescript Test > SlotNamed 1`] = `
 "<div>
+  <slot name=\\"myAwesomeSlot\\"></slot>
   <slot name=\\"top\\"></slot>
   <slot name=\\"left\\">Default left</slot>
   <slot>Default Child</slot>
@@ -1219,6 +1407,21 @@ exports[`Liquid > jsx > Typescript Test > Stamped.io 1`] = `
 "
 `;
 
+exports[`Liquid > jsx > Typescript Test > StoreComment 1`] = `
+"<div>{{foo}}</div>
+"
+`;
+
+exports[`Liquid > jsx > Typescript Test > StoreShadowVars 1`] = `
+"<div></div>
+"
+`;
+
+exports[`Liquid > jsx > Typescript Test > StoreWithState 1`] = `
+"<div></div>
+"
+`;
+
 exports[`Liquid > jsx > Typescript Test > Submit 1`] = `
 "<button type=\\"submit\\" props.attributes=\\"{{attributes}}\\">{{text}}</button>
 "
@@ -1240,6 +1443,11 @@ exports[`Liquid > jsx > Typescript Test > Textarea 1`] = `
 "
 `;
 
+exports[`Liquid > jsx > Typescript Test > UseValueAndFnFromStore 1`] = `
+"<div>Test</div>
+"
+`;
+
 exports[`Liquid > jsx > Typescript Test > Video 1`] = `
 "<video
   preload=\\"none\\"
@@ -1255,6 +1463,13 @@ exports[`Liquid > jsx > Typescript Test > Video 1`] = `
 
 exports[`Liquid > jsx > Typescript Test > arrowFunctionInUseStore 1`] = `
 "<div>Hello {{name}}</div>
+"
+`;
+
+exports[`Liquid > jsx > Typescript Test > basicForFragment 1`] = `
+"<div>
+  <select></select>
+</div>
 "
 `;
 
@@ -1283,7 +1498,9 @@ exports[`Liquid > jsx > Typescript Test > basicForwardRef 1`] = `
 `;
 
 exports[`Liquid > jsx > Typescript Test > basicForwardRefMetadata 1`] = `
-"<div><input class=\\"input\\" value=\\"{{name}}\\" /></div>
+"/** useMetadata: {\\"forwardRef\\":\\"inputRef\\"} */
+
+<div><input class=\\"input\\" value=\\"{{name}}\\" /></div>
 <style>
   .input {
     color: red;
@@ -1297,9 +1514,29 @@ exports[`Liquid > jsx > Typescript Test > basicOnUpdateReturn 1`] = `
 "
 `;
 
+exports[`Liquid > jsx > Typescript Test > basicRefAttributePassing 1`] = `
+"/** useMetadata: {\\"attributePassing\\":{\\"enabled\\":true}} */
+
+<button>Attribute Passing</button>
+"
+`;
+
+exports[`Liquid > jsx > Typescript Test > basicRefAttributePassingCustomRef 1`] = `
+"/** useMetadata: {\\"attributePassing\\":{\\"enabled\\":true,\\"customRef\\":\\"buttonRef\\"}}
+*/
+
+<div><button>Attribute Passing</button></div>
+"
+`;
+
 exports[`Liquid > jsx > Typescript Test > class + ClassName + css 1`] = `
-"<div class=\\"test2 test div\\">
-  Hello! I can run in React, Vue, Solid, or Liquid!
+"<div>
+  <MyComp class=\\"test\\" className=\\"test2\\">
+    Hello! I can run in React, Vue, Solid, or Liquid!
+  </MyComp>
+  <div class=\\"test2 test div\\">
+    Hello! I can run in React, Vue, Solid, or Liquid!
+  </div>
 </div>
 <style>
   .div {
@@ -1349,6 +1586,15 @@ exports[`Liquid > jsx > Typescript Test > classState 1`] = `
 "
 `;
 
+exports[`Liquid > jsx > Typescript Test > complexMeta 1`] = `
+"/** useMetadata:
+{\\"x\\":\\"y\\",\\"asdf\\":{\\"stringValue\\":\\"d\\",\\"booleanValue\\":true,\\"numberValue\\":1,\\"innerObject\\":{\\"stringValue\\":\\"inner\\",\\"numberValue\\":2,\\"booleanValue\\":false},\\"spreadStringValue\\":\\"f\\"}}
+*/
+
+<div></div>
+"
+`;
+
 exports[`Liquid > jsx > Typescript Test > componentWithContext 1`] = `
 "<div><div>{{foo.value}}</div></div>
 "
@@ -1390,8 +1636,54 @@ exports[`Liquid > jsx > Typescript Test > defaultValsWithTypes 1`] = `
 "
 `;
 
+exports[`Liquid > jsx > Typescript Test > eventInputAndChange 1`] = `
+"<div>
+  <input class=\\"input\\" value=\\"{{name}}\\" />
+
+  Hello! I can run in React, Vue, Solid, or Liquid!
+</div>
+<style>
+  .input {
+    color: red;
+  }
+</style>
+"
+`;
+
 exports[`Liquid > jsx > Typescript Test > expressionState 1`] = `
 "<div>{{refToUse}}</div>
+"
+`;
+
+exports[`Liquid > jsx > Typescript Test > figmaMeta 1`] = `
+"/** useMetadata:
+{\\"figma\\":{\\"name\\":\\"def-button-beta-outlined\\",\\"url\\":\\"https://www.figma.com/xxx\\",\\"props\\":{\\"iconSmall\\":{\\"type\\":\\"instance\\",\\"key\\":\\"📍
+Icon Small\\"},\\"iconMedium\\":{\\"type\\":\\"instance\\",\\"key\\":\\"📍 Icon
+Medium\\"},\\"label\\":{\\"type\\":\\"string\\",\\"key\\":\\"✏️
+Label\\"},\\"icon\\":{\\"type\\":\\"boolean\\",\\"key\\":\\"👁️
+Icon\\",\\"value\\":{\\"false\\":false,\\"true\\":\\"placeholder\\"}},\\"interactiveState\\":{\\"type\\":\\"enum\\",\\"key\\":\\"Interactive
+State\\",\\"value\\":{\\"(Def)
+Enabled\\":false,\\"Hovered\\":false,\\"Pressed\\":false,\\"Focused\\":false,\\"Disabled\\":\\"true\\"}},\\"size\\":{\\"type\\":\\"enum\\",\\"key\\":\\"Size\\",\\"value\\":{\\"(Def)
+Medium\\":false,\\"Small\\":\\"small\\"}},\\"width\\":{\\"type\\":\\"enum\\",\\"key\\":\\"Width\\",\\"value\\":{\\"(Def)
+Auto Width\\":false,\\"Full Width\\":\\"full\\"}}}}} */
+
+<button
+  data-icon=\\"{{icon}}\\"
+  data-disabled=\\"{{interactiveState}}\\"
+  data-width=\\"{{width}}\\"
+  data-size=\\"{{size}}\\"
+>
+  {{label}}
+</button>
+"
+`;
+
+exports[`Liquid > jsx > Typescript Test > getterState 1`] = `
+"<div>
+  <p>{{foo2}}</p>
+  <p>{{bar}}</p>
+  <p></p>
+</div>
 "
 `;
 
@@ -1464,6 +1756,11 @@ exports[`Liquid > jsx > Typescript Test > onInit & onMount 1`] = `
 
 exports[`Liquid > jsx > Typescript Test > onInit 1`] = `
 "<div>Default name defined by parent {{name}}</div>
+"
+`;
+
+exports[`Liquid > jsx > Typescript Test > onInitPlain 1`] = `
+"<div></div>
 "
 `;
 
@@ -1556,10 +1853,38 @@ exports[`Liquid > jsx > Typescript Test > self-referencing component with childr
 "
 `;
 
+exports[`Liquid > jsx > Typescript Test > setState 1`] = `
+"<div><button>Click me</button></div>
+"
+`;
+
+exports[`Liquid > jsx > Typescript Test > showExpressions 1`] = `
+"<div>
+  {% if conditionA %}Content0{% endif %} {% if conditionA %}ContentA{% endif %}
+  {% if conditionA %}{% endif %} {% if conditionA %}ContentB{% endif %} {% if
+  conditionA %}{{undefined}}{% endif %} {% if conditionA %}ContentC{% endif %}
+  {% if conditionA %}{% endif %} {% if conditionA %}ContentD{% endif %} {% if
+  conditionA %}{% endif %} {% if conditionA %}ContentE{% endif %} {% if
+  conditionA %}hello{% endif %} {% if conditionA %}ContentF{% endif %} {% if
+  conditionA %}123{% endif %}
+</div>
+"
+`;
+
 exports[`Liquid > jsx > Typescript Test > showWithFor 1`] = `
 "{% if conditionA %}{% for item in items %}
 <div key=\\"{{idx}}\\">{{item}}</div>
 {% endfor %}{% endif %}
+"
+`;
+
+exports[`Liquid > jsx > Typescript Test > showWithOtherValues 1`] = `
+"<div>
+  {% if conditionA %} ContentA {% endif %} {% if conditionA %} ContentB {% endif
+  %} {% if conditionA %} ContentC {% endif %} {% if conditionA %} ContentD {%
+  endif %} {% if conditionA %} ContentE {% endif %} {% if conditionA %} ContentF
+  {% endif %}
+</div>
 "
 `;
 
@@ -1590,6 +1915,21 @@ exports[`Liquid > jsx > Typescript Test > spreadNestedProps 1`] = `
 
 exports[`Liquid > jsx > Typescript Test > spreadProps 1`] = `
 "<input props=\\"{{props}}\\" />
+"
+`;
+
+exports[`Liquid > jsx > Typescript Test > store-async-function 1`] = `
+"<div></div>
+"
+`;
+
+exports[`Liquid > jsx > Typescript Test > string-literal-store 1`] = `
+"<div>{{foo}}</div>
+"
+`;
+
+exports[`Liquid > jsx > Typescript Test > string-literal-store-kebab 1`] = `
+"<div></div>
 "
 `;
 
@@ -1644,6 +1984,16 @@ exports[`Liquid > jsx > Typescript Test > svgComponent 1`] = `
 
 exports[`Liquid > jsx > Typescript Test > typeDependency 1`] = `
 "<div>{{foo}}</div>
+"
+`;
+
+exports[`Liquid > jsx > Typescript Test > typeExternalStore 1`] = `
+"<div>Hello {{_name}} !</div>
+"
+`;
+
+exports[`Liquid > jsx > Typescript Test > typeGetterStore 1`] = `
+"<div>Hello {{name}} !</div>
 "
 `;
 

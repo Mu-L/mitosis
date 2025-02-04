@@ -3,7 +3,7 @@ import { stripStateAndPropsRefs } from '@/helpers/strip-state-and-props-refs';
 import { MitosisComponent } from '@/types/mitosis-component';
 import { MitosisNode } from '@/types/mitosis-node';
 import { upperFirst } from 'lodash';
-import traverse from 'traverse';
+import traverse from 'neotraverse/legacy';
 
 import { ToReactOptions } from './types';
 
@@ -21,9 +21,20 @@ export const processBinding = (str: string, options: ToReactOptions) => {
 
 export const openFrag = (options: ToReactOptions) => getFragment('open', options);
 export const closeFrag = (options: ToReactOptions) => getFragment('close', options);
-export function getFragment(type: 'open' | 'close', options: ToReactOptions) {
-  const tagName = options.preact ? 'Fragment' : '';
-  return type === 'open' ? `<${tagName}>` : `</${tagName}>`;
+export const isFragmentWithKey = (node?: MitosisNode): boolean =>
+  node?.name === 'Fragment' && !!node?.bindings['key'];
+export function getFragment(type: 'open' | 'close', options: ToReactOptions, node?: MitosisNode) {
+  let tag = '';
+  if (node && node.bindings && isFragmentWithKey(node)) {
+    tag = options.preact ? 'Fragment' : 'React.Fragment';
+    const keyCode = node.bindings['key']?.code;
+    if (type === 'open' && keyCode) {
+      tag += ` key={${processBinding(keyCode, options)}}`;
+    }
+  } else if (options.preact) {
+    tag = 'Fragment';
+  }
+  return type === 'open' ? `<${tag}>` : `</${tag}>`;
 }
 export const wrapInFragment = (json: MitosisComponent | MitosisNode) => json.children.length !== 1;
 

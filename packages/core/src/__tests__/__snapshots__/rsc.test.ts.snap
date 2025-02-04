@@ -88,7 +88,7 @@ function MyBasicComponent(props) {
           value={DEFAULT_VALUES.name || name}
           onChange={(myEvent) => setName(myEvent.target.value)}
         />
-        Hello! I can run in React, Vue, Solid, or Liquid!
+        Hello! I can run in React, Vue, Solid, or Liquid! &gt;
       </div>
       <style jsx>{\`
         .div {
@@ -106,7 +106,7 @@ export default MyBasicComponent;
 exports[`RSC > jsx > Javascript Test > Basic Context 1`] = `
 "\\"use client\\";
 import * as React from \\"react\\";
-import { useState, useContext, useEffect } from \\"react\\";
+import { useState, useContext, useRef, useEffect } from \\"react\\";
 import { Injector, MyService, createInjector } from \\"@dummy/injection-js\\";
 
 function MyBasicComponent(props) {
@@ -119,10 +119,12 @@ function MyBasicComponent(props) {
 
   const myService = useContext(MyService);
 
-  useEffect(() => {
+  const hasInitialized = useRef(false);
+  if (!hasInitialized.current) {
     const hi = myService.method(\\"hi\\");
     console.log(hi);
-  }, []);
+    hasInitialized.current = true;
+  }
 
   useEffect(() => {
     const bye = myService.method(\\"hi\\");
@@ -147,16 +149,18 @@ export default MyBasicComponent;
 exports[`RSC > jsx > Javascript Test > Basic OnMount Update 1`] = `
 "\\"use client\\";
 import * as React from \\"react\\";
-import { useState, useEffect } from \\"react\\";
+import { useState, useRef, useEffect } from \\"react\\";
 
 function MyBasicOnMountUpdateComponent(props) {
   const [name, setName] = useState(() => \\"PatrickJS\\");
 
   const [names, setNames] = useState(() => [\\"Steve\\", \\"PatrickJS\\"]);
 
-  useEffect(() => {
+  const hasInitialized = useRef(false);
+  if (!hasInitialized.current) {
     setName(\\"PatrickJS onInit\\" + props.hi);
-  }, []);
+    hasInitialized.current = true;
+  }
 
   useEffect(() => {
     setName(\\"PatrickJS onMount\\" + props.bye);
@@ -190,7 +194,12 @@ export default MyBasicOutputsComponent;
 `;
 
 exports[`RSC > jsx > Javascript Test > Basic Outputs Meta 1`] = `
-"\\"use client\\";
+"/**
+          useMetadata:
+          {\\"outputs\\":[\\"onMessage\\",\\"onEvent\\"],\\"baz\\":\\"metadata inside component\\"}
+          */
+
+\\"use client\\";
 import * as React from \\"react\\";
 import { useState, useEffect } from \\"react\\";
 
@@ -210,10 +219,15 @@ export default MyBasicOutputsComponent;
 `;
 
 exports[`RSC > jsx > Javascript Test > BasicAttribute 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function MyComponent(props) {
-  return <input autoCapitalize=\\"on\\" autoComplete=\\"on\\" spellCheck={true} />;
+  return <input autoCapitalize=\\"on\\" autoComplete=\\"on\\" spellCheck />;
 }
 
 export default MyComponent;
@@ -221,7 +235,12 @@ export default MyComponent;
 `;
 
 exports[`RSC > jsx > Javascript Test > BasicBooleanAttribute 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 import MyBooleanAttributeComponent from \\"./basic-boolean-attribute-component.raw\\";
 
 function MyBooleanAttribute(props) {
@@ -233,8 +252,8 @@ function MyBooleanAttribute(props) {
           {props.type}
         </>
       ) : null}
-      <MyBooleanAttributeComponent toggle={true} />
-      <MyBooleanAttributeComponent toggle={true} />
+      <MyBooleanAttributeComponent toggle />
+      <MyBooleanAttributeComponent toggle />
       <MyBooleanAttributeComponent list={null} />
     </div>
   );
@@ -319,7 +338,7 @@ function MyBasicRefComponent(props) {
 
   function onBlur() {
     // Maintain focus
-    inputRef.current.focus();
+    inputRef.current?.focus();
   }
 
   function lowerCaseName() {
@@ -379,7 +398,7 @@ function MyBasicRefAssignmentComponent(props) {
 
   return (
     <div>
-      <button onClick={(evt) => handlerClick(evt)}>Click</button>
+      <button onClick={async (evt) => await handlerClick(evt)}>Click</button>
     </div>
   );
 }
@@ -430,7 +449,12 @@ export default MyPreviousComponent;
 `;
 
 exports[`RSC > jsx > Javascript Test > Button 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function Button(props) {
   return (
@@ -458,7 +482,12 @@ export default Button;
 `;
 
 exports[`RSC > jsx > Javascript Test > Columns 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function Column(props) {
   const getColumns = function getColumns() {
@@ -518,7 +547,12 @@ export default Column;
 `;
 
 exports[`RSC > jsx > Javascript Test > ContentSlotHtml 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function ContentSlotCode(props) {
   return (
@@ -1124,7 +1158,12 @@ export default ImgStateComponent;
 `;
 
 exports[`RSC > jsx > Javascript Test > Img 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 import { Builder } from \\"@builder.io/sdk\\";
 
 function ImgComponent(props) {
@@ -1176,7 +1215,12 @@ export default FormInputComponent;
 `;
 
 exports[`RSC > jsx > Javascript Test > InputParent 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 import FormInputComponent from \\"./input.raw\\";
 
 function Stepper(props) {
@@ -1197,8 +1241,35 @@ export default Stepper;
 "
 `;
 
+exports[`RSC > jsx > Javascript Test > NestedStore 1`] = `
+"\\"use client\\";
+import * as React from \\"react\\";
+import { useState } from \\"react\\";
+
+function NestedStore(props) {
+  const [_id, set_id] = useState(() => \\"abc\\");
+
+  const [_messageId, set_messageId] = useState(() => _id + \\"-message\\");
+
+  return (
+    <div id={_id}>
+      Test
+      <p id={_messageId}>Message</p>
+    </div>
+  );
+}
+
+export default NestedStore;
+"
+`;
+
 exports[`RSC > jsx > Javascript Test > RawText 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function RawText(props) {
   return (
@@ -1214,7 +1285,12 @@ export default RawText;
 `;
 
 exports[`RSC > jsx > Javascript Test > Section 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function SectionComponent(props) {
   return (
@@ -1238,7 +1314,12 @@ export default SectionComponent;
 `;
 
 exports[`RSC > jsx > Javascript Test > Select 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 import { Builder } from \\"@builder.io/sdk\\";
 
 function SelectComponent(props) {
@@ -1268,7 +1349,12 @@ export default SelectComponent;
 `;
 
 exports[`RSC > jsx > Javascript Test > SlotDefault 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function SlotCode(props) {
   return (
@@ -1285,7 +1371,12 @@ export default SlotCode;
 `;
 
 exports[`RSC > jsx > Javascript Test > SlotHtml 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 import ContentSlotCode from \\"./content-slot-jsx.raw\\";
 
 function SlotCode(props) {
@@ -1301,7 +1392,12 @@ export default SlotCode;
 `;
 
 exports[`RSC > jsx > Javascript Test > SlotJsx 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 import ContentSlotCode from \\"./content-slot-jsx.raw\\";
 
 function SlotCode(props) {
@@ -1317,11 +1413,17 @@ export default SlotCode;
 `;
 
 exports[`RSC > jsx > Javascript Test > SlotNamed 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function SlotCode(props) {
   return (
     <div>
+      <>{props.myAwesomeSlot}</>
       <>{props.top}</>
       <>{props.left || \\"Default left\\"}</>
       <>{props.children || \\"Default Child\\"}</>
@@ -1382,8 +1484,8 @@ function SmileReviews(props) {
             />
             <button
               className=\\"button\\"
-              onClick={(event) => {
-                event.preventDefault();
+              onClick={(ev) => {
+                ev.preventDefault();
                 setShowReviewPrompt(false);
               }}
             >
@@ -1435,8 +1537,68 @@ export default SmileReviews;
 "
 `;
 
+exports[`RSC > jsx > Javascript Test > StoreComment 1`] = `
+"\\"use client\\";
+import * as React from \\"react\\";
+import { useState } from \\"react\\";
+
+function StringLiteralStore(props) {
+  const [foo, setFoo] = useState(() => true);
+
+  function bar() {}
+
+  return <>{foo}</>;
+}
+
+export default StringLiteralStore;
+"
+`;
+
+exports[`RSC > jsx > Javascript Test > StoreShadowVars 1`] = `
+"\\"use client\\";
+import * as React from \\"react\\";
+import { useState } from \\"react\\";
+
+function MyComponent(props) {
+  const [errors, setErrors] = useState(() => ({}));
+
+  function foo(errors) {
+    return errors;
+  }
+
+  return <>{foo(errors)}</>;
+}
+
+export default MyComponent;
+"
+`;
+
+exports[`RSC > jsx > Javascript Test > StoreWithState 1`] = `
+"\\"use client\\";
+import * as React from \\"react\\";
+import { useState } from \\"react\\";
+
+function MyComponent(props) {
+  const [foo, setFoo] = useState(() => false);
+
+  function bar() {
+    return foo;
+  }
+
+  return <>{bar()}</>;
+}
+
+export default MyComponent;
+"
+`;
+
 exports[`RSC > jsx > Javascript Test > Submit 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function SubmitButton(props) {
   return (
@@ -1481,7 +1643,12 @@ export default Text;
 `;
 
 exports[`RSC > jsx > Javascript Test > Textarea 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function Textarea(props) {
   return (
@@ -1499,8 +1666,44 @@ export default Textarea;
 "
 `;
 
+exports[`RSC > jsx > Javascript Test > UseValueAndFnFromStore 1`] = `
+"\\"use client\\";
+import * as React from \\"react\\";
+import { useState, useEffect } from \\"react\\";
+
+function UseValueAndFnFromStore(props) {
+  const [_id, set_id] = useState(() => \\"abc\\");
+
+  const [_active, set_active] = useState(() => false);
+
+  function _do(id) {
+    set_active(!!id);
+
+    if (props.onChange) {
+      props.onChange(_active);
+    }
+  }
+
+  useEffect(() => {
+    if (_do) {
+      _do(_id);
+    }
+  });
+
+  return <div>Test</div>;
+}
+
+export default UseValueAndFnFromStore;
+"
+`;
+
 exports[`RSC > jsx > Javascript Test > Video 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function Video(props) {
   return (
@@ -1551,6 +1754,41 @@ function MyComponent(props) {
 }
 
 export default MyComponent;
+"
+`;
+
+exports[`RSC > jsx > Javascript Test > basicForFragment 1`] = `
+"\\"use client\\";
+import * as React from \\"react\\";
+import { useState } from \\"react\\";
+
+function BasicForFragment(props) {
+  const [id, setId] = useState(() => \\"xyz\\");
+
+  return (
+    <div>
+      {[\\"a\\", \\"b\\", \\"c\\"]?.map((option) => (
+        <React.Fragment key={\`key-\${option}\`}>
+          <div>{option}</div>
+        </React.Fragment>
+      ))}
+      {[\\"a\\", \\"b\\", \\"c\\"]?.map((option) => (
+        <React.Fragment key={\`\${id}-\${option}\`}>
+          <div>{option}</div>
+        </React.Fragment>
+      ))}
+      <select>
+        {[\\"d\\", \\"e\\", \\"f\\"]?.map((option) => (
+          <option key={\`\${id}-\${option}\`} value={option}>
+            {option}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+}
+
+export default BasicForFragment;
 "
 `;
 
@@ -1623,7 +1861,12 @@ export default MyBasicForwardRefComponent;
 `;
 
 exports[`RSC > jsx > Javascript Test > basicForwardRefMetadata 1`] = `
-"\\"use client\\";
+"/**
+          useMetadata:
+          {\\"forwardRef\\":\\"inputRef\\"}
+          */
+
+\\"use client\\";
 import * as React from \\"react\\";
 import { useState, forwardRef } from \\"react\\";
 
@@ -1687,14 +1930,69 @@ export default MyBasicOnUpdateReturnComponent;
 "
 `;
 
+exports[`RSC > jsx > Javascript Test > basicRefAttributePassing 1`] = `
+"/**
+          useMetadata:
+          {\\"attributePassing\\":{\\"enabled\\":true}}
+          */
+
+\\"use client\\";
+import * as React from \\"react\\";
+import { useRef } from \\"react\\";
+
+function BasicRefAttributePassingComponent(props) {
+  const buttonRef = useRef(null);
+
+  return <button ref={buttonRef}>Attribute Passing</button>;
+}
+
+export default BasicRefAttributePassingComponent;
+"
+`;
+
+exports[`RSC > jsx > Javascript Test > basicRefAttributePassingCustomRef 1`] = `
+"/**
+          useMetadata:
+          {\\"attributePassing\\":{\\"enabled\\":true,\\"customRef\\":\\"buttonRef\\"}}
+          */
+
+\\"use client\\";
+import * as React from \\"react\\";
+import { useRef } from \\"react\\";
+
+function BasicRefAttributePassingCustomRefComponent(props) {
+  const buttonRef = useRef(null);
+
+  return (
+    <div>
+      <button ref={buttonRef}>Attribute Passing</button>
+    </div>
+  );
+}
+
+export default BasicRefAttributePassingCustomRefComponent;
+"
+`;
+
 exports[`RSC > jsx > Javascript Test > class + ClassName + css 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
+import MyComp from \\"./my-component\\";
 
 function MyBasicComponent(props) {
   return (
     <>
-      <div className=\\"test2 test div\\">
-        Hello! I can run in React, Vue, Solid, or Liquid!
+      <div>
+        <MyComp className=\\"test\\" className=\\"test2\\">
+          Hello! I can run in React, Vue, Solid, or Liquid!
+        </MyComp>
+        <div className=\\"test2 test div\\">
+          Hello! I can run in React, Vue, Solid, or Liquid!
+        </div>
       </div>
       <style jsx>{\`
         .div {
@@ -1710,7 +2008,12 @@ export default MyBasicComponent;
 `;
 
 exports[`RSC > jsx > Javascript Test > class + css 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function MyBasicComponent(props) {
   return (
@@ -1732,7 +2035,12 @@ export default MyBasicComponent;
 `;
 
 exports[`RSC > jsx > Javascript Test > className + css 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function MyBasicComponent(props) {
   return (
@@ -1803,6 +2111,22 @@ export default MyBasicComponent;
 "
 `;
 
+exports[`RSC > jsx > Javascript Test > complexMeta 1`] = `
+"/**
+          useMetadata:
+          {\\"x\\":\\"y\\",\\"asdf\\":{\\"stringValue\\":\\"d\\",\\"booleanValue\\":true,\\"numberValue\\":1,\\"innerObject\\":{\\"stringValue\\":\\"inner\\",\\"numberValue\\":2,\\"booleanValue\\":false},\\"spreadStringValue\\":\\"f\\"},\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
+
+function ComplexMetaRaw(props) {
+  return <div />;
+}
+
+export default ComplexMetaRaw;
+"
+`;
+
 exports[`RSC > jsx > Javascript Test > componentWithContext 1`] = `
 "\\"use client\\";
 import * as React from \\"react\\";
@@ -1828,7 +2152,7 @@ function ComponentWithContext(props) {
           },
         }}
       >
-        {foo.value}
+        <>{foo.value}</>
       </Context1.Provider>
     </Context2.Provider>
   );
@@ -1864,7 +2188,7 @@ function ComponentWithContext(props) {
         }}
       >
         <>
-          {foo.value}
+          <>{foo.value}</>
           <div>other</div>
         </>
       </Context1.Provider>
@@ -1919,7 +2243,7 @@ function Button(props) {
         <button
           type=\\"button\\"
           {...props.attributes}
-          onClick={(event) => props.onClick(event)}
+          onClick={(event) => props.onClick()}
         >
           {props.buttonText}
         </button>
@@ -1982,7 +2306,12 @@ export default Button;
 `;
 
 exports[`RSC > jsx > Javascript Test > defaultValsWithTypes 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 const DEFAULT_VALUES = {
   name: \\"Sami\\",
@@ -1993,6 +2322,38 @@ function ComponentWithTypes(props) {
 }
 
 export default ComponentWithTypes;
+"
+`;
+
+exports[`RSC > jsx > Javascript Test > eventInputAndChange 1`] = `
+"\\"use client\\";
+import * as React from \\"react\\";
+import { useState } from \\"react\\";
+
+function EventInputAndChange(props) {
+  const [name, setName] = useState(() => \\"Steve\\");
+
+  return (
+    <>
+      <div>
+        <input
+          className=\\"input\\"
+          value={name}
+          onInput={(event) => setName(event.target.value)}
+          onChange={(event) => setName(event.target.value)}
+        />
+        Hello! I can run in React, Vue, Solid, or Liquid!
+      </div>
+      <style jsx>{\`
+        .input {
+          color: red;
+        }
+      \`}</style>
+    </>
+  );
+}
+
+export default EventInputAndChange;
 "
 `;
 
@@ -2013,8 +2374,70 @@ export default MyComponent;
 "
 `;
 
+exports[`RSC > jsx > Javascript Test > figmaMeta 1`] = `
+"/**
+          useMetadata:
+          {\\"figma\\":{\\"name\\":\\"def-button-beta-outlined\\",\\"url\\":\\"https://www.figma.com/xxx\\",\\"props\\":{\\"iconSmall\\":{\\"type\\":\\"instance\\",\\"key\\":\\"📍 Icon Small\\"},\\"iconMedium\\":{\\"type\\":\\"instance\\",\\"key\\":\\"📍 Icon Medium\\"},\\"label\\":{\\"type\\":\\"string\\",\\"key\\":\\"✏️ Label\\"},\\"icon\\":{\\"type\\":\\"boolean\\",\\"key\\":\\"👁️ Icon\\",\\"value\\":{\\"false\\":false,\\"true\\":\\"placeholder\\"}},\\"interactiveState\\":{\\"type\\":\\"enum\\",\\"key\\":\\"Interactive State\\",\\"value\\":{\\"(Def) Enabled\\":false,\\"Hovered\\":false,\\"Pressed\\":false,\\"Focused\\":false,\\"Disabled\\":\\"true\\"}},\\"size\\":{\\"type\\":\\"enum\\",\\"key\\":\\"Size\\",\\"value\\":{\\"(Def) Medium\\":false,\\"Small\\":\\"small\\"}},\\"width\\":{\\"type\\":\\"enum\\",\\"key\\":\\"Width\\",\\"value\\":{\\"(Def) Auto Width\\":false,\\"Full Width\\":\\"full\\"}}}},\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
+
+function FigmaButton(props) {
+  return (
+    <button
+      data-icon={props.icon}
+      data-disabled={props.interactiveState}
+      data-width={props.width}
+      data-size={props.size}
+    >
+      {props.label}
+    </button>
+  );
+}
+
+export default FigmaButton;
+"
+`;
+
+exports[`RSC > jsx > Javascript Test > getterState 1`] = `
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
+
+function Button(props) {
+  const foo2 = function foo2() {
+    return props.foo + \\"foo\\";
+  };
+  const bar = function bar() {
+    return \\"bar\\";
+  };
+  const baz = function baz(i) {
+    return i + foo2().length;
+  };
+
+  return (
+    <div>
+      <p>{foo2()}</p>
+      <p>{bar()}</p>
+      <p>{baz(1)}</p>
+    </div>
+  );
+}
+
+export default Button;
+"
+`;
+
 exports[`RSC > jsx > Javascript Test > import types 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 import RenderBlock from \\"./builder-render-block.raw\\";
 
 function RenderContent(props) {
@@ -2110,7 +2533,12 @@ export default MyBasicComponent;
 `;
 
 exports[`RSC > jsx > Javascript Test > nestedShow 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function NestedShow(props) {
   return (
@@ -2135,7 +2563,12 @@ export default NestedShow;
 `;
 
 exports[`RSC > jsx > Javascript Test > nestedStyles 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function NestedStyles(props) {
   return (
@@ -2219,12 +2652,14 @@ export default Embed;
 exports[`RSC > jsx > Javascript Test > onInit & onMount 1`] = `
 "\\"use client\\";
 import * as React from \\"react\\";
-import { useEffect } from \\"react\\";
+import { useRef, useEffect } from \\"react\\";
 
 function OnInit(props) {
-  useEffect(() => {
+  const hasInitialized = useRef(false);
+  if (!hasInitialized.current) {
     console.log(\\"onInit\\");
-  }, []);
+    hasInitialized.current = true;
+  }
 
   useEffect(() => {
     console.log(\\"onMount\\");
@@ -2240,7 +2675,7 @@ export default OnInit;
 exports[`RSC > jsx > Javascript Test > onInit 1`] = `
 "\\"use client\\";
 import * as React from \\"react\\";
-import { useState, useEffect } from \\"react\\";
+import { useState, useRef } from \\"react\\";
 
 export const defaultValues = {
   name: \\"PatrickJS\\",
@@ -2249,15 +2684,35 @@ export const defaultValues = {
 function OnInit(props) {
   const [name, setName] = useState(() => \\"\\");
 
-  useEffect(() => {
+  const hasInitialized = useRef(false);
+  if (!hasInitialized.current) {
     setName(defaultValues.name || props.name);
     console.log(\\"set defaults with props\\");
-  }, []);
+    hasInitialized.current = true;
+  }
 
   return <div>Default name defined by parent {name}</div>;
 }
 
 export default OnInit;
+"
+`;
+
+exports[`RSC > jsx > Javascript Test > onInitPlain 1`] = `
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
+
+function OnInitPlain(props) {
+  console.log(\\"onInit\\");
+
+  return <div />;
+}
+
+export default OnInitPlain;
 "
 `;
 
@@ -2346,7 +2801,12 @@ export default OnUpdateWithDeps;
 `;
 
 exports[`RSC > jsx > Javascript Test > preserveExportOrLocalStatement 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 const b = 3;
 const foo = () => {};
@@ -2363,7 +2823,12 @@ export default MyBasicComponent;
 `;
 
 exports[`RSC > jsx > Javascript Test > preserveTyping 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function MyBasicComponent(props) {
   return (
@@ -2397,7 +2862,12 @@ export default MyBasicComponent;
 `;
 
 exports[`RSC > jsx > Javascript Test > propsInterface 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function MyBasicComponent(props) {
   return (
@@ -2410,7 +2880,12 @@ export default MyBasicComponent;
 `;
 
 exports[`RSC > jsx > Javascript Test > propsType 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function MyBasicComponent(props) {
   return (
@@ -2452,14 +2927,14 @@ export default OnUpdate;
 `;
 
 exports[`RSC > jsx > Javascript Test > renderBlock 1`] = `
-"Identifier expected. (212:8)
-  210 |    {shouldWrap() ? (
-  211 |    <>{isEmptyHtmlElement(tag()) ? (
-> 212 |    <tag()  {...(attributes())}  {...(actions())}  />
+"Identifier expected. (219:8)
+  217 |    {shouldWrap() ? (
+  218 |    <>{isEmptyHtmlElement(tag()) ? (
+> 219 |    <tag()  {...(attributes())}  {...(actions())}  />
       |        ^
-  213 |  ) : null}
-  214 | {!isEmptyHtmlElement(tag()) && repeatItemData() ? (
-  215 |    <>{repeatItemData()?.map((data, index) => ("
+  220 |  ) : null}
+  221 | {!isEmptyHtmlElement(tag()) && repeatItemData() ? (
+  222 |    <>{repeatItemData()?.map((data, index) => ("
 `;
 
 exports[`RSC > jsx > Javascript Test > renderContentExample 1`] = `
@@ -2515,7 +2990,12 @@ export default RenderContent;
 `;
 
 exports[`RSC > jsx > Javascript Test > rootFragmentMultiNode 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function Button(props) {
   return (
@@ -2543,7 +3023,12 @@ export default Button;
 `;
 
 exports[`RSC > jsx > Javascript Test > rootShow 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function RenderStyles(props) {
   return (
@@ -2564,7 +3049,12 @@ export default RenderStyles;
 `;
 
 exports[`RSC > jsx > Javascript Test > self-referencing component 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function MyComponent(props) {
   return (
@@ -2580,7 +3070,12 @@ export default MyComponent;
 `;
 
 exports[`RSC > jsx > Javascript Test > self-referencing component with children 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function MyComponent(props) {
   return (
@@ -2600,8 +3095,87 @@ export default MyComponent;
 "
 `;
 
+exports[`RSC > jsx > Javascript Test > setState 1`] = `
+"\\"use client\\";
+import * as React from \\"react\\";
+import { useState } from \\"react\\";
+
+function SetState(props) {
+  const [n, setN] = useState(() => [\\"123\\"]);
+
+  function someFn() {
+    n[0] = \\"123\\";
+  }
+
+  return (
+    <div>
+      <button onClick={(event) => someFn()}>Click me</button>
+    </div>
+  );
+}
+
+export default SetState;
+"
+`;
+
+exports[`RSC > jsx > Javascript Test > showExpressions 1`] = `
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
+
+function ShowWithOtherValues(props) {
+  return (
+    <div>
+      {props.conditionA ? <>Content0</> : <>ContentA</>}
+      {props.conditionA ? <>ContentA</> : null}
+      {props.conditionA ? <></> : <>ContentA</>}
+      {props.conditionA ? <>ContentB</> : <>{undefined}</>}
+      {props.conditionA ? <>{undefined}</> : <>ContentB</>}
+      {props.conditionA ? <>ContentC</> : null}
+      {props.conditionA ? <></> : <>ContentC</>}
+      {props.conditionA ? <>ContentD</> : null}
+      {props.conditionA ? <></> : <>ContentD</>}
+      {props.conditionA ? <>ContentE</> : <>hello</>}
+      {props.conditionA ? <>hello</> : <>ContentE</>}
+      {props.conditionA ? <>ContentF</> : <>123</>}
+      {props.conditionA ? <>123</> : <>ContentF</>}
+      {props.conditionA === \\"Default\\" ? (
+        <>4mb</>
+      ) : props.conditionB === \\"Complete\\" ? (
+        <>20mb</>
+      ) : (
+        <>9mb</>
+      )}
+      {props.conditionA === \\"Default\\" ? (
+        <>{props.conditionB === \\"Complete\\" ? <>20mb</> : <>9mb</>}</>
+      ) : (
+        <>4mb</>
+      )}
+      {props.conditionA === \\"Default\\" ? (
+        <>{props.conditionB === \\"Complete\\" ? <div>complete</div> : <>9mb</>}</>
+      ) : props.conditionC === \\"Complete\\" ? (
+        <>dff</>
+      ) : (
+        <div>complete else</div>
+      )}
+    </div>
+  );
+}
+
+export default ShowWithOtherValues;
+"
+`;
+
 exports[`RSC > jsx > Javascript Test > showWithFor 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function NestedShow(props) {
   return (
@@ -2623,8 +3197,38 @@ export default NestedShow;
 "
 `;
 
+exports[`RSC > jsx > Javascript Test > showWithOtherValues 1`] = `
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
+
+function ShowWithOtherValues(props) {
+  return (
+    <div>
+      {props.conditionA ? <>ContentA</> : null}
+      {props.conditionA ? <>ContentB</> : <>{undefined}</>}
+      {props.conditionA ? <>ContentC</> : null}
+      {props.conditionA ? <>ContentD</> : null}
+      {props.conditionA ? <>ContentE</> : <>hello</>}
+      {props.conditionA ? <>ContentF</> : <>123</>}
+    </div>
+  );
+}
+
+export default ShowWithOtherValues;
+"
+`;
+
 exports[`RSC > jsx > Javascript Test > showWithRootText 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function ShowRootText(props) {
   return <>{props.conditionA ? <>ContentA</> : <div>else-condition-A</div>}</>;
@@ -2665,7 +3269,12 @@ export default MyBasicComponent;
 `;
 
 exports[`RSC > jsx > Javascript Test > spreadAttrs 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function MyBasicComponent(props) {
   return <input {...attrs} />;
@@ -2676,7 +3285,12 @@ export default MyBasicComponent;
 `;
 
 exports[`RSC > jsx > Javascript Test > spreadNestedProps 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function MyBasicComponent(props) {
   return <input {...props.nested} />;
@@ -2687,7 +3301,12 @@ export default MyBasicComponent;
 `;
 
 exports[`RSC > jsx > Javascript Test > spreadProps 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function MyBasicComponent(props) {
   return <input {...props} />;
@@ -2697,8 +3316,54 @@ export default MyBasicComponent;
 "
 `;
 
+exports[`RSC > jsx > Javascript Test > store-async-function 1`] = `
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
+
+function StringLiteralStore(props) {
+  const arrowFunction = async function arrowFunction() {
+    return Promise.resolve();
+  };
+  const namedFunction = async function namedFunction() {
+    return Promise.resolve();
+  };
+  const fetchUsers = async function fetchUsers() {
+    return Promise.resolve();
+  };
+
+  return <div />;
+}
+
+export default StringLiteralStore;
+"
+`;
+
+exports[`RSC > jsx > Javascript Test > string-literal-store 1`] = `
+"\\"use client\\";
+import * as React from \\"react\\";
+import { useState } from \\"react\\";
+
+function StringLiteralStore(props) {
+  const [foo, setFoo] = useState(() => 123);
+
+  return <div>{foo}</div>;
+}
+
+export default StringLiteralStore;
+"
+`;
+
 exports[`RSC > jsx > Javascript Test > styleClassAndCss 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function MyComponent(props) {
   return (
@@ -2725,7 +3390,12 @@ export default MyComponent;
 `;
 
 exports[`RSC > jsx > Javascript Test > stylePropClassAndCss 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function StylePropClassAndCss(props) {
   return (
@@ -2750,7 +3420,12 @@ export default StylePropClassAndCss;
 `;
 
 exports[`RSC > jsx > Javascript Test > subComponent 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 import Foo from \\"./foo-sub-component\\";
 
 function SubComponent(props) {
@@ -2762,7 +3437,12 @@ export default SubComponent;
 `;
 
 exports[`RSC > jsx > Javascript Test > svgComponent 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function SvgComponent(props) {
   return (
@@ -2789,7 +3469,12 @@ export default SvgComponent;
 `;
 
 exports[`RSC > jsx > Javascript Test > typeDependency 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function TypeDependency(props) {
   return <div>{props.foo}</div>;
@@ -2799,8 +3484,55 @@ export default TypeDependency;
 "
 `;
 
+exports[`RSC > jsx > Javascript Test > typeExternalStore 1`] = `
+"\\"use client\\";
+import * as React from \\"react\\";
+import { useState } from \\"react\\";
+
+function TypeExternalStore(props) {
+  const [_name, set_name] = useState(() => \\"test\\");
+
+  return <div>Hello {_name}! </div>;
+}
+
+export default TypeExternalStore;
+"
+`;
+
+exports[`RSC > jsx > Javascript Test > typeGetterStore 1`] = `
+"\\"use client\\";
+import * as React from \\"react\\";
+import { useState } from \\"react\\";
+
+function TypeGetterStore(props) {
+  const [name, setName] = useState(() => \\"test\\");
+
+  function getName() {
+    if (name === \\"a\\") {
+      return \\"b\\";
+    }
+
+    return name;
+  }
+
+  function test() {
+    return \\"test\\";
+  }
+
+  return <div>Hello {name}! </div>;
+}
+
+export default TypeGetterStore;
+"
+`;
+
 exports[`RSC > jsx > Javascript Test > use-style 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function MyComponent(props) {
   return (
@@ -2823,7 +3555,12 @@ export default MyComponent;
 `;
 
 exports[`RSC > jsx > Javascript Test > use-style-and-css 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function MyComponent(props) {
   return (
@@ -2851,7 +3588,12 @@ export default MyComponent;
 `;
 
 exports[`RSC > jsx > Javascript Test > use-style-outside-component 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function MyComponent(props) {
   return (
@@ -2886,7 +3628,12 @@ function UseTargetComponent(props) {
 
   const [lastName, setLastName] = useState(() => \\"bar\\");
 
-  useEffect(() => {}, []);
+  const [foo, setFoo] = useState(() => \\"bar\\");
+
+  useEffect(() => {
+    console.log(foo);
+    setFoo(\\"bar\\");
+  }, []);
 
   return <div>{name()}</div>;
 }
@@ -2896,14 +3643,16 @@ export default UseTargetComponent;
 `;
 
 exports[`RSC > jsx > Javascript Test > webComponent 1`] = `
-"import * as React from \\"react\\";
-import { useEffect } from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 import { register } from \\"swiper/element/bundle\\";
 
 function MyBasicWebComponent(props) {
-  useEffect(() => {
-    register();
-  }, []);
+  register();
 
   return (
     <swiper-container slides-per-view=\\"3\\" navigation=\\"true\\" pagination=\\"true\\">
@@ -3020,9 +3769,9 @@ function MyBasicComponent(props: MyBasicComponentProps) {
     return \\"bar\\";
   }
 
-  const [age, setAge] = useState(() => 1);
+  const [age, setAge] = useState<number>(() => 1);
 
-  const [sports, setSports] = useState(() => [\\"\\"]);
+  const [sports, setSports] = useState<Array<string>>(() => [\\"\\"]);
 
   return (
     <>
@@ -3031,7 +3780,7 @@ function MyBasicComponent(props: MyBasicComponentProps) {
           value={DEFAULT_VALUES.name || name}
           onChange={(myEvent) => setName(myEvent.target.value)}
         />
-        Hello! I can run in React, Vue, Solid, or Liquid!
+        Hello! I can run in React, Vue, Solid, or Liquid! &gt;
       </div>
       <style jsx>{\`
         .div {
@@ -3049,7 +3798,7 @@ export default MyBasicComponent;
 exports[`RSC > jsx > Typescript Test > Basic Context 1`] = `
 "\\"use client\\";
 import * as React from \\"react\\";
-import { useState, useContext, useEffect } from \\"react\\";
+import { useState, useContext, useRef, useEffect } from \\"react\\";
 import { Injector, MyService, createInjector } from \\"@dummy/injection-js\\";
 
 function MyBasicComponent(props: any) {
@@ -3062,10 +3811,12 @@ function MyBasicComponent(props: any) {
 
   const myService = useContext(MyService);
 
-  useEffect(() => {
+  const hasInitialized = useRef(false);
+  if (!hasInitialized.current) {
     const hi = myService.method(\\"hi\\");
     console.log(hi);
-  }, []);
+    hasInitialized.current = true;
+  }
 
   useEffect(() => {
     const bye = myService.method(\\"hi\\");
@@ -3090,7 +3841,7 @@ export default MyBasicComponent;
 exports[`RSC > jsx > Typescript Test > Basic OnMount Update 1`] = `
 "\\"use client\\";
 import * as React from \\"react\\";
-import { useState, useEffect } from \\"react\\";
+import { useState, useRef, useEffect } from \\"react\\";
 
 export interface Props {
   hi: string;
@@ -3102,9 +3853,11 @@ function MyBasicOnMountUpdateComponent(props: Props) {
 
   const [names, setNames] = useState(() => [\\"Steve\\", \\"PatrickJS\\"]);
 
-  useEffect(() => {
+  const hasInitialized = useRef(false);
+  if (!hasInitialized.current) {
     setName(\\"PatrickJS onInit\\" + props.hi);
-  }, []);
+    hasInitialized.current = true;
+  }
 
   useEffect(() => {
     setName(\\"PatrickJS onMount\\" + props.bye);
@@ -3138,7 +3891,12 @@ export default MyBasicOutputsComponent;
 `;
 
 exports[`RSC > jsx > Typescript Test > Basic Outputs Meta 1`] = `
-"\\"use client\\";
+"/**
+          useMetadata:
+          {\\"outputs\\":[\\"onMessage\\",\\"onEvent\\"],\\"baz\\":\\"metadata inside component\\"}
+          */
+
+\\"use client\\";
 import * as React from \\"react\\";
 import { useState, useEffect } from \\"react\\";
 
@@ -3158,10 +3916,15 @@ export default MyBasicOutputsComponent;
 `;
 
 exports[`RSC > jsx > Typescript Test > BasicAttribute 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function MyComponent(props: any) {
-  return <input autoCapitalize=\\"on\\" autoComplete=\\"on\\" spellCheck={true} />;
+  return <input autoCapitalize=\\"on\\" autoComplete=\\"on\\" spellCheck />;
 }
 
 export default MyComponent;
@@ -3169,7 +3932,12 @@ export default MyComponent;
 `;
 
 exports[`RSC > jsx > Typescript Test > BasicBooleanAttribute 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 type Props = {
   children: any;
@@ -3186,8 +3954,8 @@ function MyBooleanAttribute(props: Props) {
           {props.type}
         </>
       ) : null}
-      <MyBooleanAttributeComponent toggle={true} />
-      <MyBooleanAttributeComponent toggle={true} />
+      <MyBooleanAttributeComponent toggle />
+      <MyBooleanAttributeComponent toggle />
       <MyBooleanAttributeComponent list={null} />
     </div>
   );
@@ -3270,13 +4038,13 @@ export interface Props {
 }
 
 function MyBasicRefComponent(props: Props) {
-  const inputRef = useRef<HTMLInputElement>(null);
-  const inputNoArgRef = useRef<HTMLLabelElement>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const inputNoArgRef = useRef<HTMLLabelElement | null>(null);
   const [name, setName] = useState(() => \\"PatrickJS\\");
 
   function onBlur() {
     // Maintain focus
-    inputRef.current.focus();
+    inputRef.current?.focus();
   }
 
   function lowerCaseName() {
@@ -3340,7 +4108,7 @@ function MyBasicRefAssignmentComponent(props: Props) {
 
   return (
     <div>
-      <button onClick={(evt) => handlerClick(evt)}>Click</button>
+      <button onClick={async (evt) => await handlerClick(evt)}>Click</button>
     </div>
   );
 }
@@ -3395,7 +4163,12 @@ export default MyPreviousComponent;
 `;
 
 exports[`RSC > jsx > Typescript Test > Button 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 export interface ButtonProps {
   attributes?: any;
@@ -3430,7 +4203,12 @@ export default Button;
 `;
 
 exports[`RSC > jsx > Typescript Test > Columns 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 type Column = {
   content: any; // TODO: Implement this when support for dynamic CSS lands
@@ -3505,7 +4283,12 @@ export default Column;
 `;
 
 exports[`RSC > jsx > Typescript Test > ContentSlotHtml 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 type Props = {
   [key: string]: string | JSX.Element;
@@ -4182,7 +4965,12 @@ export default ImgStateComponent;
 `;
 
 exports[`RSC > jsx > Typescript Test > Img 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 export interface ImgProps {
   attributes?: any;
@@ -4264,7 +5052,12 @@ export default FormInputComponent;
 `;
 
 exports[`RSC > jsx > Typescript Test > InputParent 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 import FormInputComponent from \\"./input.raw\\";
 
 function Stepper(props: any) {
@@ -4285,8 +5078,42 @@ export default Stepper;
 "
 `;
 
+exports[`RSC > jsx > Typescript Test > NestedStore 1`] = `
+"\\"use client\\";
+import * as React from \\"react\\";
+import { useState } from \\"react\\";
+
+type MyStore = {
+  _id?: string;
+  _messageId?: string;
+};
+
+function NestedStore(props: any) {
+  const [_id, set_id] = useState<MyStore[\\"_id\\"]>(() => \\"abc\\");
+
+  const [_messageId, set_messageId] = useState<MyStore[\\"_messageId\\"]>(
+    () => _id + \\"-message\\"
+  );
+
+  return (
+    <div id={_id}>
+      Test
+      <p id={_messageId}>Message</p>
+    </div>
+  );
+}
+
+export default NestedStore;
+"
+`;
+
 exports[`RSC > jsx > Typescript Test > RawText 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 export interface RawTextProps {
   attributes?: any;
@@ -4307,7 +5134,12 @@ export default RawText;
 `;
 
 exports[`RSC > jsx > Typescript Test > Section 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 export interface SectionProps {
   maxWidth?: number;
@@ -4337,7 +5169,12 @@ export default SectionComponent;
 `;
 
 exports[`RSC > jsx > Typescript Test > Select 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 export interface FormSelectProps {
   options?: {
@@ -4379,7 +5216,12 @@ export default SelectComponent;
 `;
 
 exports[`RSC > jsx > Typescript Test > SlotDefault 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 type Props = {
   [key: string]: string;
@@ -4400,7 +5242,12 @@ export default SlotCode;
 `;
 
 exports[`RSC > jsx > Typescript Test > SlotHtml 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 type Props = {
   [key: string]: string;
@@ -4420,7 +5267,12 @@ export default SlotCode;
 `;
 
 exports[`RSC > jsx > Typescript Test > SlotJsx 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 type Props = {
   [key: string]: string;
@@ -4440,7 +5292,12 @@ export default SlotCode;
 `;
 
 exports[`RSC > jsx > Typescript Test > SlotNamed 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 type Props = {
   [key: string]: string;
@@ -4449,6 +5306,7 @@ type Props = {
 function SlotCode(props: Props) {
   return (
     <div>
+      <>{props.myAwesomeSlot}</>
       <>{props.top}</>
       <>{props.left || \\"Default left\\"}</>
       <>{props.children || \\"Default Child\\"}</>
@@ -4514,8 +5372,8 @@ function SmileReviews(props: SmileReviewsProps) {
             />
             <button
               className=\\"button\\"
-              onClick={(event) => {
-                event.preventDefault();
+              onClick={(ev) => {
+                ev.preventDefault();
                 setShowReviewPrompt(false);
               }}
             >
@@ -4567,8 +5425,68 @@ export default SmileReviews;
 "
 `;
 
+exports[`RSC > jsx > Typescript Test > StoreComment 1`] = `
+"\\"use client\\";
+import * as React from \\"react\\";
+import { useState } from \\"react\\";
+
+function StringLiteralStore(props: any) {
+  const [foo, setFoo] = useState(() => true);
+
+  function bar() {}
+
+  return <>{foo}</>;
+}
+
+export default StringLiteralStore;
+"
+`;
+
+exports[`RSC > jsx > Typescript Test > StoreShadowVars 1`] = `
+"\\"use client\\";
+import * as React from \\"react\\";
+import { useState } from \\"react\\";
+
+function MyComponent(props: any) {
+  const [errors, setErrors] = useState(() => ({}));
+
+  function foo(errors) {
+    return errors;
+  }
+
+  return <>{foo(errors)}</>;
+}
+
+export default MyComponent;
+"
+`;
+
+exports[`RSC > jsx > Typescript Test > StoreWithState 1`] = `
+"\\"use client\\";
+import * as React from \\"react\\";
+import { useState } from \\"react\\";
+
+function MyComponent(props: any) {
+  const [foo, setFoo] = useState(() => false);
+
+  function bar() {
+    return foo;
+  }
+
+  return <>{bar()}</>;
+}
+
+export default MyComponent;
+"
+`;
+
 exports[`RSC > jsx > Typescript Test > Submit 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 export interface ButtonProps {
   attributes?: any;
@@ -4627,7 +5545,12 @@ export default Text;
 `;
 
 exports[`RSC > jsx > Typescript Test > Textarea 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 export interface TextareaProps {
   attributes?: any;
@@ -4653,8 +5576,53 @@ export default Textarea;
 "
 `;
 
+exports[`RSC > jsx > Typescript Test > UseValueAndFnFromStore 1`] = `
+"\\"use client\\";
+import * as React from \\"react\\";
+import { useState, useEffect } from \\"react\\";
+
+type MyProps = {
+  onChange?: (active: boolean) => void;
+};
+type MyStore = {
+  _id?: string;
+  _active?: boolean;
+  _do?: (id?: string) => void;
+};
+
+function UseValueAndFnFromStore(props: MyProps) {
+  const [_id, set_id] = useState<MyStore[\\"_id\\"]>(() => \\"abc\\");
+
+  const [_active, set_active] = useState<MyStore[\\"_active\\"]>(() => false);
+
+  function _do(id?: string): ReturnType<MyStore[\\"_do\\"]> {
+    set_active(!!id);
+
+    if (props.onChange) {
+      props.onChange(_active);
+    }
+  }
+
+  useEffect(() => {
+    if (_do) {
+      _do(_id);
+    }
+  });
+
+  return <div>Test</div>;
+}
+
+export default UseValueAndFnFromStore;
+"
+`;
+
 exports[`RSC > jsx > Typescript Test > Video 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 export interface VideoProps {
   attributes?: any;
@@ -4734,6 +5702,41 @@ export default MyComponent;
 "
 `;
 
+exports[`RSC > jsx > Typescript Test > basicForFragment 1`] = `
+"\\"use client\\";
+import * as React from \\"react\\";
+import { useState } from \\"react\\";
+
+function BasicForFragment(props: any) {
+  const [id, setId] = useState(() => \\"xyz\\");
+
+  return (
+    <div>
+      {[\\"a\\", \\"b\\", \\"c\\"]?.map((option) => (
+        <React.Fragment key={\`key-\${option}\`}>
+          <div>{option}</div>
+        </React.Fragment>
+      ))}
+      {[\\"a\\", \\"b\\", \\"c\\"]?.map((option) => (
+        <React.Fragment key={\`\${id}-\${option}\`}>
+          <div>{option}</div>
+        </React.Fragment>
+      ))}
+      <select>
+        {[\\"d\\", \\"e\\", \\"f\\"]?.map((option) => (
+          <option key={\`\${id}-\${option}\`} value={option}>
+            {option}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+}
+
+export default BasicForFragment;
+"
+`;
+
 exports[`RSC > jsx > Typescript Test > basicForNoTagReference 1`] = `
 "\\"use client\\";
 import * as React from \\"react\\";
@@ -4808,7 +5811,12 @@ export default MyBasicForwardRefComponent;
 `;
 
 exports[`RSC > jsx > Typescript Test > basicForwardRefMetadata 1`] = `
-"\\"use client\\";
+"/**
+          useMetadata:
+          {\\"forwardRef\\":\\"inputRef\\"}
+          */
+
+\\"use client\\";
 import * as React from \\"react\\";
 import { useState, forwardRef } from \\"react\\";
 
@@ -4877,14 +5885,69 @@ export default MyBasicOnUpdateReturnComponent;
 "
 `;
 
+exports[`RSC > jsx > Typescript Test > basicRefAttributePassing 1`] = `
+"/**
+          useMetadata:
+          {\\"attributePassing\\":{\\"enabled\\":true}}
+          */
+
+\\"use client\\";
+import * as React from \\"react\\";
+import { useRef } from \\"react\\";
+
+function BasicRefAttributePassingComponent(props: any) {
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
+
+  return <button ref={buttonRef}>Attribute Passing</button>;
+}
+
+export default BasicRefAttributePassingComponent;
+"
+`;
+
+exports[`RSC > jsx > Typescript Test > basicRefAttributePassingCustomRef 1`] = `
+"/**
+          useMetadata:
+          {\\"attributePassing\\":{\\"enabled\\":true,\\"customRef\\":\\"buttonRef\\"}}
+          */
+
+\\"use client\\";
+import * as React from \\"react\\";
+import { useRef } from \\"react\\";
+
+function BasicRefAttributePassingCustomRefComponent(props: any) {
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
+
+  return (
+    <div>
+      <button ref={buttonRef}>Attribute Passing</button>
+    </div>
+  );
+}
+
+export default BasicRefAttributePassingCustomRefComponent;
+"
+`;
+
 exports[`RSC > jsx > Typescript Test > class + ClassName + css 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
+import MyComp from \\"./my-component\\";
 
 function MyBasicComponent(props: any) {
   return (
     <>
-      <div className=\\"test2 test div\\">
-        Hello! I can run in React, Vue, Solid, or Liquid!
+      <div>
+        <MyComp className=\\"test\\" className=\\"test2\\">
+          Hello! I can run in React, Vue, Solid, or Liquid!
+        </MyComp>
+        <div className=\\"test2 test div\\">
+          Hello! I can run in React, Vue, Solid, or Liquid!
+        </div>
       </div>
       <style jsx>{\`
         .div {
@@ -4900,7 +5963,12 @@ export default MyBasicComponent;
 `;
 
 exports[`RSC > jsx > Typescript Test > class + css 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function MyBasicComponent(props: any) {
   return (
@@ -4922,7 +5990,12 @@ export default MyBasicComponent;
 `;
 
 exports[`RSC > jsx > Typescript Test > className + css 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function MyBasicComponent(props: any) {
   return (
@@ -4999,6 +6072,22 @@ export default MyBasicComponent;
 "
 `;
 
+exports[`RSC > jsx > Typescript Test > complexMeta 1`] = `
+"/**
+          useMetadata:
+          {\\"x\\":\\"y\\",\\"asdf\\":{\\"stringValue\\":\\"d\\",\\"booleanValue\\":true,\\"numberValue\\":1,\\"innerObject\\":{\\"stringValue\\":\\"inner\\",\\"numberValue\\":2,\\"booleanValue\\":false},\\"spreadStringValue\\":\\"f\\"},\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
+
+function ComplexMetaRaw(props: any) {
+  return <div />;
+}
+
+export default ComplexMetaRaw;
+"
+`;
+
 exports[`RSC > jsx > Typescript Test > componentWithContext 1`] = `
 "\\"use client\\";
 import * as React from \\"react\\";
@@ -5029,7 +6118,7 @@ function ComponentWithContext(props: ComponentWithContextProps) {
           },
         }}
       >
-        {foo.value}
+        <>{foo.value}</>
       </Context1.Provider>
     </Context2.Provider>
   );
@@ -5070,7 +6159,7 @@ function ComponentWithContext(props: ComponentWithContextProps) {
         }}
       >
         <>
-          {foo.value}
+          <>{foo.value}</>
           <div>other</div>
         </>
       </Context1.Provider>
@@ -5135,7 +6224,7 @@ function Button(props: ButtonProps) {
         <button
           type=\\"button\\"
           {...props.attributes}
-          onClick={(event) => props.onClick(event)}
+          onClick={(event) => props.onClick()}
         >
           {props.buttonText}
         </button>
@@ -5206,7 +6295,12 @@ export default Button;
 `;
 
 exports[`RSC > jsx > Typescript Test > defaultValsWithTypes 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 type Props = {
   name: string;
@@ -5221,6 +6315,38 @@ function ComponentWithTypes(props: Props) {
 }
 
 export default ComponentWithTypes;
+"
+`;
+
+exports[`RSC > jsx > Typescript Test > eventInputAndChange 1`] = `
+"\\"use client\\";
+import * as React from \\"react\\";
+import { useState } from \\"react\\";
+
+function EventInputAndChange(props: any) {
+  const [name, setName] = useState(() => \\"Steve\\");
+
+  return (
+    <>
+      <div>
+        <input
+          className=\\"input\\"
+          value={name}
+          onInput={(event) => setName(event.target.value)}
+          onChange={(event) => setName(event.target.value)}
+        />
+        Hello! I can run in React, Vue, Solid, or Liquid!
+      </div>
+      <style jsx>{\`
+        .input {
+          color: red;
+        }
+      \`}</style>
+    </>
+  );
+}
+
+export default EventInputAndChange;
 "
 `;
 
@@ -5241,8 +6367,74 @@ export default MyComponent;
 "
 `;
 
+exports[`RSC > jsx > Typescript Test > figmaMeta 1`] = `
+"/**
+          useMetadata:
+          {\\"figma\\":{\\"name\\":\\"def-button-beta-outlined\\",\\"url\\":\\"https://www.figma.com/xxx\\",\\"props\\":{\\"iconSmall\\":{\\"type\\":\\"instance\\",\\"key\\":\\"📍 Icon Small\\"},\\"iconMedium\\":{\\"type\\":\\"instance\\",\\"key\\":\\"📍 Icon Medium\\"},\\"label\\":{\\"type\\":\\"string\\",\\"key\\":\\"✏️ Label\\"},\\"icon\\":{\\"type\\":\\"boolean\\",\\"key\\":\\"👁️ Icon\\",\\"value\\":{\\"false\\":false,\\"true\\":\\"placeholder\\"}},\\"interactiveState\\":{\\"type\\":\\"enum\\",\\"key\\":\\"Interactive State\\",\\"value\\":{\\"(Def) Enabled\\":false,\\"Hovered\\":false,\\"Pressed\\":false,\\"Focused\\":false,\\"Disabled\\":\\"true\\"}},\\"size\\":{\\"type\\":\\"enum\\",\\"key\\":\\"Size\\",\\"value\\":{\\"(Def) Medium\\":false,\\"Small\\":\\"small\\"}},\\"width\\":{\\"type\\":\\"enum\\",\\"key\\":\\"Width\\",\\"value\\":{\\"(Def) Auto Width\\":false,\\"Full Width\\":\\"full\\"}}}},\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
+
+function FigmaButton(props: any) {
+  return (
+    <button
+      data-icon={props.icon}
+      data-disabled={props.interactiveState}
+      data-width={props.width}
+      data-size={props.size}
+    >
+      {props.label}
+    </button>
+  );
+}
+
+export default FigmaButton;
+"
+`;
+
+exports[`RSC > jsx > Typescript Test > getterState 1`] = `
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
+
+export interface ButtonProps {
+  foo: string;
+}
+
+function Button(props: ButtonProps) {
+  const foo2 = function foo2() {
+    return props.foo + \\"foo\\";
+  };
+  const bar = function bar() {
+    return \\"bar\\";
+  };
+  const baz = function baz(i: number) {
+    return i + foo2().length;
+  };
+
+  return (
+    <div>
+      <p>{foo2()}</p>
+      <p>{bar()}</p>
+      <p>{baz(1)}</p>
+    </div>
+  );
+}
+
+export default Button;
+"
+`;
+
 exports[`RSC > jsx > Typescript Test > import types 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 type RenderContentProps = {
   options?: GetContentOptions;
@@ -5345,7 +6537,12 @@ export default MyBasicComponent;
 `;
 
 exports[`RSC > jsx > Typescript Test > nestedShow 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 interface Props {
   conditionA: boolean;
@@ -5375,7 +6572,12 @@ export default NestedShow;
 `;
 
 exports[`RSC > jsx > Typescript Test > nestedStyles 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function NestedStyles(props: any) {
   return (
@@ -5459,12 +6661,14 @@ export default Embed;
 exports[`RSC > jsx > Typescript Test > onInit & onMount 1`] = `
 "\\"use client\\";
 import * as React from \\"react\\";
-import { useEffect } from \\"react\\";
+import { useRef, useEffect } from \\"react\\";
 
 function OnInit(props: any) {
-  useEffect(() => {
+  const hasInitialized = useRef(false);
+  if (!hasInitialized.current) {
     console.log(\\"onInit\\");
-  }, []);
+    hasInitialized.current = true;
+  }
 
   useEffect(() => {
     console.log(\\"onMount\\");
@@ -5480,7 +6684,7 @@ export default OnInit;
 exports[`RSC > jsx > Typescript Test > onInit 1`] = `
 "\\"use client\\";
 import * as React from \\"react\\";
-import { useState, useEffect } from \\"react\\";
+import { useState, useRef } from \\"react\\";
 
 type Props = {
   name: string;
@@ -5493,15 +6697,35 @@ export const defaultValues = {
 function OnInit(props: Props) {
   const [name, setName] = useState(() => \\"\\");
 
-  useEffect(() => {
+  const hasInitialized = useRef(false);
+  if (!hasInitialized.current) {
     setName(defaultValues.name || props.name);
     console.log(\\"set defaults with props\\");
-  }, []);
+    hasInitialized.current = true;
+  }
 
   return <div>Default name defined by parent {name}</div>;
 }
 
 export default OnInit;
+"
+`;
+
+exports[`RSC > jsx > Typescript Test > onInitPlain 1`] = `
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
+
+function OnInitPlain(props: any) {
+  console.log(\\"onInit\\");
+
+  return <div />;
+}
+
+export default OnInitPlain;
 "
 `;
 
@@ -5594,7 +6818,12 @@ export default OnUpdateWithDeps;
 `;
 
 exports[`RSC > jsx > Typescript Test > preserveExportOrLocalStatement 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 type Types = {
   s: any[];
@@ -5621,7 +6850,12 @@ export default MyBasicComponent;
 `;
 
 exports[`RSC > jsx > Typescript Test > preserveTyping 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 export type A = \\"test\\";
 export interface C {
@@ -5673,7 +6907,12 @@ export default MyBasicComponent;
 `;
 
 exports[`RSC > jsx > Typescript Test > propsInterface 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 interface Person {
   name: string;
@@ -5691,7 +6930,12 @@ export default MyBasicComponent;
 `;
 
 exports[`RSC > jsx > Typescript Test > propsType 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 type Person = {
   name: string;
@@ -5738,14 +6982,14 @@ export default OnUpdate;
 `;
 
 exports[`RSC > jsx > Typescript Test > renderBlock 1`] = `
-"Identifier expected. (220:8)
-  218 |    {shouldWrap() ? (
-  219 |    <>{isEmptyHtmlElement(tag()) ? (
-> 220 |    <tag()  {...(attributes())}  {...(actions())}  />
+"Identifier expected. (227:8)
+  225 |    {shouldWrap() ? (
+  226 |    <>{isEmptyHtmlElement(tag()) ? (
+> 227 |    <tag()  {...(attributes())}  {...(actions())}  />
       |        ^
-  221 |  ) : null}
-  222 | {!isEmptyHtmlElement(tag()) && repeatItemData() ? (
-  223 |    <>{repeatItemData()?.map((data, index) => ("
+  228 |  ) : null}
+  229 | {!isEmptyHtmlElement(tag()) && repeatItemData() ? (
+  230 |    <>{repeatItemData()?.map((data, index) => ("
 `;
 
 exports[`RSC > jsx > Typescript Test > renderContentExample 1`] = `
@@ -5809,7 +7053,12 @@ export default RenderContent;
 `;
 
 exports[`RSC > jsx > Typescript Test > rootFragmentMultiNode 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 export interface ButtonProps {
   attributes?: any;
@@ -5844,7 +7093,12 @@ export default Button;
 `;
 
 exports[`RSC > jsx > Typescript Test > rootShow 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 export interface RenderStylesProps {
   foo: string;
@@ -5869,7 +7123,12 @@ export default RenderStyles;
 `;
 
 exports[`RSC > jsx > Typescript Test > self-referencing component 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function MyComponent(props: any) {
   return (
@@ -5885,7 +7144,12 @@ export default MyComponent;
 `;
 
 exports[`RSC > jsx > Typescript Test > self-referencing component with children 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function MyComponent(props: any) {
   return (
@@ -5905,8 +7169,92 @@ export default MyComponent;
 "
 `;
 
+exports[`RSC > jsx > Typescript Test > setState 1`] = `
+"\\"use client\\";
+import * as React from \\"react\\";
+import { useState } from \\"react\\";
+
+function SetState(props: any) {
+  const [n, setN] = useState(() => [\\"123\\"]);
+
+  function someFn() {
+    n[0] = \\"123\\";
+  }
+
+  return (
+    <div>
+      <button onClick={(event) => someFn()}>Click me</button>
+    </div>
+  );
+}
+
+export default SetState;
+"
+`;
+
+exports[`RSC > jsx > Typescript Test > showExpressions 1`] = `
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
+
+interface Props {
+  conditionA: boolean;
+  conditionB: boolean;
+}
+
+function ShowWithOtherValues(props: Props) {
+  return (
+    <div>
+      {props.conditionA ? <>Content0</> : <>ContentA</>}
+      {props.conditionA ? <>ContentA</> : null}
+      {props.conditionA ? <></> : <>ContentA</>}
+      {props.conditionA ? <>ContentB</> : <>{undefined}</>}
+      {props.conditionA ? <>{undefined}</> : <>ContentB</>}
+      {props.conditionA ? <>ContentC</> : null}
+      {props.conditionA ? <></> : <>ContentC</>}
+      {props.conditionA ? <>ContentD</> : null}
+      {props.conditionA ? <></> : <>ContentD</>}
+      {props.conditionA ? <>ContentE</> : <>hello</>}
+      {props.conditionA ? <>hello</> : <>ContentE</>}
+      {props.conditionA ? <>ContentF</> : <>123</>}
+      {props.conditionA ? <>123</> : <>ContentF</>}
+      {props.conditionA === \\"Default\\" ? (
+        <>4mb</>
+      ) : props.conditionB === \\"Complete\\" ? (
+        <>20mb</>
+      ) : (
+        <>9mb</>
+      )}
+      {props.conditionA === \\"Default\\" ? (
+        <>{props.conditionB === \\"Complete\\" ? <>20mb</> : <>9mb</>}</>
+      ) : (
+        <>4mb</>
+      )}
+      {props.conditionA === \\"Default\\" ? (
+        <>{props.conditionB === \\"Complete\\" ? <div>complete</div> : <>9mb</>}</>
+      ) : props.conditionC === \\"Complete\\" ? (
+        <>dff</>
+      ) : (
+        <div>complete else</div>
+      )}
+    </div>
+  );
+}
+
+export default ShowWithOtherValues;
+"
+`;
+
 exports[`RSC > jsx > Typescript Test > showWithFor 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 interface Props {
   conditionA: boolean;
@@ -5933,8 +7281,42 @@ export default NestedShow;
 "
 `;
 
+exports[`RSC > jsx > Typescript Test > showWithOtherValues 1`] = `
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
+
+interface Props {
+  conditionA: boolean;
+}
+
+function ShowWithOtherValues(props: Props) {
+  return (
+    <div>
+      {props.conditionA ? <>ContentA</> : null}
+      {props.conditionA ? <>ContentB</> : <>{undefined}</>}
+      {props.conditionA ? <>ContentC</> : null}
+      {props.conditionA ? <>ContentD</> : null}
+      {props.conditionA ? <>ContentE</> : <>hello</>}
+      {props.conditionA ? <>ContentF</> : <>123</>}
+    </div>
+  );
+}
+
+export default ShowWithOtherValues;
+"
+`;
+
 exports[`RSC > jsx > Typescript Test > showWithRootText 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 interface Props {
   conditionA: boolean;
@@ -5988,7 +7370,12 @@ export default MyBasicComponent;
 `;
 
 exports[`RSC > jsx > Typescript Test > spreadAttrs 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function MyBasicComponent(props: any) {
   return <input {...attrs} />;
@@ -5999,7 +7386,12 @@ export default MyBasicComponent;
 `;
 
 exports[`RSC > jsx > Typescript Test > spreadNestedProps 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function MyBasicComponent(props: any) {
   return <input {...props.nested} />;
@@ -6010,7 +7402,12 @@ export default MyBasicComponent;
 `;
 
 exports[`RSC > jsx > Typescript Test > spreadProps 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function MyBasicComponent(props: any) {
   return <input {...props} />;
@@ -6020,8 +7417,54 @@ export default MyBasicComponent;
 "
 `;
 
+exports[`RSC > jsx > Typescript Test > store-async-function 1`] = `
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
+
+function StringLiteralStore(props: any) {
+  const arrowFunction = async function arrowFunction() {
+    return Promise.resolve();
+  };
+  const namedFunction = async function namedFunction() {
+    return Promise.resolve();
+  };
+  const fetchUsers = async function fetchUsers() {
+    return Promise.resolve();
+  };
+
+  return <div />;
+}
+
+export default StringLiteralStore;
+"
+`;
+
+exports[`RSC > jsx > Typescript Test > string-literal-store 1`] = `
+"\\"use client\\";
+import * as React from \\"react\\";
+import { useState } from \\"react\\";
+
+function StringLiteralStore(props: any) {
+  const [foo, setFoo] = useState(() => 123);
+
+  return <div>{foo}</div>;
+}
+
+export default StringLiteralStore;
+"
+`;
+
 exports[`RSC > jsx > Typescript Test > styleClassAndCss 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function MyComponent(props: any) {
   return (
@@ -6048,7 +7491,12 @@ export default MyComponent;
 `;
 
 exports[`RSC > jsx > Typescript Test > stylePropClassAndCss 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function StylePropClassAndCss(props: any) {
   return (
@@ -6073,7 +7521,12 @@ export default StylePropClassAndCss;
 `;
 
 exports[`RSC > jsx > Typescript Test > subComponent 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 import Foo from \\"./foo-sub-component\\";
 
 function SubComponent(props: any) {
@@ -6085,7 +7538,12 @@ export default SubComponent;
 `;
 
 exports[`RSC > jsx > Typescript Test > svgComponent 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function SvgComponent(props: any) {
   return (
@@ -6112,7 +7570,12 @@ export default SvgComponent;
 `;
 
 exports[`RSC > jsx > Typescript Test > typeDependency 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 export type TypeDependencyProps = {
   foo: Foo;
@@ -6129,8 +7592,62 @@ export default TypeDependency;
 "
 `;
 
+exports[`RSC > jsx > Typescript Test > typeExternalStore 1`] = `
+"\\"use client\\";
+import * as React from \\"react\\";
+import { useState } from \\"react\\";
+import { FooStore } from \\"./foo-store\\";
+
+function TypeExternalStore(props: any) {
+  const [_name, set_name] = useState<FooStore[\\"_name\\"]>(() => \\"test\\");
+
+  return <div>Hello {_name}! </div>;
+}
+
+export default TypeExternalStore;
+"
+`;
+
+exports[`RSC > jsx > Typescript Test > typeGetterStore 1`] = `
+"\\"use client\\";
+import * as React from \\"react\\";
+import { useState } from \\"react\\";
+
+type GetterStore = {
+  getName: () => string;
+  name: string;
+  get test(): string;
+};
+
+function TypeGetterStore(props: any) {
+  const [name, setName] = useState<GetterStore[\\"name\\"]>(() => \\"test\\");
+
+  function getName(): ReturnType<GetterStore[\\"getName\\"]> {
+    if (name === \\"a\\") {
+      return \\"b\\";
+    }
+
+    return name;
+  }
+
+  function test(): ReturnType<GetterStore[\\"test\\"]> {
+    return \\"test\\";
+  }
+
+  return <div>Hello {name}! </div>;
+}
+
+export default TypeGetterStore;
+"
+`;
+
 exports[`RSC > jsx > Typescript Test > use-style 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function MyComponent(props: any) {
   return (
@@ -6153,7 +7670,12 @@ export default MyComponent;
 `;
 
 exports[`RSC > jsx > Typescript Test > use-style-and-css 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function MyComponent(props: any) {
   return (
@@ -6181,7 +7703,12 @@ export default MyComponent;
 `;
 
 exports[`RSC > jsx > Typescript Test > use-style-outside-component 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function MyComponent(props: any) {
   return (
@@ -6216,7 +7743,12 @@ function UseTargetComponent(props: any) {
 
   const [lastName, setLastName] = useState(() => \\"bar\\");
 
-  useEffect(() => {}, []);
+  const [foo, setFoo] = useState(() => \\"bar\\");
+
+  useEffect(() => {
+    console.log(foo);
+    setFoo(\\"bar\\");
+  }, []);
 
   return <div>{name()}</div>;
 }
@@ -6226,14 +7758,16 @@ export default UseTargetComponent;
 `;
 
 exports[`RSC > jsx > Typescript Test > webComponent 1`] = `
-"import * as React from \\"react\\";
-import { useEffect } from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 import { register } from \\"swiper/element/bundle\\";
 
 function MyBasicWebComponent(props: any) {
-  useEffect(() => {
-    register();
-  }, []);
+  register();
 
   return (
     <swiper-container slides-per-view=\\"3\\" navigation=\\"true\\" pagination=\\"true\\">
@@ -6373,14 +7907,14 @@ export default MyComponent;
 `;
 
 exports[`RSC > svelte > Javascript Test > context 1`] = `
-"'>' expected. (34:13)
-  32 | return (
-  33 |
-> 34 | <'activeTab'.Provider  value={activeTab}><div>{activeTab}</div></'activeTab'.Provider>
+"'>' expected. (35:13)
+  33 | return (
+  34 |
+> 35 | <'activeTab'.Provider  value={activeTab}><div>{activeTab}</div></'activeTab'.Provider>
      |             ^
-  35 |
   36 |
-  37 |"
+  37 |
+  38 |"
 `;
 
 exports[`RSC > svelte > Javascript Test > each 1`] = `
@@ -6585,7 +8119,12 @@ export default MyComponent;
 `;
 
 exports[`RSC > svelte > Javascript Test > slots 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function MyComponent(props) {
   return (
@@ -6601,7 +8140,12 @@ export default MyComponent;
 `;
 
 exports[`RSC > svelte > Javascript Test > style 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function MyComponent(props) {
   return (
@@ -6775,14 +8319,14 @@ export default MyComponent;
 `;
 
 exports[`RSC > svelte > Typescript Test > context 1`] = `
-"'>' expected. (34:13)
-  32 | return (
-  33 |
-> 34 | <'activeTab'.Provider  value={activeTab}><div>{activeTab}</div></'activeTab'.Provider>
+"'>' expected. (35:13)
+  33 | return (
+  34 |
+> 35 | <'activeTab'.Provider  value={activeTab}><div>{activeTab}</div></'activeTab'.Provider>
      |             ^
-  35 |
   36 |
-  37 |"
+  37 |
+  38 |"
 `;
 
 exports[`RSC > svelte > Typescript Test > each 1`] = `
@@ -6987,7 +8531,12 @@ export default MyComponent;
 `;
 
 exports[`RSC > svelte > Typescript Test > slots 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function MyComponent(props: any) {
   return (
@@ -7003,7 +8552,12 @@ export default MyComponent;
 `;
 
 exports[`RSC > svelte > Typescript Test > style 1`] = `
-"import * as React from \\"react\\";
+"/**
+          useMetadata:
+          {\\"rsc\\":{\\"componentType\\":\\"server\\"}}
+          */
+
+import * as React from \\"react\\";
 
 function MyComponent(props: any) {
   return (

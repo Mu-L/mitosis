@@ -6,16 +6,9 @@ import { checkIsComponentImport } from '@/helpers/render-imports';
 import { BaseHook, MitosisComponent } from '@/types/mitosis-component';
 import json5 from 'json5';
 import { kebabCase, size, uniq } from 'lodash';
-import { DefaultProps, PropsDefinition } from 'vue/types/options';
 import { stringifySingleScopeOnMount } from '../helpers/on-mount';
-import {
-  encodeQuotes,
-  getContextKey,
-  getContextValue,
-  getOnUpdateHookName,
-  mapMitosisComponentToKebabCase,
-} from './helpers';
-import { ToVueOptions } from './types';
+import { encodeQuotes, getContextKey, getContextValue, getOnUpdateHookName } from './helpers';
+import { DefaultProps, PropsDefinition, ToVueOptions } from './types';
 
 const getContextProvideString = (json: MitosisComponent, options: ToVueOptions) => {
   return `{
@@ -47,10 +40,8 @@ function getContextInjectString(component: MitosisComponent, options: ToVueOptio
 const generateComponentImport =
   (options: ToVueOptions) =>
   (componentName: string): string => {
-    if (options.vueVersion >= 3 && options.asyncComponentImports) {
+    if (options.asyncComponentImports) {
       return `'${componentName}': defineAsyncComponent(${componentName})`;
-    } else if (options.vueVersion === 2) {
-      return `'${mapMitosisComponentToKebabCase(componentName)}': ${componentName}`;
     } else {
       return `'${componentName}': ${componentName}`;
     }

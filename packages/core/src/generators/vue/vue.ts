@@ -16,12 +16,12 @@ import { stripMetaProperties } from '@/helpers/strip-meta-properties';
 import { collectCss } from '@/helpers/styles/collect-css';
 import { MitosisComponent } from '@/types/mitosis-component';
 import { TranspilerGenerator } from '@/types/transpiler';
-import { flow, pipe } from 'fp-ts/lib/function';
+import { flow } from 'fp-ts/lib/function';
 import { pickBy, size, uniq } from 'lodash';
+import traverse from 'neotraverse/legacy';
 import { format } from 'prettier/standalone';
-import traverse from 'traverse';
 import {
-  Plugin,
+  MitosisPlugin,
   runPostCodePlugins,
   runPostJsonPlugins,
   runPreCodePlugins,
@@ -32,7 +32,7 @@ import { blockToVue } from './blocks';
 import { generateCompositionApiScript } from './compositionApi';
 import { getOnUpdateHookName, processBinding, renameMitosisComponentsToKebabCase } from './helpers';
 import { generateOptionsApiScript } from './optionsApi';
-import { ToVueOptions, VueOptsWithoutVersion } from './types';
+import { ToVueOptions } from './types';
 
 // Transform <foo.bar key="value" /> to <component :is="foo.bar" key="value" />
 function processDynamicComponents(json: MitosisComponent, _options: ToVueOptions) {
@@ -66,7 +66,7 @@ function processForKeys(json: MitosisComponent, _options: ToVueOptions) {
  *
  * We add a `computed` property for the dependencies, and a matching `watch` function for the `onUpdate` code
  */
-const onUpdatePlugin: Plugin = (options) => ({
+const onUpdatePlugin: MitosisPlugin = (options) => ({
   json: {
     post: (component) => {
       if (component.hooks.onUpdate) {
@@ -97,19 +97,19 @@ const onUpdatePlugin: Plugin = (options) => ({
 });
 
 const BASE_OPTIONS: ToVueOptions = {
-  vueVersion: 2,
   api: 'options',
   defineComponent: true,
+  casing: 'pascal',
 };
 
-const componentToVue: TranspilerGenerator<Partial<ToVueOptions>> =
+export const componentToVue: TranspilerGenerator<Partial<ToVueOptions>> =
   (userOptions) =>
   ({ component: _component, path }) => {
     // Make a copy we can safely mutate, similar to babel's toolchain can be used
     let component = fastClone(_component);
 
     const options = initializeOptions({
-      target: userOptions?.vueVersion === 2 ? 'vue2' : 'vue3',
+      target: 'vue',
       component,
       defaults: BASE_OPTIONS,
       userOptions: userOptions,
@@ -200,10 +200,14 @@ const componentToVue: TranspilerGenerator<Partial<ToVueOptions>> =
 
     stripMetaProperties(component);
 
-    const template = pipe(
-      component.children.map((item) => blockToVue(item, options, { isRootNode: true })).join('\n'),
-      renameMitosisComponentsToKebabCase,
-    );
+    const templateStrBody = component.children
+      .map((item) => blockToVue(item, options, { isRootNode: true }))
+      .join('\n');
+
+    const template =
+      options.casing === 'kebab'
+        ? renameMitosisComponentsToKebabCase(templateStrBody)
+        : templateStrBody;
 
     const onUpdateWithDeps = component.hooks.onUpdate?.filter((hook) => hook.deps?.length) || [];
     const onUpdateWithoutDeps =
@@ -213,7 +217,7 @@ const componentToVue: TranspilerGenerator<Partial<ToVueOptions>> =
 
     // import from vue
     let vueImports: string[] = [];
-    if (options.vueVersion >= 3 && options.asyncComponentImports) {
+    if (options.asyncComponentImports) {
       vueImports.push('defineAsyncComponent');
     }
     if (options.api === 'options' && options.defineComponent) {
@@ -229,7 +233,7 @@ const componentToVue: TranspilerGenerator<Partial<ToVueOptions>> =
       size(component.context.get) && vueImports.push('inject');
       size(
         Object.keys(component.state).filter((key) => component.state[key]?.type === 'property'),
-      ) && vueImports.push('ref');
+      ) + size(component.refs) && vueImports.push('ref');
       size(slotsProps) && vueImports.push('useSlots');
     }
 
@@ -318,12 +322,6 @@ const componentToVue: TranspilerGenerator<Partial<ToVueOptions>> =
     str = str.replace(/<script(.*)>\n?<\/script>/g, '').trim();
     return str;
   };
-
-export const componentToVue2 = (vueOptions?: VueOptsWithoutVersion) =>
-  componentToVue({ ...vueOptions, vueVersion: 2 });
-
-export const componentToVue3 = (vueOptions?: VueOptsWithoutVersion) =>
-  componentToVue({ ...vueOptions, vueVersion: 3 });
 
 // Remove unused artifacts like empty script or style tags
 const removePatterns = [
